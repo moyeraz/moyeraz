@@ -1,0 +1,51 @@
+.btn {padding-inline: 30px; height: 44px; display: inline-flex; align-items: center; border-radius: 8px; font-size: 14px; font-weight: 700; white-space: nowrap; transition: all 0.2s ease-in-out;}
+
+.btn-solid {
+    &.btn-primary {color: #fff; background: theme('colors.primary[600]');
+        &:hover, &:focus {color: #fff; background: theme('colors.primary[400]');}
+    }
+}
+
+.btn-outline {border: 1px solid; background: transparent;
+    &.btn-primary {border-color: theme('colors.primary[600]'); color: theme('colors.primary[600]'); fill: red;
+        &:hover, &:focus {color: #fff; background: theme('colors.primary[600]');}
+    }
+    &.btn-white {border-color: #fff; color: #fff;
+        &:hover, &:focus {border-color: theme('colors.primary[600]'); color: #fff; background: theme('colors.primary[600]');}
+    }
+}
+
+.btn-arrow {gap: 40px;
+    --arrow-white       : url("data:image/svg+xml,%3Csvg viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.98208 10V6H0.0301073L0 3.99H8.98208V0L14 5L8.98208 10Z' fill='white'/%3E%3C/svg%3E%0A");
+    --arrow-primary     : url("data:image/svg+xml,%3Csvg viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.98208 10V6H0.0301073L0 3.99H8.98208V0L14 5L8.98208 10Z' fill='%23B1892E'/%3E%3C/svg%3E%0A");
+
+    &:after {content: ''; width: 14px; height: 10px; background-repeat: no-repeat; background-position: center;}
+
+    &.btn-solid {
+        &:after {background-image: var(--arrow-white);}
+    }
+    &.btn-outline {
+        &.btn-primary {
+            &:after {background-image: var(--arrow-primary);}
+            &:hover, &:focus {
+                &:after {background-image: var(--arrow-white);}
+            }
+        }
+        &.btn-white {
+            &:after {background-image: var(--arrow-white);}
+            // &:hover, &:focus {
+            //     &:after {background-image: var(--arrow-white);}
+            // }
+        }
+    }
+
+    &.w-full {justify-content: space-between;}
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[xl]')) {
+    .btn {height: 48px; font-size: 18px;}
+}

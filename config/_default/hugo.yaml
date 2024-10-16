@@ -1,0 +1,244 @@
+baseURL: ''
+languageCode: 'en-us'
+title: 'Moyer Realty Services'
+theme: 'moyer'
+pagination:
+    pagerSize: 6
+markup:
+    goldmark:
+        renderer:
+            unsafe: true
+        parser:
+            attribute:
+                block: true
+            wrapStandAloneImageWithinParagraph: false
+minify:
+    tdewolff:
+        html:
+            keepWhitespace: false
+
+menus:
+    main:
+        -
+            name: 'Home'
+            pageRef: '/'
+            weight: 10
+        -
+            name: 'Buyers'
+            pageRef: '/buyers/'
+            weight: 20
+        -
+            name: 'Sellers'
+            pageRef: '/sellers/'
+            weight: 30
+        -
+            name: 'Articles'
+            pageRef: '/articles/'
+            weight: 40
+        -
+            name: 'About Us'
+            pageRef: '/about-us/'
+            weight: 50
+        # -
+        #     name: Hugo
+        #     pre: <i class="fa fa-heart"></i>
+        #     url: https://gohugo.io/
+        #     weight: 40
+        #     params:
+        #         rel: external
+
+outputs:
+    home:
+        - html
+        - rss
+        - webappmanifest
+
+permalinks:
+    categories: /articles/:title
+
+module:
+    hugoVersion:
+        extended: false
+        min: 0.112.0
+    mounts:
+        -
+            source: assets
+            target: assets
+        -
+            source: hugo_stats.json
+            target: assets/watching/hugo_stats.json
+build:
+    writeStats: true
+    cachebusters:
+        -
+            source: assets/watching/hugo_stats\.json
+            target: main\.scss
+        -
+            source: (postcss|tailwind)\.config\.js
+            target: css
+        -
+            source: assets/.*\.(js|ts|jsx|tsx)
+            target: js
+        -
+            source: assets/.*\.(.*)$
+            target: $1
+
+
+params:
+    author: 'Moyer Realty Services'
+    linkedin: https://www.linkedin.com/company/moyer/
+    facebook: https://www.facebook.com/moyer.realty/
+    instagram: https://www.instagram.com/moyer.az/
+    youtube: https://www.youtube.com/@moyeraz
+    description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
+    modals:
+        contact-us:
+            id: "contact-us-modal"
+            title: "Get in Touch with Our Team"
+            image: "images/get-in-touch.jpg"
+            form_action: "https://submit-form.com/NcRDxU1ac" 
+            button_text: "Get in Touch"
+            fields:
+                -
+                    type: hidden
+                    name: _redirect
+                    value: /thank-you
+                    url: true
+                -
+                    type: hidden
+                    name: _append
+                    value: false
+                - 
+                    label: Name
+                    type: text
+                    id: name
+                    placeholder: "Your Full Name"
+                    full_width: false
+                - 
+                    label: Phone Number
+                    type: tel
+                    id: phone_number
+                    placeholder: "Your Phone Number"
+                    full_width: false
+                - 
+                    label: Email Address
+                    type: email
+                    id: email_address
+                    placeholder: "Your Email Address"
+                    full_width: true
+                - 
+                    label: Message
+                    type: textarea
+                    id: message
+                    placeholder: "Tell us how we can assist you..."
+                    rows: 6
+                    full_width: true
+        seller:
+            id: "seller-modal"
+            title: "Get a Free Home Valuation"
+            image: "images/home-valuation.jpg"
+            form_action: https://submit-form.com/Kv7aTCXly
+            button_text: "Request Valuation"
+            fields:
+                -
+                    type: hidden
+                    name: _redirect
+                    value: /thank-you
+                    url: true
+                -
+                    type: hidden
+                    name: _append
+                    value: false
+                - 
+                    label: Name
+                    type: text
+                    id: name
+                    placeholder: "Your Full Name"
+                    full_width: false
+                - 
+                    label: Phone Number
+                    type: tel
+                    id: phone_number
+                    placeholder: "Your Phone Number"
+                    full_width: false
+                - 
+                    label: Email Address
+                    type: email
+                    id: email_address
+                    placeholder: "Your Email Address"
+                    full_width: true
+                - 
+                    label: Property Address
+                    type: text
+                    id: property_address
+                    placeholder: "Your Property Address"
+                    full_width: true
+                - 
+                    label: Message
+                    type: textarea
+                    id: message
+                    placeholder: "Tell us how we can assist you..."
+                    rows: 6
+                    full_width: true
+        buyer:
+            id: "buyer-modal"
+            title: "Start Your Home Search"
+            image: "images/home-search.jpg"
+            form_action: https://submit-form.com/0w7RCCsao
+            button_text: "Find My Perfect Home"
+            fields:
+                -
+                    type: hidden
+                    name: _redirect
+                    value: /thank-you
+                    url: true
+                -
+                    type: hidden
+                    name: _append
+                    value: false
+                - 
+                    label: Name
+                    type: text
+                    id: name
+                    placeholder: "Your Full Name"
+                    full_width: false
+                - 
+                    label: Phone Number
+                    type: tel
+                    id: phone_number
+                    placeholder: "Your Phone Number"
+                    full_width: false
+                - 
+                    label: Email Address
+                    type: email
+                    id: email_address
+                    placeholder: "Your Email Address"
+                    full_width: true
+                - 
+                    label: Preferred Location
+                    type: select
+                    id: preferred-location
+                    placeholder: "City or Neighborhood"
+                    full_width: true
+                    options:
+                        - Benson
+                        - Green Valley
+                        - Marana
+                        - Oro Valley
+                        - Red Rock
+                        - Rio Rico
+                        - Saddlebrooke
+                        - Sahuarita
+                        - Tubac
+                        - Tucson
+                        - Vail
+                - 
+                    label: Message
+                    type: textarea
+                    id: message
+                    placeholder: "Tell us how we can assist you..."
+                    rows: 6
+                    full_width: true
+                -
+                    type: honeypot
+                    id: terms

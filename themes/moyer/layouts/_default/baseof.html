@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<head>
+    {{ partial "head.html" . }}
+</head>
+<body class="text-text-600 bg-neutral-100 {{ block "body_classes" . }}{{ end }}">
+    {{ partial "header.html" . }}
+    {{- with .Params.showcase }}
+        {{ partial "showcase.html" . }}
+    {{- end }}
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+    
+    <!-- Enable contact form for all pages, footer link -->
+    {{ partial "data-capture-modal" (dict "id" "contact-us" "modal" (index $.Site.Params.modals "contact-us")) }}
+    {{ if .Params.enableModals }}
+        {{ range .Params.activeModals }}
+            {{ $modalId := . }}
+            {{ $modalConfig := index $.Site.Params.modals $modalId }}
+            {{ partial "data-capture-modal" (dict "id" $modalId "modal" $modalConfig) }}
+        {{ end }}
+    {{ end }}
+
+    {{ partial "footer.html" . }}
+</body>
+</html>

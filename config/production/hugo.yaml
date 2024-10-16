@@ -1,0 +1,7 @@
+baseURL: ''
+minify:
+    minifyOutput: true
+enableRobotsTXT: true
+
+params:
+    google_analytics: G-QWQ0H5N569

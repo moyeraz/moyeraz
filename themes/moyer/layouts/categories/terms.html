@@ -1,0 +1,22 @@
+{{ define "main" }}
+<div class="page-name-holder">
+    <span>{{ .Title }}</span>
+</div>
+<div id="categories-page">
+    <div class="row justify-content-center">
+        {{ range .Data.Terms.ByCount }}
+        <div class="col-md-4">
+            <div class="category-card">
+                <div class="category-card-details">
+                    <a class="category-card-title" href="{{ .Page.Permalink }}">{{ .Page.Title }}
+                        ({{ $pageCount := len .Pages }}
+                        {{ $pageCount }} post{{ if ne $pageCount 1 }}s{{ end }} )
+                    </a>
+                </div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+</div>
+
+{{ end }}

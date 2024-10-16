@@ -1,0 +1,9 @@
+User-agent: *
+{{/* {{- range .Pages -}}
+Disallow: {{ .RelPermalink }}
+{{ end -}}
+Disallow: /view-quote.php  -}}
+Disallow: */ -}}
+Disallow: /cgi-bin/
+
+Sitemap: {{ .Site.BaseURL }}sitemap.xml

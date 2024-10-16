@@ -1,0 +1,40 @@
+:root {
+    --font-sans-heading         : 'Poppins', system-ui;
+    --font-sans-body            : 'Roboto', system-ui;
+    
+    --primary-100               : 249 241 229;// #F9F1E5;
+    --primary-400               : 210 167 91;// #D2A75B;
+    --primary-600               : 177 137 46;// #B1892E;
+    --primary-800               : 161 119 41;// #A17729;
+
+    --secondary-600             : 51 51 51;// #333333;
+
+    --text-400                  : 102 102 102;// #666666;
+    --text-600                  : 51 51 51;// #333333;
+
+    --link-400                  : 210 167 91;// #D2A75B
+    --link-600                  : 177 137 46;// #B1892E
+
+    --page-p-inline             : 16px;
+    --section-p-block-sm        : 40px;
+    --section-p-block           : 80px;
+    --comp-p-spacing-sm         : 20px;
+    --comp-p-spacing            : 30px;
+    --spacer                    : 60px;
+
+    --header-height             : 100px;
+    --header-height-sm          : 70px;
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[xl]')) {
+    :root {
+        --page-p-inline             : 40px;
+
+        --header-height             : 120px;
+        --header-height-sm          : 80px;
+    }
+}

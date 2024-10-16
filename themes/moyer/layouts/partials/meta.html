@@ -1,0 +1,226 @@
+{{- $title_page := .Title }}
+{{- $title_site := site.Title }}
+{{- if .Params.meta.title }}
+    {{- $title_page = .Params.meta.title }}
+{{- end }}
+{{- if .Params.meta.title_site }}
+    {{- $title_site = .Params.meta.title_site }}
+{{- else if eq .Page.Type "articles" }}
+    {{- $title_site = "Southern Arizona Realty Digest" }}
+{{- end }}
+{{- $title := printf "%s | %s" $title_page $title_site }}
+<title>{{ $title }}</title>
+<!-- <title itemprop="name">{{ .Title }} | {{ site.Title }}</title> -->
+<meta itemprop="name" content="{{ $title }}">
+<meta name="application-name" content="{{ $title }}">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png">
+<link rel="icon" sizes="48x48" href="/favicons/favicon-48x48.png">
+
+
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-title" content="{{ .Site.Title }}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="white">
+
+
+{{- $description := site.Params.description }}
+{{- if .Params.description }}
+    {{- $description = .Params.description }}
+{{- end }}
+<meta name="description" content="{{ $description }}">
+<meta itemprop="description" content="{{ $description }}">
+<base href="{{ .Permalink }}">
+<link rel="canonical" href="{{ .Permalink }}" itemprop="url">
+<meta name="url" content="{{ .Permalink }}">
+<!-- <meta name="language" content="{{ .Language.LanguageName }}"> -->
+<!-- {{ range .AllTranslations }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
+{{ end }} -->
+{{- with .Params.image }}
+    <meta itemprop="image" content="{{ . | absURL }}">
+{{- else }}
+    <meta itemprop="image" content="{{ site.Params.ogimage | absURL }}">
+{{- end }}
+<link rel="sitemap" type="application/xml" title="Sitemap" href='{{ "sitemap.xml" | absURL }}'>
+{{- with .OutputFormats.Get "RSS" }}
+    <link href="{{ .Permalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}">
+    <link href="{{ .Permalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}">
+{{- end }}
+
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ .Title }} | {{ site.Title }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ .Language.Lang }}">
+{{ $ogImage := .Params.image }}
+{{ $imageResource := "" }}
+
+{{ if $ogImage }}
+  {{ if .Page.Resources.GetMatch $ogImage }}
+    {{ $imageResource = .Page.Resources.GetMatch $ogImage }}
+  {{ else if fileExists (printf "assets/%s" $ogImage) }}
+    {{ $imageResource = resources.Get $ogImage }}
+  {{ end }}
+
+  {{ if $imageResource }}
+    {{ $webpImage := $imageResource.Resize "1200x630 webp" }}
+    {{ $imagePath := $webpImage.RelPermalink | strings.TrimPrefix "/" }}
+    <meta property="og:image" content="{{ .Site.BaseURL }}{{ $imagePath }}">
+    <meta property="og:image:width" content="{{ $webpImage.Width }}">
+    <meta property="og:image:height" content="{{ $webpImage.Height }}">
+  {{ else }}
+    <meta property="og:image" content="{{ $ogImage | absURL }}">
+  {{ end }}
+{{ else }}
+  {{ with .Site.Params.defaultOGImage }}
+    {{ $defaultImage := resources.Get . }}
+    {{ if $defaultImage }}
+      {{ $webpImage := $defaultImage.Resize "1200x630 webp" }}
+      <meta property="og:image" content="{{ $webpImage.Permalink }}">
+      <meta property="og:image:width" content="{{ $webpImage.Width }}">
+      <meta property="og:image:height" content="{{ $webpImage.Height }}">
+    {{ else }}
+      <meta property="og:image" content="{{ . | absURL }}">
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+<meta property="og:updated_time" content={{ .Lastmod.Format "2006-01-02T15:04:05Z0700" | safeHTML }}>
+
+
+<!-- Social Media Tags -->
+<!-- <meta property="fb:app_id" content="538089519640705">
+<meta property="fb:admins" content="100000686899395"> -->
+
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ .Title }} | {{ site.Title }}">
+<meta name="twitter:description" content="{{ $description }}">
+<meta name="twitter:url" content="{{ .Permalink }}">
+{{ if $ogImage }}
+  {{ if .Page.Resources.GetMatch $ogImage }}
+    {{ $imageResource = .Page.Resources.GetMatch $ogImage }}
+  {{ else if fileExists (printf "assets/%s" $ogImage) }}
+    {{ $imageResource = resources.Get $ogImage }}
+  {{ end }}
+
+  {{ if $imageResource }}
+    {{ $webpImage := $imageResource.Resize "1200x600 webp" }}
+    {{ $imagePath := $webpImage.RelPermalink | strings.TrimPrefix "/" }}
+    <meta property="twitter:image" content="{{ .Site.BaseURL }}{{ $imagePath }}">
+  
+  {{ else }}
+    <meta property="twitter:image" content="{{ $ogImage | absURL }}">
+  {{ end }}
+{{ else }}
+  {{ with .Site.Params.defaultOGImage }}
+    {{ $defaultImage := resources.Get . }}
+    {{ if $defaultImage }}
+      {{ $webpImage := $defaultImage.Resize "1200x600 webp" }}
+      <meta property="twitter:image" content="{{ $webpImage.Permalink }}">
+    {{ else }}
+      <meta property="twitter:image" content="{{ . | absURL }}">
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{- if site.Params.twitter }}
+<meta name="twitter:site" content="{{ site.Params.twitter }}">
+<meta name="twitter:creator" content="{{ site.Params.twitter }}">
+{{- end }}
+
+
+<!-- Tags for Article Pages
+These meta tags are specific for article or blog pages such as, example.org/blog/example-blog/. -->
+<!-- To make sure this renders only in the article page, we check the section -->
+{{- if eq .Section "blog" }}
+
+    <!-- Pagination meta tags for list pages only -->
+    {{ $paginator := .Paginate (where .Pages "Section" "blog") }} 
+    {{ if $paginator }}
+        <link rel="first" href="{{ $paginator.First.URL }}">
+        <link rel="last" href="{{ $paginator.Last.URL }}">
+        {{ if $paginator.HasPrev }}
+            <link rel="prev" href="{{ $paginator.Prev.URL }}">
+        {{end }}
+        {{ if $paginator.HasNext }}
+            <link rel="next" href="{{ $paginator.Next.URL }}">
+        {{end }}
+    {{end }}
+
+    <meta property="og:type" content="article">
+    <meta property="article:publisher" content="{{ site.Params.facebook }}">
+    <meta property="og:article:published_time" content={{ .Date.Format "2006-01-02T15:04:05Z0700" | safeHTML }}>
+    <meta property="article:published_time" content={{ .Date.Format "2006-01-02T15:04:05Z0700" | safeHTML }}>
+
+    {{ with.Params.author }}
+    <meta property="og:article:author" content="{{humanize . }}">
+    <meta property="article:author" content="{{humanize . }}">
+    <meta name="author" content="{{humanize . }}">
+    {{ end }}
+
+    {{ with.Params.category }}
+    <meta name="news_keywords" content="{{ index . 0 }}">
+    <meta property="article:section" content="{{ index . 0 }}">
+    {{ end }}
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": {{ .Title }},
+        "author": {
+            "@type": "Person",
+            "name": "{{ .Site.Params.github }}"
+        },
+        "datePublished": "{{ .Date.Format "2006-01-02" }}",
+        "description": {{ .Description }},
+        "wordCount": {{ .WordCount }},
+        "mainEntityOfPage": "True",
+        "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+        "image": {
+            "@type": "imageObject",
+            "url": "{{ with .Params.image }}{{ .Permalink }}{{ end }}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ .Site.Title }}",
+            "logo": {
+                "@type": "imageObject",
+                "url": "https://www.example.com/images/brand/favicon.png"
+            }
+        }
+    }
+    </script>
+{{- end }}
+
+
+<!-- Meta Tags for Website Pages
+For pages such as /contact, /about etc.. Don't include these tags on article or blog pages. -->
+<meta name="author" content="{{ site.Params.author }}">
+<meta property="og:type" content="website">
+<script defer type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "url": "{{ .Permalink }}",
+    "sameAs": [
+        "{{ .Site.Params.facebook }}",
+        "{{ .Site.Params.github }}"
+    ],
+    "name": "{{ .Title }}",
+    "logo": "https://www.example.com/images/brand/favicon.png"
+}
+</script>
+
+
+<!-- Search Engine Crawler Tags -->
+<meta name="robots" content="index,follow">
+<meta name="googlebot" content="index,follow">

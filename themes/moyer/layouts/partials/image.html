@@ -1,0 +1,25 @@
+{{/* <picture class="d-flex justify-content-center">
+    <source srcset="{{ $smallImg.RelPermalink }}" type="{{ $smallImg.MediaType }}" media="(max-width: 576px)" width="{{ $smallImg.Width }}" height="{{ $smallImg.Height }}">
+    <img class="post-featured-img h-auto w-auto mb-3" alt="{{ $alt }}" src="{{ $largeImg.RelPermalink }}" width="{{ $largeImg.Width }}" height="{{ $largeImg.Height }}">
+</picture> */}}
+
+{{ $image := "" }}
+{{ if .resource }}
+    {{- $image = .context.Resources.Get .image }}
+{{ else }}
+    {{- $image = resources.Get (.image | safeURL) }}
+{{ end }}
+{{- $ext := path.Ext .image }}
+
+{{ if eq $ext ".svg" }}
+    <picture class="{{ .classes }}">
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}" alt="{{ .alt }}">
+    </picture>
+{{ else }}
+    <picture class="{{ .classes }}">
+        {{ if hugo.IsProduction }}
+            <source srcset="" type="image/webp">
+        {{ end }}
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ .alt }}">
+    </picture>
+{{ end }}

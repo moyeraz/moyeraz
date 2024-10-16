@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+// --------------------------------------------------------
+// IMPORTS
+// --------------------------------------------------------
+@import "variables";
+
+@import "common/header";
+
+@import "components/buttons";
+@import "components/cards";
+@import "components/md-content";
+
+
+// --------------------------------------------------------
+// STYLES
+// --------------------------------------------------------
+body {min-height: 100vh; font-size: 16px; line-height: 28px; font-family: var(--font-sans-body); font-weight: 400;}
+
+.container {margin-inline: auto; padding-inline: var(--page-p-inline);}
+
+[class*="text-heading-"] {font-family: var(--font-sans-heading); font-weight: 700;}
+.text-heading-0 {font-size: 32px; line-height: 44px;}
+.text-heading-1 {font-size: 30px; line-height: 38px;}
+.text-heading-2 {font-size: 28px; line-height: 36px;}
+.text-heading-3 {font-size: 30px; line-height: 38px;}
+.text-heading-4 {font-size: 22px; line-height: 30px;}
+.text-heading-5 {font-size: 20px; line-height: 28px;}
+
+.text-body {font-size: 16px; line-height: 28px;}
+.text-subtext {font-size: 14px; line-height: 28px;}
+
+input[type="checkbox"][name="terms"] {position: absolute; display: none;}
+
+.pagination {display: flex; align-items: center; justify-content: center; margin: 60px 0; gap: 10px;
+    .page-link {display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 16px; color: #333; text-decoration: none; border: 1px solid #333; transition: 300ms ease; border-radius: 2px;
+        &:hover {background-color: #D2A75B; color: #fff; border-color: #B1892E;}
+    }
+    .page-item {
+        &.active {
+            .page-link {color: #fff; border-color: #B1892E; background-color: #B1892E;}
+        }
+        &.disabled {
+            .page-link {cursor: not-allowed;
+                &:hover {background-color: transparent; color: #333; border-color: #333;}
+            }
+        }    
+    }
+}
+
+// #default-carousel .carousel-indicators {height: 12px; transition: 300ms ease;
+//     [aria-current="false"] {background-color: theme('colors.secondary[600]'); width: 24px;}
+//     [aria-current="true"] {background-color: theme('colors.primary[600]'); width: 40px;}
+// }
+
+
+// --------------------------------------------------------
+// ACCORDION
+// --------------------------------------------------------
+.accordion-icon {position: relative; width: 16px; height: 16px;
+    span {position: absolute; left: 0; top: 50%; width: 100%; height: 1.5px; display: block; background: theme('colors.secondary[600]');
+        + span {transform: rotate3d(0, 0, 1, 90deg); transition: transform 0.2s ease-in-out;
+            [aria-expanded="true"] & {transform: rotate3d(0, 0, 0, 90deg);}
+        }
+    }
+}
+
+
+// --------------------------------------------------------
+// SWIPER
+// --------------------------------------------------------
+.swiper-pagination {position: static; margin-top: 20px;
+    .swiper-pagination-bullet {width: 24px; height: 12px; border-radius: 8px; transition: width 0.2s ease-in-out, background 0.2s ease-in-out;
+        &.swiper-pagination-bullet-active {width: 40px; background: theme('colors.primary[600]');}
+    }
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[lg]')) {
+    // ========= ACCORDION
+    .accordion-icon {width: 25px; height: 25px;}
+
+    // ========= SWIPER
+    .swiper-pagination {margin-top: 40px;
+        .swiper-pagination-bullet {height: 16px;}
+    }
+}
+
+
+@media (min-width: theme('screens[xl]')) {
+    .text-heading-0 {font-size: 40px; line-height: 52px;}
+    .text-heading-1 {font-size: 36px; line-height: 48px;}
+    .text-heading-2 {font-size: 32px; line-height: 40px;}
+    .text-heading-4 {font-size: 28px; line-height: 36px;}
+    .text-heading-5 {font-size: 24px; line-height: 30px;}
+}

@@ -1,0 +1,37 @@
+{{ define "main" }}
+    {{ .Content }}
+    {{/* {{ range site.RegularPages }}
+        <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+        {{ .Summary }}
+    {{ end }} */}}
+
+    <div class="box-features py-spacer">
+        <div class="container">
+            <h2 class="mb-10 text-heading-0 text-center xl:mb-14">{{ .Params.features.title }}</h2>
+            <div class="card-feature-holder grid grid-cols-1 gap-8 lg:grid-cols-3">
+                {{ range $i, $el := .Params.features.items }}
+                    <div class="card-feature relative p-8 rounded-lg bg-white shadow-xl transition-colors hover:bg-primary-100{{ if ne $i 0 }} lg:before:absolute lg:before:top-[10px] lg:before:bottom-[10px] lg:before:-left-4 lg:before:w-[1px] lg:before:bg-secondary-600 lg:before:bg-opacity-20{{ end }}">
+                        <div class="cf-icon mb-6 fill-primary-600 [&>svg]:w-auto [&>svg]:h-8 xl:mb-8 xl:[&>svg]:h-14">
+                            {{ readFile $el.icon | safeHTML }}
+                        </div>
+                        <div class="cf-title mb-5 text-heading-5 xl:mb-8">{{ $el.title }}</div>
+                        <div class="cf-info text-text-400">{{ $el.text }}</div>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+
+    {{ partial "highlight.html" (dict "context" . "info" .Params.buyers "classes" "bg-white") }}
+
+    <div class="container py-spacer">
+        <h3 class="mb-10 text-heading-2 text-center xl:mb-14">{{ .Params.articles.title }}</h3>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 2xl:grid-cols-4 [&>.card-blog:nth-child(4)]:hidden 2xl:[&>.card-blog:nth-child(4)]:block">
+            {{ range where .Site.RegularPages.ByDate.Reverse "Type" "articles" | first 4 }}
+                {{ partial "blog-card" . }}
+            {{ end }}
+        </div>
+    </div>
+
+    {{ partial "highlight.html" (dict "context" . "info" .Params.sellers "order" "reverse" "classes" "bg-white mb-spacer") }}
+{{ end }}

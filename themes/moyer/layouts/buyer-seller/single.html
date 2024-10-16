@@ -1,0 +1,101 @@
+{{ define "main" }}
+    {{ .Content }}
+
+    <section class="sec-meaning py-spacer">
+        <div class="container">
+            <h2 class="mb-6 text-heading-1 text-center lg:mb-10">{{ .Params.meaning.title }}</h2>
+            <div class="box-meaning grid gap-10 grid-cols-1 lg:grid-cols-2">
+                <div class="bm-media relative h-[240px] lg:h-auto">
+                    {{ partial "image.html" (dict "context" . "image" .Params.meaning.media "alt" .Params.meaning.title "classes" "absolute inset-0" "rounded" "rounded-lg") }}
+                </div>
+                <div class="bm-text">
+                    <div class="bm-title mb-5 text-2xl font-display font-semibold lg:text-3xl">{{ .Params.meaning.rules.title }}</div>
+                    <div class="bm-list flex gap-5 flex-col">
+                        {{ range .Params.meaning.rules.items }}
+                            <div class="bm-list-item py-4 px-6 flex gap-5 items-center rounded-lg bg-white">
+                                <div class="bm-list-icon shrink-0 [&>svg]:w-10 [&>svg]:h-10">
+                                    {{ readFile .icon | safeHTML }}
+                                </div>
+                                <div class="bm-list-title text-base leading-5 lg:text-lg lg:leading-6">{{ .title }}</div>
+                            </div>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec-navigate py-spacer bg-white">
+        <div class="container">
+            <h2 class="mb-6 text-heading-1 text-center lg:mb-10">{{ .Params.navigate.title }}</h2>
+            {{ if .Params.navigate.subtitle }}<div class="subtitle -mt-5 mb-10 text-[22px] leading-7 font-display font-semibold text-center">{{ .Params.navigate.subtitle }}</div>{{ end }}
+            <div class="box-navigate-holder flex flex-wrap flex-col gap-y-10 gap-x-10 justify-center md:flex-row">
+                {{ range .Params.navigate.items }}
+                    <div class="box-navigate shrink-0{{ if eq $.Params.navigate.columns 4 }} md:w-[258px]{{ else }} md:w-[370px]{{ end }}">
+                        <div class="bn-icon mb-6 flex justify-center fill-primary-600 [&>svg]:w-20 [&>svg]:h-20">
+                            {{ readFile .icon | safeHTML }}
+                        </div>
+                        <div class="bn-title mb-4 text-lg font-display font-bold text-center lg:text-base">{{ .title }}</div>
+                        <div class="bn-text leading-6 text-center">{{ .text }}</div>
+                    </div>
+                {{ end }}
+            </div>
+            <div class="box-navigate-action mt-10 flex gap-8 flex-wrap justify-center">
+                {{ range .Params.navigate.buttons }}
+                    <a href="{{ .link }}" class="{{ .classes }}">{{ .title }}</a>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    <section class="sec-faqs py-spacer">
+        <div class="container">
+            <h2 class="mb-6 text-heading-1 text-center lg:mb-10">{{ .Params.faqs.title }}</h2>
+            <div class="accordion-holder mx-auto border-t-2 border-gray-[#e0e0e0] lg:max-w-[80%] lg:bg-white">
+                <div id="accordion-faqs" data-accordion="collapse" data-active-classes="text-text-600 lg:bg-white" data-inactive-classes="border-b-2 border-gray-[#e0e0e0] text-text-600 text-opacity-70">
+                    {{ range $i, $el := .Params.faqs.items }}
+                        <h2 id="accordion-flush-heading-{{ $i }}">
+                            <button type="button" class="flex items-center justify-between w-full py-4 text-sm font-display font-semibold text-left text-text-600 text-opacity-70 gap-3 md:py-6 lg:py-7 lg:px-10 lg:text-lg lg:font-bold" data-accordion-target="#accordion-flush-body-{{ $i }}" aria-expanded="true" aria-controls="accordion-flush-body-{{ $i }}">
+                                <span>{{ $el.title }}</span>
+                                <!-- <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg> -->
+                                <div data-accordion-icon class="accordion-icon shrink-0" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="accordion-flush-body-{{ $i }}" class="hidden" aria-labelledby="accordion-flush-heading-{{ $i }}">
+                            <div class="pb-5 border-b-2 border-gray-[#e0e0e0] text-sm lg:px-10 lg:text-base">
+                                {{ $el.text }}
+                            </div>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec-process py-spacer bg-white">
+        <div class="container">
+            <h2 class="mb-10 text-heading-1 text-center">{{ .Params.process.title }}</h2>
+            <div class="box-process-holder relative z-10 grid gap-8 grid-cols-1 justify-items-center lg:grid-cols-4">
+                {{ range $i, $el := .Params.process.items }}
+                    <div class="box-process p-8 min-h-52 flex flex-col justify-between rounded-lg bg-neutral-100">
+                        <div class="bp-title max-w-[80%] text-xl font-display font-bold">{{ $el.title }}</div>
+                        <div class="bp-details flex items-center justify-between">
+                            <div class="bp-icon fill-primary-600 [&>svg]:w-auto [&>svg]:h-[60px] lg:fill-secondary-600">{{ readFile $el.icon | safeHTML }}</div>
+                            <div class="bp-count text-[40px] leading-[48px] font-display font-bold">{{ $el.count }}</div>
+                        </div>
+                        {{ if ne (add $i 1) ($.Params.process.items | len) }}
+                            {{ readFile "static/icons/arrow-curved.svg" | safeHTML }}
+                        {{ end }}
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    {{ partial "highlight.html" (dict "context" . "info" .Params.cta "order" "reverse" "classes" "my-spacer") }}
+{{ end }}

@@ -1,0 +1,6 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+<rect x="0.5" y="0.5" width="23" height="23" rx="3.5"/>
+<path d="M5 8H7.625M19 8H11.125" stroke-linecap="round"/>
+<path d="M19 16H16.375M5 16H12.875" stroke-linecap="round"/>
+<path d="M5 12H7.625H19" stroke-linecap="round"/>
+</svg>

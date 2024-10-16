@@ -1,0 +1,128 @@
+// Different types of headers
+// dark (white text and buttons)
+// light (dark text and colored buttons)
+// dark-light (dark for mobile and light for desktop)
+// ... all the above 3 types combine with header-fixed for sticky header
+
+
+#header {height: var(--header-height); transition: background 0.18s ease-in-out, height 0.18s ease-in-out;
+    .container {padding-inline: 28px;}
+    .btn-contact {display: none;}
+
+    .navbar-toggler {transition: stroke 0.2s ease-in-out;}
+    .navbar-wrapper {padding-inline: 0; width: calc(100% - 16px); border-radius: 8px; background: #fff; box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.14);
+        .btn-contact {display: inline-flex; border: none; color: #fff; background: theme('colors.primary[600]');
+            &:hover, &:focus {color: #fff; background: theme('colors.primary[400]');}
+        }
+    }
+    .nav-main {
+        a {border-radius: 8px; color: theme('colors.text[600]');
+            &.active {color: #fff;}
+        }
+    }
+
+    &.header-dark {
+        .logo-scroll {display: none;}
+        .navbar-toggler {stroke: #fff;}
+    }
+    &.header-light {
+        .logo-main {display: none;}
+        .navbar-toggler {stroke: theme('colors.text[600]');}
+    }
+    &.header-dark-light {
+        .logo-main {display: block;}
+        .logo-scroll {display: none;}
+        .navbar-toggler {stroke: #fff;}
+    }
+}
+
+// .header-dark-light {
+//     #header.header-light {
+//         .logo-main {display: block;}
+//         .logo-scroll {display: none;}
+//         .navbar-toggler {stroke: #fff;}
+//     }
+// }
+
+.header-fixed {
+    #header {height: var(--header-height-sm); background: #fff; box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+        .logo-main {display: none;}
+        .logo-scroll {display: block;}
+
+        &.header-dark, &.header-light, &.header-dark-light {
+            .navbar-toggler {stroke: theme('colors.text[600]');}
+        }
+    }
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[md]')) {
+    #header {
+        .container {padding-inline: var(--page-p-inline);}
+        .navbar-wrapper {padding-inline: 0;}
+    }
+}
+
+
+@media (min-width: theme('screens[lg]')) {
+    #header {
+        &.header-dark-light {
+            .logo-main {display: none;}
+            .logo-scroll {display: block;}
+
+            .navbar-toggler {stroke: theme('colors.text[600]');}
+        }
+    }
+}
+
+
+@media (min-width: theme('screens[xl]')) {
+    #header {
+        .btn-contact {display: inline-flex;}
+
+        .navbar-wrapper {margin-inline: 0; width: 100%; border-radius: 0; background: transparent; box-shadow: none;
+            .btn-contact {display: none;}
+        }
+
+        &.header-dark {
+            .nav-main {
+                a {color: #fff;
+                    &.active {color: #fff;}
+                }
+            }
+        }
+        &.header-light {
+            .nav-main {
+                a {color: theme('colors.text[600]');
+                    &.active {color: theme('colors.text[600]');}
+                }
+            }
+        }
+        &.header-dark-light {
+            .logo-main {display: none;}
+            .logo-scroll {display: block;}
+            .nav-main {
+                a {color: theme('colors.text[600]');
+                    &.active {color: theme('colors.text[600]');}
+                }
+            }
+        }
+    }
+
+    .header-fixed {
+        #header {
+            .btn-contact {display: inline-flex; border: none; color: #fff; background: theme('colors.primary[600]');
+                &:hover, &:focus {color: #fff; background: theme('colors.primary[400]');}
+            }
+    
+            .nav-main {
+                a {border-radius: 8px; color: theme('colors.text[600]');
+                    &.active {color: theme('colors.text[600]');}
+                }
+            }
+        }
+    }
+}

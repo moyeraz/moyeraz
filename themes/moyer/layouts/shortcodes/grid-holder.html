@@ -1,0 +1,12 @@
+{{- $cols := .Get "column" -}}
+
+{{- $col_count := "" -}}
+{{- if eq $cols "2" -}}
+    {{- $col_count = "md:grid-cols-2" -}}
+{{- else -}}
+    {{- $col_count = "md:grid-cols-3" -}}
+{{- end -}}
+
+<div class="grid grid-cols-1 gap-8 {{ $col_count }} my-10">
+{{ .Inner }}
+</div>
