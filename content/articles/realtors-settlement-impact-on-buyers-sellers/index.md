@@ -1,6 +1,7 @@
 ---
 Title: "Realtors Settlement Impact: What It Means for Buyers & Sellers"
-date: 2024-10-11
+date: 2024-10-11T00:40:04-00:00
+lastmod: 2024-10-12T00:40:04-00:00
 draft: false
 categories:
     - Buying Tips

@@ -1,5 +1,7 @@
 ---
 Title: Southern Arizona Realty Digest
+aliases:
+    - /categories/
 image: images/article-showcase.jpg
 meta:
     description: Read expert advice, market updates, and tips on buying, selling, and investing in Southern Arizona real estate.

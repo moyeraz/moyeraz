@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "hugo --gc",
-    "build:netlify": "hugo --gc -b https://moyer-realty.netlify.app/",
+    "build:kinsta": "npx avif --input=\"**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min && hugo --gc",
+    "build:netlify": "npx avif --input=\"**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min && hugo --gc -b https://moyer-realty.netlify.app/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,7 +14,12 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
+    "avif": "^0.5.3",
+    "gulp": "^5.0.0",
+    "gulp-imagemin": "^9.1.0",
+    "gulp-rename": "^2.0.0",
     "hugo-extended": "^0.135.0",
+    "imagemin-webp": "^8.0.0",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "tailwindcss": "^3.4.12"

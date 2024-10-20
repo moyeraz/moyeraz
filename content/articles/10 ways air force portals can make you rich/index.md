@@ -1,6 +1,7 @@
 ---
 title: "10 ways air force portals can make you rich"
-date: 2023-11-10
+date: 2023-10-19T00:40:04-00:00
+lastmod: 2023-10-19T00:40:04-00:00
 draft: true
 categories:
     - Buying Tips

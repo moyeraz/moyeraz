@@ -1,7 +1,6 @@
 ---
 Title: Thank You
 sitemap_exclude: true
-# page_classes: text-center
 ---
 
 Thank you for contacting us.  

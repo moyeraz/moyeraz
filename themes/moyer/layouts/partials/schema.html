@@ -1,0 +1,85 @@
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        {{- if eq .Params.structured_data.type "Organization" }}
+            "@type": "Organization",
+            "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
+        {{- else if eq .Params.structured_data.type "RealEstateAgent" }}
+            "@type": "RealEstateAgent",
+            "@id": {{ printf "%s%s" site.BaseURL "#realestateagent" }},
+        {{- end }}
+        "name": {{ site.Params.sitename }},
+        "url": {{ .Permalink }},
+        "logo": {
+            "@type": "ImageObject",
+            "url": {{ absURL site.Params.logo.image }},
+            "width": "{{ site.Params.logo.width }}",
+            "height": "{{ site.Params.logo.height }}"
+        },
+        "description": {{ .Params.structured_data.description }},
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": {{ site.Params.address.locality }},
+            "addressRegion": {{ site.Params.address.region }},
+            "postalCode": {{ site.Params.address.code }},
+            "addressCountry": {{ site.Params.address.country }}
+        },
+        "telephone": {{ site.Params.tel }},
+        "email": {{ site.Params.email }},
+        "foundingDate": "{{ site.Params.founder.date }}",
+        "founder": {
+            "@type": "Person",
+            "name": {{ site.Params.founder.name }}
+        },
+        "sameAs": [
+            {{ site.Params.linkedin }},
+            {{ site.Params.facebook }},
+            {{ site.Params.instagram }},
+            {{ site.Params.youtube }}
+        ],
+        "openingHoursSpecification": [
+            {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                    {{- range $in, $el := $e.days }}
+                        {{ $el }}{{ if ne (add $in 1) ($e.days | len) }},{{ end }}
+                    {{- end }}
+                ],
+                "opens": {{ $e.opens }},
+                "closes": {{ $e.closes }}
+            }
+            {{- end }}
+        ],
+        "areaServed": [
+            {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
+                {{ $e }}
+            {{- end }}
+        ],
+        "priceRange": {{ site.Params.price_range }}{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
+        {{- if .Params.structured_data.offers }}
+            "makesOffer": [
+                {{- range $i, $e := .Params.structured_data.offers }}{{ if $i }},{{ end }}
+                {
+                    "@type": "Offer",
+                    "name": {{ .name }},
+                    "description": {{ .description }}
+                }
+                {{- end }}
+            ],
+        {{- end }}
+        {{- if .Params.structured_data.employees }}
+            "employee": [
+                {{- range $ind, $emp := .Params.structured_data.employees }}{{ if $ind }},{{ end }}
+                    {
+                        "@type": "Person",
+                        "name": {{ $emp.name }},
+                        "jobTitle": {{ $emp.job_title }},
+                        "telephone": {{ $emp.tel }},
+                        "email": {{ $emp.email }}
+                    }
+                {{- end }}
+            ]
+        {{- end }}
+    }
+</script>

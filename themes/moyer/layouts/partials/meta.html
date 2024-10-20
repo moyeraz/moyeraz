@@ -28,8 +28,8 @@
 
 
 {{- $description := site.Params.description }}
-{{- if .Params.description }}
-    {{- $description = .Params.description }}
+{{- if .Params.meta.description }}
+    {{- $description = .Params.meta.description }}
 {{- end }}
 <meta name="description" content="{{ $description }}">
 <meta itemprop="description" content="{{ $description }}">
@@ -140,10 +140,10 @@
 <!-- Tags for Article Pages
 These meta tags are specific for article or blog pages such as, example.org/blog/example-blog/. -->
 <!-- To make sure this renders only in the article page, we check the section -->
-{{- if eq .Section "blog" }}
+{{- if eq .Section "articles" }}
 
     <!-- Pagination meta tags for list pages only -->
-    {{ $paginator := .Paginate (where .Pages "Section" "blog") }} 
+    {{/* $paginator := .Paginate (where .Pages "Section" "articles") }} 
     {{ if $paginator }}
         <link rel="first" href="{{ $paginator.First.URL }}">
         <link rel="last" href="{{ $paginator.Last.URL }}">
@@ -153,25 +153,25 @@ These meta tags are specific for article or blog pages such as, example.org/blog
         {{ if $paginator.HasNext }}
             <link rel="next" href="{{ $paginator.Next.URL }}">
         {{end }}
-    {{end }}
+    {{end */}}
 
     <meta property="og:type" content="article">
     <meta property="article:publisher" content="{{ site.Params.facebook }}">
     <meta property="og:article:published_time" content={{ .Date.Format "2006-01-02T15:04:05Z0700" | safeHTML }}>
     <meta property="article:published_time" content={{ .Date.Format "2006-01-02T15:04:05Z0700" | safeHTML }}>
 
-    {{ with.Params.author }}
+    {{ with .Params.author }}
     <meta property="og:article:author" content="{{humanize . }}">
     <meta property="article:author" content="{{humanize . }}">
     <meta name="author" content="{{humanize . }}">
     {{ end }}
 
-    {{ with.Params.category }}
+    {{ with .Params.category }}
     <meta name="news_keywords" content="{{ index . 0 }}">
     <meta property="article:section" content="{{ index . 0 }}">
     {{ end }}
 
-    <script defer type="application/ld+json">
+    {{/* <script defer type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "Article",
@@ -198,7 +198,7 @@ These meta tags are specific for article or blog pages such as, example.org/blog
             }
         }
     }
-    </script>
+    </script> */}}
 {{- end }}
 
 
@@ -206,7 +206,7 @@ These meta tags are specific for article or blog pages such as, example.org/blog
 For pages such as /contact, /about etc.. Don't include these tags on article or blog pages. -->
 <meta name="author" content="{{ site.Params.author }}">
 <meta property="og:type" content="website">
-<script defer type="application/ld+json">
+{{/* <script defer type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "WebSite",
@@ -218,7 +218,7 @@ For pages such as /contact, /about etc.. Don't include these tags on article or 
     "name": "{{ .Title }}",
     "logo": "https://www.example.com/images/brand/favicon.png"
 }
-</script>
+</script> */}}
 
 
 <!-- Search Engine Crawler Tags -->

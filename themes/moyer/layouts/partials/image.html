@@ -3,12 +3,12 @@
     <img class="post-featured-img h-auto w-auto mb-3" alt="{{ $alt }}" src="{{ $largeImg.RelPermalink }}" width="{{ $largeImg.Width }}" height="{{ $largeImg.Height }}">
 </picture> */}}
 
-{{ $image := "" }}
-{{ if .resource }}
+{{- $image := "" }}
+{{- if .resource }}
     {{- $image = .context.Resources.Get .image }}
-{{ else }}
+{{- else }}
     {{- $image = resources.Get (.image | safeURL) }}
-{{ end }}
+{{- end }}
 {{- $ext := path.Ext .image }}
 
 {{ if eq $ext ".svg" }}
@@ -18,7 +18,22 @@
 {{ else }}
     <picture class="{{ .classes }}">
         {{ if hugo.IsProduction }}
-            <source srcset="" type="image/webp">
+            {{- $image_name := strings.TrimSuffix $ext $image }}
+            {{- $image_avif := "" }}
+            {{- $image_webp := "" }}
+            {{- if .resource }}
+                {{ $image_avif =  .context.Resources.Get (printf "%s%s" $image_name ".avif") }}
+                {{ $image_webp =  .context.Resources.Get (printf "%s%s" $image_name ".webp") }}
+            {{- else }}
+                {{ $image_avif =  resources.Get (printf "%s%s" $image_name ".avif") }}
+                {{ $image_webp =  resources.Get (printf "%s%s" $image_name ".webp") }}
+            {{- end }}
+            {{ if $image_avif }}
+                <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
+            {{ end }}
+            {{ if $image_webp }}
+                <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
+            {{ end }}
         {{ end }}
         <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ .alt }}">
     </picture>

@@ -56,6 +56,9 @@ outputs:
 permalinks:
     categories: /articles/:title
 
+taxonomies:
+    category: categories
+
 module:
     hugoVersion:
         extended: false
@@ -85,12 +88,57 @@ build:
 
 
 params:
-    author: 'Moyer Realty Services'
+    dateformat: "January 2, 2006"
+    sitename: Moyer Realty Services
+    logo:
+        image: /images/logo_moyer-realty-services.svg
+        width: 440
+        height: 150
     linkedin: https://www.linkedin.com/company/moyer/
     facebook: https://www.facebook.com/moyer.realty/
     instagram: https://www.instagram.com/moyer.az/
     youtube: https://www.youtube.com/@moyeraz
     description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
+    author: James Moyer
+    email: info@moyeraz.com
+    tel: +1-520-200-1770
+    address:
+        locality: Tucson
+        region: Arizona
+        code: 85706
+        country: United States
+    founder:
+        name: James Moyer
+        date: 2009
+    working_hours:
+        -
+            days:
+                - Monday
+                - Tuesday
+                - Wednesday
+                - Thursday
+                - Friday
+            opens: 08:30
+            closes: 18:00
+        -
+            days:
+                - Saturday
+                - Sunday
+            opens: ByAppointment
+            closes: ByAppointment
+    area_served:
+        - Benson Arizona
+        - Green Valley Arizona
+        - Marana Arizona
+        - Oro Valley Arizona
+        - Red Rock Arizona
+        - Rio Rico Arizona
+        - Saddlebrooke Arizona
+        - Sahuarita Arizona
+        - Tubac Arizona
+        - Tucson Arizona
+        - Vail Arizona
+    price_range: $100,000 - $30,000,000
     modals:
         contact-us:
             id: "contact-us-modal"

@@ -1,12 +1,13 @@
 ---
 title: "How the NAR Settlement Impacts Home Buyers and Real Estate Agents"
-date: 2024-10-01
+date: 2024-10-01T00:40:04-00:00
+lastmod: 2024-10-01T00:40:04-00:00
 draft: false
 categories:
     - Buying Tips
     - Selling Tips
 author: "James Moyer"
-image: 'NAR.jpeg'
+image: 'NAR.jpg'
 featured: true
 ---
 

@@ -3,6 +3,9 @@ title: 'Buy or Sell a Home in Southern Arizona'
 image: images/real-estate-leaders.jpg
 meta:
     description: Buy or sell a home in Southern Arizona with Moyer Realty Services. Veteran-owned, offering clear, trustworthy guidance every step of the way.
+structured_data:
+    type: Organization
+    description: Moyer Realty Services provides residential real estate services for home buyers and sellers in Southern Arizona. Veteran-owned, we guide clients through the real estate process with clarity, transparency, and expertise in the latest regulations.
 showcase:
     title: Arizona’s Trusted Real Estate Leaders
     subtitle: Providing expert guidance for Arizona buyers and sellers with clarity, transparency, and trust at every step.
