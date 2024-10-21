@@ -4,6 +4,28 @@ type: buyer-seller
 image: images/buyer-showcase.jpg
 meta:
     description: Expert home buying services for Southern Arizona. First-time buyers, military relocations, and investors — we guide you from search to closing.
+structured_data:
+    description: Moyer Realty Services specializes in guiding homebuyers through the process of purchasing residential properties in Southern Arizona.
+    offer_catalog:
+        items:
+            -
+                name: First-Time Homebuyer Guidance
+                description: We help first-time homebuyers navigate the complex Arizona real estate market with confidence.
+            -
+                name: Military Relocation Assistance
+                description: As a veteran-owned business, we specialize in helping military families relocate smoothly.
+            -
+                name: Investment Property Acquisition
+                description: We provide market insights and property evaluation services to help you make profitable investment decisions.
+            -
+                name: New Construction Home Buying
+                description: We guide you through selecting the right builder and reviewing contracts.
+            -
+                name: Buyer Market Analysis
+                description: We provide comprehensive market analysis to help you make the best decision for your home purchase.
+            -
+                name: Down Payment Assistance Programs
+                description: We connect buyers with available down payment assistance programs.
 enableModals: true
 activeModals: ["buyer"]
 showcase:

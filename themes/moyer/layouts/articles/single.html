@@ -53,3 +53,62 @@
     </div>
 </div>
 {{ end }}
+
+
+{{ define "structured" }}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "@id": {{ printf "%s%s" .Permalink "#blogposting" }},
+        "headline": {{ .Title }},
+        "description": {{ .Summary | plainify }},
+        "url": {{ .Permalink }},
+        "datePublished": {{ .Date }},
+        "dateModified": {{ .Lastmod }},
+        "author": {
+            "@type": "Person",
+            "name": {{ .Params.author }},
+            "url": {{ absURL "/about-us/" }}
+        },
+        "image": {
+            "@type": "ImageObject",
+            {{- with .Resources.Get .Params.image }}
+                "url": {{ .Permalink }},
+                "width": "{{ .Width }}",
+                "height": "{{ .Height }}"
+            {{- end }}
+        },
+        "publisher": {
+            "@type": "Organization",
+            "@id": {{ printf "%s%s" .Permalink "#organization" }},
+            "name": {{ site.Params.sitename }},
+            "logo": {
+                "@type": "ImageObject",
+                "url": {{ absURL site.Params.logo.image }}
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": {{ .Permalink }}
+        },
+        {{/* "keywords": "{{ .Params.keywords }}", */}}
+        "wordCount": "{{ .WordCount }}",
+        "articleBody": "{{ .Plain | safeJS }}",
+        {{/* "articleSection": "{{ .Params.articleSection }}", */}}
+        "commentCount": 0,
+        "inLanguage": "en-US",
+        "isPartOf": {
+            "@type": "Blog",
+            "@id": {{ printf "%s%s" .Permalink "#blog" }},
+            "name": {{ .Page.Parent.Title }},
+            "url": {{ absURL "/articles/" }}
+        }
+        {{/* "potentialAction": {
+            "@type": "CommentAction",
+            "name": "Comment",
+            "target": "{{ .Permalink }}#comments"
+        } */}}
+    }
+</script>
+{{ end }}

@@ -99,3 +99,84 @@
 
     {{ partial "highlight.html" (dict "context" . "info" .Params.cta "order" "reverse" "classes" "my-spacer") }}
 {{ end }}
+
+
+{{ define "structured" }}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "RealEstateAgent",
+        "@id": {{ printf "%s%s" .Permalink "#realestateagent" }},
+        "name": {{ site.Params.sitename }},
+        "url": {{ .Permalink }},
+        "logo": {
+            "@type": "ImageObject",
+            "url": {{ absURL site.Params.logo.image }},
+            "width": "{{ site.Params.logo.width }}",
+            "height": "{{ site.Params.logo.height }}"
+        },
+        "description": {{ .Params.structured_data.description }},
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": {{ site.Params.address.locality }},
+            "addressRegion": {{ site.Params.address.region }},
+            "postalCode": {{ site.Params.address.code }},
+            "addressCountry": {{ site.Params.address.country }}
+        },
+        "telephone": {{ site.Params.tel }},
+        "email": {{ site.Params.email }},
+        "areaServed": [
+            {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
+                {{ $e }}
+            {{- end }}
+        ],
+        {{- if .Params.structured_data.offer_catalog.items }}
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Buyer Services",
+                "itemListElement": [
+                    {{- range $i, $e := .Params.structured_data.offer_catalog.items }}{{ if $i }},{{ end }}
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": {{ .name }},
+                                "description": {{ .description }}
+                            }
+                        }
+                    {{- end }}
+                ]
+            },
+        {{ end }}
+        {{- if .Params.structured_data.offers }}
+            "makesOffer": [
+                {{- range $i, $e := .Params.structured_data.offers }}{{ if $i }},{{ end }}
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": {{ .name }},
+                            "description": {{ .description }}
+                        }
+                    }
+                {{- end }}
+            ],
+        {{- end }}
+        "mainEntity": {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {{- range $i, $e := .Params.faqs.items }}{{ if $i }},{{ end }}
+                    {
+                        "@type": "Question",
+                        "name": {{ .title }},
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": {{ .text }}
+                        }
+                    }
+                {{- end }}
+            ]
+        }
+    }
+</script>
+{{ end }}

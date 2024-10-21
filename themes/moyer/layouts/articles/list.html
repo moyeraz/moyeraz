@@ -75,3 +75,55 @@
         </div>
     </section>
 {{ end }}
+
+
+{{ define "structured" }}
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "@id": {{ printf "%s%s" .Permalink "#blog" }},
+        "name": {{ .Title }},
+        "description": {{ .Params.structured_data.description }},
+        "url": {{ .Permalink }},
+        "publisher": {
+            "@type": "Organization",
+            "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
+            "name": {{ site.Params.sitename }},
+            "logo": {
+                "@type": "ImageObject",
+                "url": {{ absURL site.Params.logo.image }}
+            }
+        },
+        "blogPost": [
+            {{- range $i, $e := .Data.Pages }}{{ if $i }},{{ end }}
+                {
+                    "@type": "BlogPosting",
+                    "headline": {{ $e.Title }},
+                    "description": {{ $e.Summary | plainify }},
+                    "url": {{ $e.Permalink }},
+                    "datePublished": {{ $e.Date }},
+                    "dateModified": {{ $e.Lastmod }},
+                    "author": {
+                        "@type": "Person",
+                        "name": {{ $e.Params.author }},
+                        "url": {{ absURL "/about-us/" }}
+                    },
+                    "image": {
+                        "@type": "ImageObject",
+                        {{- with .Resources.Get $e.Params.image }}
+                            "url": {{ .Permalink }},
+                            "width": "{{ .Width }}",
+                            "height": "{{ .Height }}"
+                        {{- end }}
+                    },
+                    "mainEntityOfPage": {
+                        "@type": "WebPage",
+                        "@id": {{ .Permalink }}
+                    }
+                }
+            {{- end }}
+        ]
+    }
+</script>
+{{ end }}

@@ -4,6 +4,27 @@ type: buyer-seller
 image: images/seller-showcase.jpg
 meta:
     description: Sell your home with confidence in Southern Arizona. Expert home valuations, marketing, staging, and negotiation support to get the best price.
+structured_data:
+    descrption: Moyer Realty Services provides expert guidance for homeowners looking to sell their properties in the Tucson, Arizona area.
+    offers:
+        -
+            name: Comprehensive Home Valuation
+            description: Get an accurate and up-to-date valuation of your home to ensure you’re listing at the right price.
+        -
+            name: Expert Home Staging Consultation
+            description: We offer professional staging advice to make your home stand out to potential buyers.
+        -
+            name: Marketing Strategy Development
+            description: We develop a tailored marketing strategy for your home, utilizing online listings and targeted advertising.
+        -
+            name: Negotiation Expertise
+            description: We handle all negotiations with potential buyers to achieve favorable terms for your sale.
+        -
+            name: Home Preparation and Repair Guidance
+            description: We provide guidance on repairs and upgrades before listing your home.
+        -
+            name: Smooth Closing Coordination
+            description: We manage the details from offer acceptance to closing, ensuring a smooth and efficient process.
 enableModals: true
 activeModals: ["seller"]
 showcase:
