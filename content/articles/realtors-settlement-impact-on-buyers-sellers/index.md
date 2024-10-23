@@ -6,11 +6,11 @@ draft: false
 categories:
     - Buying Tips
     - Selling Tips
-tags:
-    - Buyer Agent Compensation
-    - Home Buying Advice
-    - Housing Market Updates
-    - NAR Settlement
+# tags:
+#     - Buyer Agent Compensation
+#     - Home Buying Advice
+#     - Housing Market Updates
+#     - NAR Settlement
 featured: true
 author: "James Moyer"
 image: 'moyer-sale-board.jpg'

@@ -74,7 +74,7 @@
                     {{ site.Params.instagram }},
                     {{ site.Params.youtube }}
                 ],
-                "openingHoursSpecification": [
+                {{/* "openingHoursSpecification": [
                     {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
                     {
                         "@type": "OpeningHoursSpecification",
@@ -87,13 +87,13 @@
                         "closes": {{ $e.closes }}
                     }
                     {{- end }}
-                ],
+                ], */}}
                 "areaServed": [
                     {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
                         {{ $e }}
                     {{- end }}
-                ],
-                "priceRange": {{ site.Params.price_range }}
+                ]
+                {{/* "priceRange": {{ site.Params.price_range }} */}}
             }
             {{/* {
                 "@type": "WebSite",

@@ -146,7 +146,7 @@
                         }
                     {{- end }}
                 ]
-            },
+            }
         {{ end }}
         {{- if .Params.structured_data.offers }}
             "makesOffer": [
@@ -160,9 +160,9 @@
                         }
                     }
                 {{- end }}
-            ],
+            ]
         {{- end }}
-        "mainEntity": {
+        {{/* "mainEntity": {
             "@type": "FAQPage",
             "mainEntity": [
                 {{- range $i, $e := .Params.faqs.items }}{{ if $i }},{{ end }}
@@ -176,7 +176,7 @@
                     }
                 {{- end }}
             ]
-        }
+        }*/}}
     }
 </script>
 {{ end }}
