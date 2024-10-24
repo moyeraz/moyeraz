@@ -162,21 +162,25 @@
                 {{- end }}
             ]
         {{- end }}
-        {{/* "mainEntity": {
-            "@type": "FAQPage",
-            "mainEntity": [
-                {{- range $i, $e := .Params.faqs.items }}{{ if $i }},{{ end }}
-                    {
-                        "@type": "Question",
-                        "name": {{ .title }},
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": {{ .text }}
-                        }
-                    }
-                {{- end }}
-            ]
-        }*/}}
+    }
+</script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+        {{ range $index, $element := .Params.faqs.items -}}
+        {{ if ne $index 0 }},{{ end }}
+        {
+            "@type": "Question",
+            "name": {{ $element.title | jsonify }},
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ $element.text | jsonify }}
+            }
+        }
+        {{- end }}
+    ]
     }
 </script>
 {{ end }}
