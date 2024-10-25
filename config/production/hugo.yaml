@@ -1,4 +1,4 @@
-baseURL: ''
+baseURL: 'https://moyeraz.com/'
 minify:
     minifyOutput: true
 enableRobotsTXT: true
