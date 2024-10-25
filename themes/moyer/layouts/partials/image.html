@@ -35,6 +35,6 @@
                 <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
             {{ end }}
         {{ end }}
-        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ .alt }}">
+        <img loading="lazy" class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ .alt }}">
     </picture>
 {{ end }}
