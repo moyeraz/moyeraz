@@ -15,6 +15,6 @@
         </div>
     </div>
     <div class="sc-media absolute inset-0 -z-10 before:absolute before:inset-0 before:bg-secondary-600 before:bg-opacity-60">
-        {{ partial "image.html" (dict "context" . "image" .media "alt" .title) }}
+        {{ partial "image.html" (dict "context" . "image" .media "alt" .title "loading" "eager") }}
     </div>
 </section>

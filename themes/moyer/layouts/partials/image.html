@@ -13,7 +13,7 @@
 
 {{ if eq $ext ".svg" }}
     <picture class="{{ .classes }}">
-        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}" alt="{{ .alt }}">
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}"{{ if ne .loading "eager" }} loading="lazy"{{ end }} alt="{{ .alt }}">
     </picture>
 {{ else }}
     <picture class="{{ .classes }}">
@@ -35,6 +35,6 @@
                 <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
             {{ end }}
         {{ end }}
-        <img loading="lazy" class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ .alt }}">
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ $image.Width }}" height="{{ $image.Height }}"{{ if ne .loading "eager" }} loading="lazy"{{ end }} alt="{{ .alt }}">
     </picture>
 {{ end }}
