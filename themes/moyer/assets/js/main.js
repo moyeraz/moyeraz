@@ -14,23 +14,27 @@ document.addEventListener( 'DOMContentLoaded', function (){
     });
 
     // swiper: featured articles
-    const swiper = new Swiper('.swiper', {
-        loop: true,
-        speed: 1000,
-        spaceBetween: 30,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-        },
-        autoplay: {
-            delay: 3000,
-            pauseOnMouseEnter: true
-        },
-        // navigation: {
-        //     nextEl: '.swiper-button-next',
-        //     prevEl: '.swiper-button-prev',
-        // },
-    });
+    const swiperEl = document.querySelector('.swiper');
+
+    if (swiperEl) {
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            speed: 1000,
+            spaceBetween: 30,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            autoplay: {
+                delay: 3000,
+                pauseOnMouseEnter: true
+            },
+            // navigation: {
+            //     nextEl: '.swiper-button-next',
+            //     prevEl: '.swiper-button-prev',
+            // },
+        });
+    }
 
 
 });
