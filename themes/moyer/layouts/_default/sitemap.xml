@@ -1,6 +1,6 @@
 {{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    {{ range where .Site.RegularPages "Params.sitemap_exclude" "ne" true }}
+    {{ range where .Site.Pages "Params.sitemap_exclude" "ne" true }}
         {{- if .Permalink -}}
             <url>
                 <loc>{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}</loc>
