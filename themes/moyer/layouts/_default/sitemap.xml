@@ -1,11 +1,11 @@
 {{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    {{ range where (where .Site.Pages "Params.sitemap_exclude" "ne" true) ".Page.Kind" "ne" "taxonomy" }}
+    {{ range where .Site.RegularPages "Params.sitemap_exclude" "ne" true }}
         {{- if .Permalink -}}
             <url>
-                <loc>{{ .Permalink }}</loc>
+                <loc>{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}</loc>
                 {{ if not .Lastmod.IsZero }}
-                    <lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>
+                    <lastmod>{{ safeHTML (.Lastmod.Format "2006-01-02T15:04:05-07:00") }}</lastmod>
                 {{ end }}
                 {{ with .Sitemap.ChangeFreq }}
                     <changefreq>{{ . }}</changefreq>
@@ -18,13 +18,13 @@
                         <xhtml:link
                             rel="alternate"
                             hreflang="{{ .Language.LanguageCode }}"
-                            href="{{ .Permalink }}"
+                            href="{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}"
                         />
                     {{ end }}
                     <xhtml:link
                         rel="alternate"
                         hreflang="{{ .Language.LanguageCode }}"
-                        href="{{ .Permalink }}"
+                        href="{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}"
                     />
                 {{ end }}
             </url>
