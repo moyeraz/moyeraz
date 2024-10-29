@@ -1,7 +1,7 @@
 .md-content {
-    h1 {@extend .text-heading-1; margin: 35px 0; font-weight: 800;}
-    h2 {@extend .text-heading-2; margin: 35px 0 15px; font-weight: 800;}
-    h3 {@extend .text-heading-3; margin: 35px 0 10px; font-weight: 800;}
+    h1 {@extend .text-heading-1; margin: 35px 0; font-weight: 900;}
+    h2 {@extend .text-heading-2; margin: 35px 0 15px; font-weight: 900;}
+    h3 {@extend .text-heading-3; margin: 35px 0 10px; font-weight: 900;}
     ul {margin: 40px 0;
         li {position: relative; margin-left: 40px;
             &:before {content: ''; display: block; height: 8px; width: 8px; border: 1px solid theme('colors.primary[600]'); border-radius: 50px; position: absolute; left: -18px; top: 9px;}

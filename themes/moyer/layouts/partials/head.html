@@ -4,5 +4,5 @@
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
 {{ if site.Params.google_analytics }}
-    {{ partial "ga.html" . }}
+    {{ partialCached "ga.html" . }}
 {{ end }}
