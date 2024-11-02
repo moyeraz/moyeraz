@@ -7,7 +7,7 @@ gulp.task('img-min', async () => {
     const imagemin = (await import("gulp-imagemin")).default;
     const imageminWebp = (await import("imagemin-webp")).default;
     return gulp
-        .src(['./**/*.{jpg,png}'], {encoding: false}, {base: './'})
+        .src(['public/**/*.{jpg,png}'], {encoding: false}, {base: './'})
         .pipe(await imagemin(
             [
                 imageminWebp({
@@ -16,5 +16,5 @@ gulp.task('img-min', async () => {
             ]
         ))
         .pipe(rename({ extname: '.webp' }))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./public/'));
 });

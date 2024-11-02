@@ -10,6 +10,12 @@ showcase:
     title: Arizona’s Trusted Real Estate Leaders
     subtitle: Providing expert guidance for Arizona buyers and sellers with clarity, transparency, and trust at every step.
     media: images/real-estate-leaders.jpg
+    media_srcset:
+        - 640
+        - 1280
+        - 1920
+    media_sizes:
+        - 100vw
     buttons:
         -
             title: Looking to Buy?
