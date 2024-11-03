@@ -14,7 +14,7 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form action="{{ .modal.form_action }}">
+                    <form action="{{ .modal.form_action }}" method="POST" onsubmit="return validateForm();">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -41,12 +41,32 @@
                                     </div>
                                 {{ end }}
                             {{ end }}
+                            
+                            <!-- Add reCAPTCHA widget before the submit button -->
+                            <div class="col-span-2 mb-4">
+                                <div class="g-recaptcha" data-sitekey="{{ .Site.Params.recaptcha_site_key }}"></div>
+                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
+                            </div>
+
                             <div class="col-span-full">
                                 <button type="submit" class="btn btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
+
+                    <!-- Add form validation script -->
+                    <script>
+                        function validateForm() {
+                            var recaptchaResponse = grecaptcha.getResponse();
+                            if (recaptchaResponse.length === 0) {
+                                document.getElementById('recaptcha-error').classList.remove('hidden');
+                                return false;
+                            }
+                            document.getElementById('recaptcha-error').classList.add('hidden');
+                            return true;
+                        }
+                    </script>
                 </div>
             </div>        
         </div>
