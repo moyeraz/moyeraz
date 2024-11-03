@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "hugo --gc",
-    "build:kinsta": "hugo --gc -b https://moyeraz.com/ && npx avif --input=\"./public/**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min",
+    "build:kinsta": "hugo --gc -b https://www.moyeraz.com/ && npx avif --input=\"./public/**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min",
     "build:netlify": "hugo --gc -b https://moyer-realty.netlify.app/ && npx avif --input=\"./public/**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
