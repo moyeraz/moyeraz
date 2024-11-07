@@ -49,11 +49,18 @@
                             </div>
 
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit{{ .modal.name }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
+                     <!-- Add form validation script -->
+                     <script>
+                        function callback{{ .modal.name | safeJS }}() {
+                            const submitButton = document.querySelector('.btn-submit{{ .modal.name }}');
+                            submitButton.removeAttribute('disabled');
+                        }
+                    </script>
                 </div>
             </div>        
         </div>

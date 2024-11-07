@@ -1,4 +1,6 @@
-.btn {padding-inline: 30px; height: 44px; display: inline-flex; align-items: center; border-radius: 8px; font-size: 14px; font-weight: 700; white-space: nowrap; transition: all 0.2s ease-in-out;}
+.btn {padding-inline: 30px; height: 44px; display: inline-flex; align-items: center; border-radius: 8px; font-size: 14px; font-weight: 700; white-space: nowrap; transition: all 0.2s ease-in-out;
+    &[disabled] {opacity: 0.5; cursor: not-allowed;}
+}
 
 .btn-solid {
     &.btn-primary {color: #fff; background: theme('colors.primary[600]');
