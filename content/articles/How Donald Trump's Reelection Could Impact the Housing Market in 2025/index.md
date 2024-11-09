@@ -2,7 +2,7 @@
 title: "How Donald Trump's Reelection Could Impact the Housing Market in 2025"
 date: 2024-11-09T00:00:00-00:00
 lastmod: 2024-11-09T00:00:00-00:00
-draft: true
+draft: false
 categories:
     - Market Updates
     - Financing
