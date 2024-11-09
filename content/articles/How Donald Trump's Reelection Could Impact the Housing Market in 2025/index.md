@@ -7,7 +7,7 @@ categories:
     - Market Updates
     - Financing
 author: "James Moyer"
-image: '2025-Housing-Market.jpg'
+image: '2025 Housing Market.jpg'
 featured: true
 ---
 
