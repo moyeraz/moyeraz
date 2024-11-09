@@ -10,10 +10,11 @@
                         {{ if .Params.author }}<span class="py-2 text-text-400 text-sm relative after:content-[''] after:h-4 after:w-px after:bg-text-400 after:block after:absolute after:-right-3 after:top-[10px]">{{ .Params.author }}</span>{{ end }}
                         <span class="py-2 text-text-400 text-sm">{{ .ReadingTime }} Mins</span>
                     </div>
-                <div class="flex gap-3 mt-2">
+                <div class="flex gap-3 mt-2 pb-4 items-center">
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="text-text-400 text-sm hover:text-primary-600 transition duration-300">
                     Share on Facebook
                     </a>
+                    <span class="border-l h-4 border-text-400 mx-2"></span>
                     <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink }}&title={{ .Title }}" target="_blank" rel="noopener noreferrer" class="text-text-400 text-sm hover:text-primary-600 transition duration-300">
                     Share on LinkedIn
                     </a>
