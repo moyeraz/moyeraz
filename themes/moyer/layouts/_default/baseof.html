@@ -24,5 +24,28 @@
     {{ end }}
 
     {{ partial "footer.html" . }}
+
+    <!-- Swiper JavaScript and Initialization -->
+    <script defer src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiperEl = document.querySelector('.swiper');
+        if (swiperEl) {
+            const swiper = new Swiper('.swiper', {
+                loop: true,
+                speed: 1000,
+                spaceBetween: 30,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+                autoplay: {
+                    delay: 3000,
+                    pauseOnMouseEnter: true
+                },
+            });
+        }
+    });
+    </script>
 </body>
 </html>
