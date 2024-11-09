@@ -13,6 +13,17 @@ featured: true
 
 With Donald Trump winning reelection in 2024, the housing market in 2025 may experience changes due to his policy initiatives. Key areas of impact could include inflation from new tariffs, tighter immigration controls affecting labor supply in construction, and heightened economic uncertainty. Here’s a closer look at how Trump’s policies could shape the housing landscape in the coming year.
 
+<!-- Social Share Buttons -->
+<div style="margin-top: 20px;">
+    <h3>Share this article:</h3>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Share on Facebook" width="32" height="32" style="vertical-align: middle; margin-right: 10px;">
+    </a>
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink }}&title={{ .Title }}" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="Share on LinkedIn" width="32" height="32" style="vertical-align: middle;">
+    </a>
+</div>
+
 ## 1. Tariffs and Rising Inflation
 
 One of Trump’s primary economic strategies involves increasing tariffs on foreign goods, particularly from major trading partners like China. These tariffs often lead to higher costs for materials needed in home construction, such as lumber, steel, and other essentials. As these costs rise, home construction becomes more expensive, which can drive up housing prices overall.
