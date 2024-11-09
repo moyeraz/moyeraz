@@ -8,13 +8,15 @@
                 <div class="flex flex-col items-center lg:items-start gap-2">
                     <div class="flex gap-5">
                         <span class="py-2 text-text-400 text-sm">{{ .Date.Format site.Params.dateformat }}</span>
-                        {{ if .Params.author }}<span class="py-2 text-text-400 text-sm">{{ .Params.author }}</span>{{ end }}
+                        {{ if .Params.author }}
+                            <span class="py-2 text-text-400 text-sm">{{ .Params.author }}</span>
+                        {{ end }}
                         <span class="py-2 text-text-400 text-sm">{{ .ReadingTime }} Mins</span>
                     </div>
                 </div>
                 <div class="flex gap-2 lg:gap-4">
-                    {{ range .GetTerms "categories" }}
-                        <a class="category-link" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+                    {{ range .Params.categories }}
+                        <a class="category-link" href="{{ . | urlize }}">{{ . }}</a>
                     {{ end }}
                 </div>
             </div>
@@ -83,50 +85,50 @@
 
 {{ define "structured" }}
 <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "@id": "{{ .Permalink }}#blogposting",
-        "headline": "{{ .Title }}",
-        "description": "{{ .Summary | plainify }}",
-        "url": "{{ .Permalink }}",
-        "datePublished": "{{ .Date }}",
-        "dateModified": "{{ .Lastmod }}",
-        "author": {
-            "@type": "Person",
-            "name": "{{ .Params.author }}",
-            "url": "{{ absURL "/about-us/" }}"
-        },
-        "image": {
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": "{{ .Permalink }}#blogposting",
+    "headline": "{{ .Title }}",
+    "description": "{{ .Summary | plainify }}",
+    "url": "{{ .Permalink }}",
+    "datePublished": "{{ .Date }}",
+    "dateModified": "{{ .Lastmod }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ .Params.author }}",
+        "url": "{{ absURL "/about-us/" }}"
+    },
+    "image": {
+        "@type": "ImageObject",
+        {{- with .Resources.GetMatch .Params.image }}
+            "url": "{{ .Permalink }}",
+            "width": "{{ .Width }}",
+            "height": "{{ .Height }}"
+        {{- end }}
+    },
+    "publisher": {
+        "@type": "Organization",
+        "@id": "{{ .Permalink }}#organization",
+        "name": "{{ site.Params.sitename }}",
+        "logo": {
             "@type": "ImageObject",
-            {{- with .Resources.Get .Params.image }}
-                "url": "{{ .Permalink }}",
-                "width": "{{ .Width }}",
-                "height": "{{ .Height }}"
-            {{- end }}
-        },
-        "publisher": {
-            "@type": "Organization",
-            "@id": "{{ .Permalink }}#organization",
-            "name": "{{ site.Params.sitename }}",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "{{ absURL site.Params.logo.image }}"
-            }
-        },
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "{{ .Permalink }}"
-        },
-        "wordCount": "{{ .WordCount }}",
-        "articleBody": "{{ .Plain | safeJS }}",
-        "inLanguage": "en-US",
-        "isPartOf": {
-            "@type": "Blog",
-            "@id": "{{ .Permalink }}#blog",
-            "name": "{{ .Page.Parent.Title }}",
-            "url": "{{ absURL "/articles/" }}"
+            "url": "{{ absURL site.Params.logo.image }}"
         }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ .Permalink }}"
+    },
+    "wordCount": "{{ .WordCount }}",
+    "articleBody": "{{ .Plain | safeJS }}",
+    "inLanguage": "en-US",
+    "isPartOf": {
+        "@type": "Blog",
+        "@id": "{{ .Permalink }}#blog",
+        "name": "{{ .Page.Parent.Title }}",
+        "url": "{{ absURL "/articles/" }}"
     }
+}
 </script>
 {{ end }}
