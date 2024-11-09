@@ -4,5 +4,4 @@ minify:
 enableRobotsTXT: true
 
 params:
-    google_analytics: G-QWQ0H5N569
     recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
