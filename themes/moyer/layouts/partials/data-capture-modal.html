@@ -14,11 +14,6 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    
-                    <!-- Thank You Message (Hidden Initially) -->
-                    <div id="thank-you-message-{{ .modal.id }}" class="hidden text-center text-green-600 font-bold py-4">
-                        Thank you, we have received your request and will be in touch shortly.
-                    </div>
 
                     <!-- Form Section -->
                     <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
@@ -48,7 +43,7 @@
                                     </div>
                                 {{ end }}
                             {{ end }}
-                            
+
                             <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
                                 <div class="g-recaptcha" 
@@ -65,12 +60,17 @@
                         </div>
                     </form>
                     <script>
+                        // Close modal on submission to navigate to thank-you page
+                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
+                            closeModal("{{ .modal.id }}");
+                        };
+
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
                             document.body.classList.remove("modal-open");
                         }
-                        
+
                         // Define reCAPTCHA-enabled button management
                         function getButtonSelector(modalId) {
                             return '.btn-submit-' + modalId;
@@ -94,36 +94,15 @@
                             }
                         };
 
-                        // Wrapper functions for each modal
+                        // Wrapper functions for each modal to handle reCAPTCHA
                         (function() {
                             var modalId = '{{ .modal.id | safeJS }}';
-
                             window['enableSubmitButton' + modalId] = function(response) {
                                 window.enableSubmitButton(response, modalId);
                             };
-                            
                             window['recaptchaExpired' + modalId] = function() {
                                 window.recaptchaExpired(modalId);
                             };
-
-                            // Handle form submission to show a thank-you message
-                            const form = document.getElementById(`form-${modalId}`);
-                            form.addEventListener('submit', function(event) {
-                                event.preventDefault();
-                                
-                                const thankYouMessage = document.getElementById(`thank-you-message-${modalId}`);
-                                
-                                form.classList.add("hidden");
-                                thankYouMessage.classList.remove("hidden");
-
-                                // Automatically close modal after 5 seconds
-                                setTimeout(() => {
-                                    closeModal(modalId);
-                                    form.reset();
-                                    form.classList.remove("hidden");
-                                    thankYouMessage.classList.add("hidden");
-                                }, 5000);
-                            });
                         })();
                     </script>
                 </div>
