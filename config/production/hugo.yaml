@@ -1,6 +1,14 @@
 baseURL: ''
 minify:
-    minifyOutput: true
+  tdewolff:
+    html:
+      minify: true  # Minify HTML
+      keepWhitespace: false  # Removes unnecessary whitespace
+    css:
+      minify: true  # Minify CSS files
+    js:
+      minify: true  # Minify JavaScript files
 enableRobotsTXT: true
+
 params:
-    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
+  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
