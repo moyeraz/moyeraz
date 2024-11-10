@@ -2,6 +2,5 @@ baseURL: ''
 minify:
     minifyOutput: true
 enableRobotsTXT: true
-
 params:
     recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
