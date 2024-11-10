@@ -23,7 +23,7 @@
         {{ end }}
     {{ end }}
 
-    {{ partial "footer.html" . }}
+        {{ partial "footer.html" . }}
 
     <!-- Conditionally Load Swiper JavaScript and Initialization for Articles and Categories -->
     {{ if or (eq .Page.Type "articles") (eq .Page.Type "categories") }}
@@ -32,19 +32,26 @@
         document.addEventListener('DOMContentLoaded', function () {
             const swiperEl = document.querySelector('.swiper');
             if (swiperEl) {
-                const swiper = new Swiper('.swiper', {
-                    loop: true,
-                    speed: 1000,
-                    spaceBetween: 30,
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    },
-                    autoplay: {
-                        delay: 3000,
-                        pauseOnMouseEnter: true
-                    },
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        // Initialize Swiper only when it becomes visible
+                        const swiper = new Swiper('.swiper', {
+                            loop: true,
+                            speed: 1000,
+                            spaceBetween: 30,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true
+                            },
+                            autoplay: {
+                                delay: 3000,
+                                pauseOnMouseEnter: true
+                            },
+                        });
+                        observer.disconnect(); // Stop observing after initialization
+                    }
                 });
+                observer.observe(swiperEl);
             }
         });
         </script>
