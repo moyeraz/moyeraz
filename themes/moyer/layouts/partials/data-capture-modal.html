@@ -14,7 +14,14 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form action="{{ .modal.form_action }}" method="POST">
+                    
+                    <!-- Thank You Message (Hidden Initially) -->
+                    <div id="thank-you-message-{{ .modal.id }}" class="hidden text-center text-green-600 font-bold py-4">
+                        Thank you, we have received your request and will be in touch shortly.
+                    </div>
+
+                    <!-- Form Section -->
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="handleSubmit(event, '{{ .modal.id }}')">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -76,6 +83,26 @@
                         const submitButton = document.querySelector(getButtonSelector(modalId));
                         if (submitButton) { submitButton.setAttribute('disabled', 'disabled'); }
                     };
+
+                    // Show Thank You Message and Close Modal
+                    function handleSubmit(event, modalId) {
+                        event.preventDefault();
+
+                        const form = document.getElementById(`form-${modalId}`);
+                        const thankYouMessage = document.getElementById(`thank-you-message-${modalId}`);
+                        
+                        // Hide the form and show the thank you message
+                        form.classList.add("hidden");
+                        thankYouMessage.classList.remove("hidden");
+
+                        // Close the modal after 5 seconds
+                        setTimeout(() => {
+                            document.getElementById(modalId).classList.add("hidden");
+                            form.reset();  // Optionally reset the form fields
+                            form.classList.remove("hidden"); // Show form for the next use
+                            thankYouMessage.classList.add("hidden"); // Hide thank you message
+                        }, 5000);
+                    }
 
                     (function() {
                         var modalId = '{{ .modal.id | safeJS }}';
