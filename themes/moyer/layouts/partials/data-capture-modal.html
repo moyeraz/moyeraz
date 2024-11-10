@@ -44,11 +44,11 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- Add reCAPTCHA widget before the submit button -->
+                            <!-- reCAPTCHA widget container -->
                             <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" 
-                                    data-sitekey="{{ site.Params.recaptcha_key }}" 
-                                    data-callback="enableSubmitButton{{ .modal.id | safeJS }}" 
+                                <div id="recaptcha-container-{{ .modal.id }}" class="g-recaptcha"
+                                    data-sitekey="{{ site.Params.recaptcha_key }}"
+                                    data-callback="enableSubmitButton{{ .modal.id | safeJS }}"
                                     data-expired-callback="recaptchaExpired{{ .modal.id | safeJS }}"></div>
                                 <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
                             </div>
@@ -59,51 +59,39 @@
                             </div>
                         </div>
                     </form>
-                    <script>
-                        // Close modal on submission to navigate to thank-you page
-                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
-                            closeModal("{{ .modal.id }}");
-                        };
 
+                    <script>
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
                             document.body.classList.remove("modal-open");
                         }
 
-                        // Define reCAPTCHA-enabled button management
-                        function getButtonSelector(modalId) {
-                            return '.btn-submit-' + modalId;
-                        }
-
-                        window.enableSubmitButton = function(response, modalId) {
-                            if (!response) {
-                                console.warn('No reCAPTCHA response token received');
-                                return;
+                        // Lazy-load reCAPTCHA script only when the modal is opened
+                        document.getElementById('{{ .modal.id }}').addEventListener('click', function() {
+                            if (!window.grecaptcha) {
+                                const script = document.createElement('script');
+                                script.src = "https://www.google.com/recaptcha/api.js";
+                                script.async = true;
+                                script.defer = true;
+                                document.head.appendChild(script);
                             }
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                        });
+
+                        // reCAPTCHA callbacks to manage button state
+                        window.enableSubmitButton{{ .modal.id }} = function() {
+                            const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
                             if (submitButton) {
                                 submitButton.removeAttribute('disabled');
                             }
                         };
 
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                        window.recaptchaExpired{{ .modal.id }} = function() {
+                            const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
                             if (submitButton) {
                                 submitButton.setAttribute('disabled', 'disabled');
                             }
                         };
-
-                        // Wrapper functions for each modal to handle reCAPTCHA
-                        (function() {
-                            var modalId = '{{ .modal.id | safeJS }}';
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
-                            };
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
-                            };
-                        })();
                     </script>
                 </div>
             </div>        
