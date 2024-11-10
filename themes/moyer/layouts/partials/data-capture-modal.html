@@ -6,7 +6,7 @@
                     {{ partial "image.html" (dict "context" . "image" .modal.image "alt" .title "object" "cover" "rounded" "rounded-lg") }}
                 </div>
                 <div class="py-5 px-4 md:py-12 md:px-10">
-                    <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" data-modal-hide="{{ .modal.id }}">
+                    <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ .modal.id }}')">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
@@ -66,53 +66,34 @@
                     </form>
                 <!-- JavaScript for reCAPTCHA-specific functionality and form submission -->
                 <script>
-                    function getButtonSelector(modalId) { return '.btn-submit-' + modalId; }
-
-                    function showRecaptchaError(modalId) {
-                        const errorDiv = document.querySelector(`#${modalId} #recaptcha-error`);
-                        if (errorDiv) { errorDiv.classList.remove('hidden'); }
+                    function closeModal(modalId) {
+                        const modal = document.getElementById(modalId);
+                        modal.classList.add("hidden");
+                        document.body.classList.remove("modal-open"); // Ensure overlay class is removed
                     }
 
-                    window.enableSubmitButton = function(response, modalId) {
-                        if (!response) { showRecaptchaError(modalId); return; }
-                        const submitButton = document.querySelector(getButtonSelector(modalId));
-                        if (submitButton) { submitButton.removeAttribute('disabled'); }
-                    };
-
-                    window.recaptchaExpired = function(modalId) {
-                        const submitButton = document.querySelector(getButtonSelector(modalId));
-                        if (submitButton) { submitButton.setAttribute('disabled', 'disabled'); }
-                    };
-
-                    // Show Thank You Message and Close Modal
                     async function handleSubmit(event, modalId) {
                         event.preventDefault();
-
                         const form = document.getElementById(`form-${modalId}`);
                         const thankYouMessage = document.getElementById(`thank-you-message-${modalId}`);
                         const formData = new FormData(form);
 
                         try {
-                            // Send form data to Formspark
                             const response = await fetch(form.action, {
                                 method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                },
                                 body: formData
                             });
 
                             if (response.ok) {
-                                // Hide the form and show the thank you message
                                 form.classList.add("hidden");
                                 thankYouMessage.classList.remove("hidden");
 
-                                // Close the modal after 5 seconds
+                                // Close the modal after showing the thank you message
                                 setTimeout(() => {
-                                    document.getElementById(modalId).classList.add("hidden");
-                                    form.reset();  // Optionally reset the form fields
-                                    form.classList.remove("hidden"); // Show form for the next use
-                                    thankYouMessage.classList.add("hidden"); // Hide thank you message
+                                    closeModal(modalId);
+                                    form.reset();
+                                    form.classList.remove("hidden");
+                                    thankYouMessage.classList.add("hidden");
                                 }, 5000);
                             } else {
                                 console.error("Form submission failed:", response.statusText);
@@ -125,10 +106,16 @@
                     (function() {
                         var modalId = '{{ .modal.id | safeJS }}';
                         window['enableSubmitButton' + modalId] = function(response) {
-                            window.enableSubmitButton(response, modalId);
+                            const submitButton = document.querySelector(`.btn-submit-${modalId}`);
+                            if (submitButton) {
+                                submitButton.removeAttribute('disabled');
+                            }
                         };
                         window['recaptchaExpired' + modalId] = function() {
-                            window.recaptchaExpired(modalId);
+                            const submitButton = document.querySelector(`.btn-submit-${modalId}`);
+                            if (submitButton) {
+                                submitButton.setAttribute('disabled', 'disabled');
+                            }
                         };
                     })();
                 </script>
