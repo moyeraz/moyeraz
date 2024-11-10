@@ -46,7 +46,7 @@
 
                             <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha"
+                                <div class="g-recaptcha" 
                                     id="recaptcha-container-{{ .modal.id }}"
                                     data-sitekey="{{ site.Params.recaptcha_key }}"
                                     data-callback="enableSubmitButton{{ .modal.id | safeJS }}"
@@ -76,30 +76,46 @@
                         }
 
                         // Lazy load reCAPTCHA script only when the modal is opened
+                        let recaptchaLoaded = false;
                         document.getElementById('{{ .modal.id }}').addEventListener('click', function() {
-                            if (!window.grecaptcha) {
+                            if (!recaptchaLoaded) {
+                                recaptchaLoaded = true;
                                 const script = document.createElement('script');
-                                script.src = "https://www.google.com/recaptcha/api.js";
+                                script.src = "https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit";
                                 script.async = true;
                                 script.defer = true;
                                 document.head.appendChild(script);
+                            } else {
+                                grecaptcha.render("recaptcha-container-{{ .modal.id }}", {
+                                    sitekey: "{{ site.Params.recaptcha_key }}",
+                                    callback: enableSubmitButton{{ .modal.id }},
+                                    "expired-callback": recaptchaExpired{{ .modal.id }}
+                                });
                             }
                         });
 
-                        // reCAPTCHA callbacks to manage button state
-                        window.enableSubmitButton{{ .modal.id }} = function() {
+                        // Define reCAPTCHA callback functions for button management
+                        function enableSubmitButton{{ .modal.id }}(response) {
                             const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
                             if (submitButton) {
                                 submitButton.removeAttribute('disabled');
                             }
-                        };
+                        }
 
-                        window.recaptchaExpired{{ .modal.id }} = function() {
+                        function recaptchaExpired{{ .modal.id }}() {
                             const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
                             if (submitButton) {
                                 submitButton.setAttribute('disabled', 'disabled');
                             }
-                        };
+                        }
+
+                        function onRecaptchaLoad() {
+                            grecaptcha.render("recaptcha-container-{{ .modal.id }}", {
+                                sitekey: "{{ site.Params.recaptcha_key }}",
+                                callback: enableSubmitButton{{ .modal.id }},
+                                "expired-callback": recaptchaExpired{{ .modal.id }}
+                            });
+                        }
                     </script>
                 </div>
             </div>        
