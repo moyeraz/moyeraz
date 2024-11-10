@@ -16,7 +16,7 @@
                     <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
 
                     <!-- Form Section -->
-                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="handleRecaptcha(event)">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -44,76 +44,28 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- Add reCAPTCHA widget before the submit button -->
-                            <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" 
-                                    id="recaptcha-container-{{ .modal.id }}"
-                                    data-sitekey="{{ site.Params.recaptcha_key }}"
-                                    data-callback="enableSubmitButton{{ .modal.id | safeJS }}"
-                                    data-expired-callback="recaptchaExpired{{ .modal.id | safeJS }}">
-                                </div>
-                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
-                            </div>
+                            <!-- Hidden reCAPTCHA token input -->
+                            <input type="hidden" id="recaptcha-token" name="g-recaptcha-response">
 
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
 
-                    <!-- Lazy-load reCAPTCHA Script and Initialize When Modal Opens -->
+                    <!-- Load reCAPTCHA v3 Script -->
+                    <script src="https://www.google.com/recaptcha/api.js?render={{ .Site.Params.recaptcha_key }}" async defer></script>
                     <script>
-                        // Close modal on submission to navigate to thank-you page
-                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
-                            closeModal("{{ .modal.id }}");
-                        };
-
-                        function closeModal(modalId) {
-                            const modal = document.getElementById(modalId);
-                            modal.classList.add("hidden");
-                            document.body.classList.remove("modal-open");
-                        }
-
-                        // Lazy load reCAPTCHA script only when the modal is opened
-                        let recaptchaLoaded = false;
-                        document.getElementById('{{ .modal.id }}').addEventListener('click', function() {
-                            if (!recaptchaLoaded) {
-                                recaptchaLoaded = true;
-                                const script = document.createElement('script');
-                                script.src = "https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit";
-                                script.async = true;
-                                script.defer = true;
-                                document.head.appendChild(script);
-                            } else {
-                                grecaptcha.render("recaptcha-container-{{ .modal.id }}", {
-                                    sitekey: "{{ site.Params.recaptcha_key }}",
-                                    callback: enableSubmitButton{{ .modal.id }},
-                                    "expired-callback": recaptchaExpired{{ .modal.id }}
+                        function handleRecaptcha(event) {
+                            event.preventDefault();
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute('{{ .Site.Params.recaptcha_key }}', {action: 'submit'}).then(function(token) {
+                                    // Add the token to the form
+                                    document.getElementById('recaptcha-token').value = token;
+                                    // Submit the form now that reCAPTCHA has been verified
+                                    document.getElementById("form-{{ .modal.id }}").submit();
                                 });
-                            }
-                        });
-
-                        // Define reCAPTCHA callback functions for button management
-                        function enableSubmitButton{{ .modal.id }}(response) {
-                            const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            }
-                        }
-
-                        function recaptchaExpired{{ .modal.id }}() {
-                            const submitButton = document.querySelector('.btn-submit-{{ .modal.id }}');
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            }
-                        }
-
-                        function onRecaptchaLoad() {
-                            grecaptcha.render("recaptcha-container-{{ .modal.id }}", {
-                                sitekey: "{{ site.Params.recaptcha_key }}",
-                                callback: enableSubmitButton{{ .modal.id }},
-                                "expired-callback": recaptchaExpired{{ .modal.id }}
                             });
                         }
                     </script>
