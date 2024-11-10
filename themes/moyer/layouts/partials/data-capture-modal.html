@@ -45,6 +45,7 @@
                             {{ end }}
 
                             <!-- Add reCAPTCHA widget before the submit button -->
+                            <input type="hidden" id="recaptcha-token-{{ .modal.id }}" name="g-recaptcha-response">
                             <div class="col-span-2 mb-4">
                                 <div class="g-recaptcha" 
                                     data-sitekey="{{ site.Params.recaptcha_key }}" 
@@ -62,7 +63,7 @@
 
                     <!-- Lazy Load reCAPTCHA Initialization -->
                     <script>
-                        // Close modal on submission to navigate to thank-you page
+                        // Close modal on submission
                         document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
                             closeModal("{{ .modal.id }}");
                         };
@@ -73,14 +74,23 @@
                             document.body.classList.remove("modal-open");
                         }
 
-                        // Initialize reCAPTCHA only when the modal is opened
+                        // Initialize reCAPTCHA only when the modal opens
                         document.getElementById('{{ .modal.id }}').addEventListener('click', function() {
-                            if (typeof grecaptcha !== 'undefined') {
-                                grecaptcha.ready(function() {
-                                    grecaptcha.execute('{{ .Site.Params.recaptcha_key }}').then(function(token) {
-                                        document.getElementById('recaptcha-token').value = token;
+                            if (!document.getElementById('recaptcha-script')) {
+                                const script = document.createElement('script');
+                                script.src = "https://www.google.com/recaptcha/api.js?render={{ .Site.Params.recaptcha_key }}";
+                                script.id = 'recaptcha-script';
+                                script.async = true;
+                                script.defer = true;
+                                document.head.appendChild(script);
+
+                                script.onload = function() {
+                                    grecaptcha.ready(function() {
+                                        grecaptcha.execute('{{ .Site.Params.recaptcha_key }}').then(function(token) {
+                                            document.getElementById('recaptcha-token-{{ .modal.id }}').value = token;
+                                        });
                                     });
-                                });
+                                };
                             }
                         });
 
