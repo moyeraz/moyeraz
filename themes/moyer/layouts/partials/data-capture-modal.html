@@ -21,7 +21,7 @@
                     </div>
 
                     <!-- Form Section -->
-                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="handleSubmit(event, '{{ .modal.id }}')">
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -59,67 +59,74 @@
                             </div>
 
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled aria-disabled="true">{{ .modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
-                <!-- JavaScript for reCAPTCHA-specific functionality and form submission -->
-                <script>
-                    function closeModal(modalId) {
-                        const modal = document.getElementById(modalId);
-                        modal.classList.add("hidden");
-                        document.body.classList.remove("modal-open"); // Ensure overlay class is removed
-                    }
+                    <script>
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            modal.classList.add("hidden");
+                            document.body.classList.remove("modal-open");
+                        }
+                        
+                        // Define reCAPTCHA-enabled button management
+                        function getButtonSelector(modalId) {
+                            return '.btn-submit-' + modalId;
+                        }
 
-                    async function handleSubmit(event, modalId) {
-                        event.preventDefault();
-                        const form = document.getElementById(`form-${modalId}`);
-                        const thankYouMessage = document.getElementById(`thank-you-message-${modalId}`);
-                        const formData = new FormData(form);
+                        window.enableSubmitButton = function(response, modalId) {
+                            if (!response) {
+                                console.warn('No reCAPTCHA response token received');
+                                return;
+                            }
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
+                                submitButton.removeAttribute('disabled');
+                            }
+                        };
 
-                        try {
-                            const response = await fetch(form.action, {
-                                method: 'POST',
-                                body: formData
-                            });
+                        window.recaptchaExpired = function(modalId) {
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
+                                submitButton.setAttribute('disabled', 'disabled');
+                            }
+                        };
 
-                            if (response.ok) {
+                        // Wrapper functions for each modal
+                        (function() {
+                            var modalId = '{{ .modal.id | safeJS }}';
+
+                            window['enableSubmitButton' + modalId] = function(response) {
+                                window.enableSubmitButton(response, modalId);
+                            };
+                            
+                            window['recaptchaExpired' + modalId] = function() {
+                                window.recaptchaExpired(modalId);
+                            };
+
+                            // Handle form submission to show a thank-you message
+                            const form = document.getElementById(`form-${modalId}`);
+                            form.addEventListener('submit', function(event) {
+                                event.preventDefault();
+                                
+                                const thankYouMessage = document.getElementById(`thank-you-message-${modalId}`);
+                                
                                 form.classList.add("hidden");
                                 thankYouMessage.classList.remove("hidden");
 
-                                // Close the modal after showing the thank you message
+                                // Automatically close modal after 5 seconds
                                 setTimeout(() => {
                                     closeModal(modalId);
                                     form.reset();
                                     form.classList.remove("hidden");
                                     thankYouMessage.classList.add("hidden");
                                 }, 5000);
-                            } else {
-                                console.error("Form submission failed:", response.statusText);
-                            }
-                        } catch (error) {
-                            console.error("Form submission error:", error);
-                        }
-                    }
-
-                    (function() {
-                        var modalId = '{{ .modal.id | safeJS }}';
-                        window['enableSubmitButton' + modalId] = function(response) {
-                            const submitButton = document.querySelector(`.btn-submit-${modalId}`);
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            }
-                        };
-                        window['recaptchaExpired' + modalId] = function() {
-                            const submitButton = document.querySelector(`.btn-submit-${modalId}`);
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            }
-                        };
-                    })();
-                </script>
-            </div>
+                            });
+                        })();
+                    </script>
+                </div>
             </div>        
         </div>
     </div>
