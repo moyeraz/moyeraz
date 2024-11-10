@@ -16,7 +16,7 @@
                     <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
 
                     <!-- Form Section -->
-                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="return handleFormSubmit('{{ .modal.id }}')">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -44,16 +44,8 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- Add reCAPTCHA widget before the submit button -->
+                            <!-- Add reCAPTCHA token input for submission -->
                             <input type="hidden" id="recaptcha-token-{{ .modal.id }}" name="g-recaptcha-response">
-                            <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" 
-                                    data-sitekey="{{ site.Params.recaptcha_key }}" 
-                                    data-callback="enableSubmitButton{{ .modal.id | safeJS }}" 
-                                    data-expired-callback="recaptchaExpired{{ .modal.id | safeJS }}"></div>
-                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
-                            </div>
-
                             <div class="col-span-full">
                                 <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
@@ -61,17 +53,27 @@
                         </div>
                     </form>
 
-                    <!-- Lazy Load reCAPTCHA Initialization -->
+                    <!-- Lazy Load reCAPTCHA Initialization and Submission Handling -->
                     <script>
-                        // Close modal on submission
-                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
-                            closeModal("{{ .modal.id }}");
-                        };
-
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
                             document.body.classList.remove("modal-open");
+                        }
+
+                        function handleFormSubmit(modalId) {
+                            const form = document.getElementById(`form-${modalId}`);
+                            const recaptchaTokenInput = document.getElementById(`recaptcha-token-${modalId}`);
+
+                            // Execute reCAPTCHA and set the token, then submit
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute('{{ .Site.Params.recaptcha_key }}').then(function(token) {
+                                    recaptchaTokenInput.value = token;
+                                    form.submit(); // Only submit the form after token is set
+                                });
+                            });
+
+                            return false; // Prevent default form submission to wait for reCAPTCHA
                         }
 
                         // Initialize reCAPTCHA only when the modal opens
@@ -83,46 +85,8 @@
                                 script.async = true;
                                 script.defer = true;
                                 document.head.appendChild(script);
-
-                                script.onload = function() {
-                                    grecaptcha.ready(function() {
-                                        grecaptcha.execute('{{ .Site.Params.recaptcha_key }}').then(function(token) {
-                                            document.getElementById('recaptcha-token-{{ .modal.id }}').value = token;
-                                        });
-                                    });
-                                };
                             }
                         });
-
-                        // Define reCAPTCHA button management
-                        function getButtonSelector(modalId) {
-                            return '.btn-submit-' + modalId;
-                        }
-
-                        window.enableSubmitButton = function(response, modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            }
-                        };
-
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            }
-                        };
-
-                        // Wrapper functions for each modal to handle reCAPTCHA
-                        (function() {
-                            var modalId = '{{ .modal.id | safeJS }}';
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
-                            };
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
-                            };
-                        })();
                     </script>
                 </div>
             </div>        
