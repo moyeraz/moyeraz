@@ -3,7 +3,7 @@
 <head>
     {{ partial "head.html" . }}
     {{ block "structured" . }}{{ end }}
-    {{ partial "js.html" . }}
+    {{ partial "head/js.html" . }}
 </head>
 <body class="text-text-600 bg-neutral-100 {{ block "body_classes" . }}{{ end }}">
     {{ partial "header.html" . }}
