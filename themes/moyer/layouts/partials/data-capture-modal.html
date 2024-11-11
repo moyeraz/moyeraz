@@ -16,7 +16,7 @@
                     <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
 
                     <!-- Form Section -->
-                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="handleRecaptcha(event)">
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" onsubmit="handleFormSubmit(event, '{{ .modal.id }}')">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -44,33 +44,49 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- Hidden reCAPTCHA token input -->
-                            <input type="hidden" id="recaptcha-token" name="g-recaptcha-response">
+                            <!-- reCAPTCHA v2 Checkbox -->
+                            <div class="col-span-full mb-4">
+                                <div class="g-recaptcha" 
+                                     data-sitekey="{{ .Site.Params.recaptcha_site_key }}" 
+                                     data-callback="enableSubmitButton{{ .modal.id }}" 
+                                     data-expired-callback="disableSubmitButton{{ .modal.id }}"></div>
+                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
+                            </div>
 
+                            <!-- Submit Button -->
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
+                                <button type="submit" id="submit-btn-{{ .modal.id }}" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
 
-                    <!-- Load reCAPTCHA v3 Script -->
-<script src="https://www.google.com/recaptcha/api.js?render={{ .Site.Params.recaptcha_site_key }}" async defer></script>
-<script>
-    function handleRecaptcha(event) {
-        event.preventDefault();
-        grecaptcha.ready(function() {
-            grecaptcha.execute('{{ .Site.Params.recaptcha_site_key }}', {action: 'submit'}).then(function(token) {
-                document.getElementById('recaptcha-token').value = token;
-                document.getElementById("form-{{ .modal.id }}").submit();
-            });
-        });
-    }
-</script>
+                    <!-- Load reCAPTCHA v2 Script -->
+                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+                    <script>
+                        function enableSubmitButton{{ .modal.id }}() {
+                            document.getElementById("submit-btn-{{ .modal.id }}").disabled = false;
+                        }
 
+                        function disableSubmitButton{{ .modal.id }}() {
+                            document.getElementById("submit-btn-{{ .modal.id }}").disabled = true;
+                        }
 
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            if (modal) {
+                                modal.classList.add("hidden");
+                                document.body.classList.remove("modal-open");
+                            }
+                        }
 
+                        function handleFormSubmit(event, modalId) {
+                            event.preventDefault();  // Prevent default form submission
+                            closeModal(modalId);     // Close the modal
+                            document.getElementById("form-" + modalId).submit(); // Submit the form
+                        }
+                    </script>
                 </div>
             </div>        
         </div>
