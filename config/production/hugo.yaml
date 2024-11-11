@@ -11,5 +11,6 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_site_key: "{{ getenv \"reCAPTCHA_Site_Key\" | default \"your-default-site-key\" }}"
-  recaptcha_secret_key: "{{ getenv \"reCAPTCHA_Secret_Key\" | default \"your-default-secret-key\" }}"
+  # Leave these keys empty; we'll handle them in templates
+  recaptcha_site_key: ""
+  recaptcha_secret_key: ""
