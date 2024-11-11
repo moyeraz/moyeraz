@@ -11,4 +11,5 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_key: "6Leq8XoqAAAAADMLU5CvrDDrRodR63qswu5l4mcv"
+  recaptcha_key: {{ getenv "reCAPTCHA_Site_Key" | default "your-default-site-key" }}
+  recaptcha_secret_key: {{ getenv "reCAPTCHA_Secret_Key" | default "your-default-secret-key" }}
