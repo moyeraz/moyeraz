@@ -11,5 +11,5 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_key: "your-default-site-key"  # This will be replaced by Kinsta's environment variable if available
-  recaptcha_secret_key: "your-default-secret-key"  # This also will be replaced by Kinsta's environment variable if available
+  recaptcha_key: {{ getenv "reCAPTCHA_Site_Key" | default "your-default-site-key" }}
+  recaptcha_secret_key: {{ getenv "reCAPTCHA_Secret_Key" | default "your-default-secret-key" }}
