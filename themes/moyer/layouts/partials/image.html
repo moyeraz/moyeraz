@@ -1,3 +1,8 @@
+{{/* <picture class="d-flex justify-content-center">
+    <source srcset="{{ $smallImg.RelPermalink }}" type="{{ $smallImg.MediaType }}" media="(max-width: 576px)" width="{{ $smallImg.Width }}" height="{{ $smallImg.Height }}">
+    <img class="post-featured-img h-auto w-auto mb-3" alt="{{ $alt }}" src="{{ $largeImg.RelPermalink }}" width="{{ $largeImg.Width }}" height="{{ $largeImg.Height }}">
+</picture> */}}
+
 {{- $image := "" }}
 {{- if .resource }}
     {{- $image = .context.Resources.Get .image }}
@@ -6,33 +11,42 @@
 {{- end }}
 {{- $ext := path.Ext .image }}
 
-{{ if $image }}
-    {{ if eq $ext ".svg" }}
-        <picture class="{{ .classes }}">
-            <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}"{{ if ne .loading "eager" }} loading="lazy"{{ end }} alt="{{ .alt }}">
-        </picture>
-    {{ else }}
-        <picture class="{{ .classes }}">
-            {{ if hugo.IsProduction }}
-                {{- $image_name := strings.TrimSuffix $ext $image.RelPermalink }}
-                <source srcset="{{ printf "%s.avif" $image_name }}" type="image/avif">
-                <source srcset="{{ printf "%s.webp" $image_name }}" type="image/webp">
-            {{ end }}
-            <img
-                class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}"
-                src="{{ $image.RelPermalink }}"
-                width="{{ $image.Width }}"
-                height="{{ $image.Height }}"
-                {{ if ne .loading "eager" }}loading="lazy"{{ end }}
-                alt="{{ .alt }}"
-            >
-        </picture>
-    {{ end }}
+{{ if eq $ext ".svg" }}
+    <picture class="{{ .classes }}">
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}"{{ if ne .loading "eager" }} loading="lazy"{{ end }} alt="{{ .alt }}">
+    </picture>
 {{ else }}
-    <!-- Optionally, provide a fallback image or message -->
-    <p>Image not available</p>
+    <picture class="{{ .classes }}">
+        {{ if hugo.IsProduction }}
+            {{- $image_name := strings.TrimSuffix $ext $image.RelPermalink }}
+            {{/*- $image_avif := "" }}
+            {{- $image_webp := "" }}
+            {{- if .resource }}
+                {{ $image_avif =  .context.Resources.Get (printf "%s%s" $image_name ".avif") }}
+                {{ $image_webp =  .context.Resources.Get (printf "%s%s" $image_name ".webp") }}
+            {{- else }}
+                {{ $image_avif =  resources.Get (printf "%s%s" $image_name ".avif") }}
+                {{ $image_webp =  resources.Get (printf "%s%s" $image_name ".webp") }}
+            {{- end */}}
+            {{/* if $image_avif }}
+                <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
+            {{ end }}
+            {{ if $image_webp }}
+                <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
+            {{ end */}}
+            <source srcset="{{ printf "%s.avif" $image_name }}" type="image/avif">
+            <source srcset="{{ printf "%s.webp" $image_name }}" type="image/webp">
+        {{ end }}
+        <img
+            class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}"
+            src="{{ $image.RelPermalink }}"
+            width="{{ $image.Width }}"
+            height="{{ $image.Height }}"
+            {{ if ne .loading "eager" }}loading="lazy"{{ end }}
+            alt="{{ .alt }}"
+        >
+    </picture>
 {{ end }}
-
 
 
 
