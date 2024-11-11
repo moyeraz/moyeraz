@@ -11,6 +11,5 @@ minify:
 enableRobotsTXT: true
 
 params:
-  # Leave these keys empty; we'll handle them in templates
-  recaptcha_site_key: ""
-  recaptcha_secret_key: ""
+  recaptcha_site_key: "your-default-site-key"  # Set as a placeholder, no environment function here
+  recaptcha_secret_key: "your-default-secret-key"  # Placeholder, no environment function here
