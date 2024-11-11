@@ -11,5 +11,5 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_site_key: "your-default-site-key"  # Placeholder only, no getenv usage
-  recaptcha_secret_key: "your-default-secret-key"  # Placeholder only, no getenv usage
+  recaptcha_site_key: "6Leq8XoqAAAAADMLU5CvrDDrRodR63qswu5l4mcv"  # Your actual site key
+  recaptcha_secret_key: "your-default-secret-key"  # Set a placeholder or leave it as is
