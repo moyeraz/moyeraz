@@ -12,4 +12,3 @@ enableRobotsTXT: true
 
 params:
   recaptcha_site_key: "6Leq8XoqAAAAADMLU5CvrDDrRodR63qswu5l4mcv"  # Place your actual site key here
-  recaptcha_secret_key: "6Leq8XoqAAAAAMd_IfZ3LOgho1rXBoKxhrP3hONM"  # Add your secret key here
