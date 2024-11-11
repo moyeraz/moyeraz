@@ -1,13 +1,22 @@
 <div class="card-blog mx-auto max-w-[390px] bg-white rounded-lg shadow-xl">
     <a href="{{ .Permalink }}" class="block lg:px-5 lg:pt-5">
         {{ partial "image.html" (dict "context" . "resource" "page" "image" .Params.image "alt" .Title "classes" "block aspect-[4/3]" "rounded" "rounded-t-lg lg:rounded-lg") }}
-        <!-- <img class="rounded-lg aspe" src="{{ .Params.image }}" alt="{{ .Title }}"> -->
     </a>
     <div class="p-5 flex flex-col items-start">
-        <h3 class="mb-4 text-lg font-bold font-display lg:text-xl"><a class="block hover:underline transition duration-300" href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <h3 class="mb-4 text-lg font-bold font-display lg:text-xl">
+            <a class="block hover:underline transition duration-300" href="{{ .Permalink }}">{{ .Title }}</a>
+        </h3>
         <div class="mb-4 text-text-400 text-sm">{{ .Date.Format site.Params.dateformat }}</div>
         <div class="mb-5 text-text-400 line-clamp-3">
-            {{ slicestr .Summary 0 300 | plainify }}...
+            {{ if .Summary }}
+                {{ if ge (len .Summary) 300 }}
+                    {{ slicestr .Summary 0 300 | plainify }}...
+                {{ else }}
+                    {{ .Summary | plainify }}
+                {{ end }}
+            {{ else }}
+                <p>No summary available</p>
+            {{ end }}
         </div>
         <a href="{{ .Permalink }}" class="btn btn-arrow btn-outline btn-primary">Read More</a>
     </div>
