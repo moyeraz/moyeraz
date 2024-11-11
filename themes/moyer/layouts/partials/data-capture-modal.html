@@ -55,18 +55,19 @@
                     </form>
 
                     <!-- Load reCAPTCHA v3 Script -->
-                        <script src="https://www.google.com/recaptcha/api.js?render={{ getenv "reCAPTCHA_Site_Key" | default .Site.Params.recaptcha_site_key }}" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ .Site.Params.recaptcha_site_key }}" async defer></script>
 <script>
     function handleRecaptcha(event) {
         event.preventDefault();
         grecaptcha.ready(function() {
-            grecaptcha.execute('{{ getenv "reCAPTCHA_Site_Key" | default .Site.Params.recaptcha_site_key }}', {action: 'submit'}).then(function(token) {
+            grecaptcha.execute('{{ .Site.Params.recaptcha_site_key }}', {action: 'submit'}).then(function(token) {
                 document.getElementById('recaptcha-token').value = token;
                 document.getElementById("form-{{ .modal.id }}").submit();
             });
         });
     }
 </script>
+
 
 
                 </div>
