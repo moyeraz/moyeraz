@@ -60,31 +60,29 @@
                         </div>
                     </form>
                     <script>
-                        // Close modal on submission to navigate to thank-you page
-                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
-                            closeModal("{{ .modal.id }}");
-                        };
-
-                        function closeModal(modalId) {
-                            const modal = document.getElementById(modalId);
-                            modal.classList.add("hidden");
-                            document.body.classList.remove("modal-open");
-                        }
-
+                        // Load reCAPTCHA script only when modal opens
                         function openModal(modalId) {
                             const modal = document.getElementById(modalId);
                             if (modal) {
                                 modal.classList.remove("hidden");
                                 document.body.classList.add("modal-open");
 
-                                // Load reCAPTCHA script if not already loaded
+                                // Dynamically load reCAPTCHA script
                                 if (!window.grecaptcha) {
                                     const recaptchaScript = document.createElement("script");
-                                    recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
+                                    recaptchaScript.src = "https://www.google.com/recaptcha/api.js?render={{ site.Params.recaptcha_key }}";
                                     recaptchaScript.async = true;
                                     recaptchaScript.defer = true;
                                     document.head.appendChild(recaptchaScript);
                                 }
+                            }
+                        }
+
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            if (modal) {
+                                modal.classList.add("hidden");
+                                document.body.classList.remove("modal-open");
                             }
                         }
 
