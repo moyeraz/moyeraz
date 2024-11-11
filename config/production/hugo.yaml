@@ -11,5 +11,5 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_site_key: "6Leq8XoqAAAAADMLU5CvrDDrRodR63qswu5l4mcv"  # Your actual site key
-  recaptcha_secret_key: "your-default-secret-key"  # Set a placeholder or leave it as is
+  recaptcha_site_key: "6Leq8XoqAAAAADMLU5CvrDDrRodR63qswu5l4mcv"  # Place your actual site key here
+  recaptcha_secret_key: {{ getenv "RECAPTCHA_SECRET_KEY" | default "your-default-secret-key" }}
