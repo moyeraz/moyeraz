@@ -1,7 +1,10 @@
+<!-- Flowbite and Swiper Scripts -->
 <script defer src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 {{- if or (eq .Page.Type "articles") (eq .Page.Type "categories") }}
     <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 {{- end }}
+
+<!-- Main JS with Development and Production Handling -->
 {{- with resources.Get "js/main.js" }}
   {{- if eq hugo.Environment "development" }}
     {{- with . | js.Build }}
@@ -14,4 +17,6 @@
     {{- end }}
   {{- end }}
 {{- end }}
+
+<!-- reCAPTCHA v2 Script -->
 <script src="https://www.google.com/recaptcha/api.js?render={{ site.Params.recaptcha_key }}" async defer></script>
