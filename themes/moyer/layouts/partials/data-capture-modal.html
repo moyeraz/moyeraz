@@ -8,7 +8,7 @@
                 <div class="py-5 px-4 md:py-12 md:px-10">
                     <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ .modal.id }}')">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -18,14 +18,13 @@
                     <!-- Form Section -->
                     <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
-                            <!-- Honeypot Field for Spam Prevention -->
-                            <input type="text" name="terms" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
-
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
-                                    <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                {{ else if eq .type "honeypot" }}
+                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off" style="display: none;">
                                 {{ else }}
-                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
+                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{ end }}">
                                         {{ if .label }}
                                             <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
@@ -44,39 +43,16 @@
                                     </div>
                                 {{ end }}
                             {{ end }}
-
-                            <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
-                                <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
-                            </div>
                         </div>
+                        <button type="submit" class="mt-4 bg-primary-600 text-white rounded-lg px-4 py-2">Submit</button>
                     </form>
-                    <script>
-                        document.getElementById('form-{{ .modal.id }}').addEventListener('submit', function(event) {
-                            event.preventDefault();
-                            const form = event.target;
-                            const formData = new FormData(form);
 
-                            fetch(form.action, {
-                                method: 'POST',
-                                body: formData,
-                                headers: {
-                                    'Accept': 'application/json'
-                                }
-                            }).then(response => {
-                                if (response.ok) {
-                                    // Redirect to thank-you page and close the modal
-                                    closeModal('{{ .modal.id }}');
-                                    setTimeout(() => {
-                                        window.location.href = '{{ site.BaseURL }}thank-you/';
-                                    }, 500); // slight delay to ensure modal closes smoothly
-                                } else {
-                                    console.error('Form submission failed.');
-                                }
-                            }).catch(error => {
-                                console.error('There was an error!', error);
-                            });
-                        });
+                    <script>
+                        // Close modal on form submission
+                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
+                            closeModal("{{ .modal.id }}");
+                            return false; // Prevent actual form submission for demonstration
+                        };
 
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
