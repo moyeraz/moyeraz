@@ -155,6 +155,8 @@ params:
                   placeholder: "Tell us how we can assist you..."
                   rows: 6
                   full_width: true
+                - type: honeypot
+                  id: terms
         seller:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
@@ -195,6 +197,8 @@ params:
                   placeholder: "Tell us how we can assist you..."
                   rows: 6
                   full_width: true
+                - type: honeypot
+                  id: terms
         buyer:
             id: "buyer-modal"
             title: "Start Your Home Search"

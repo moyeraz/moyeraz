@@ -18,11 +18,12 @@
                     <!-- Form Section -->
                     <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
+                            <!-- Honeypot Field for Spam Prevention -->
+                            <input type="text" name="terms" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
                                     <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
-                                {{ else if eq .type "honeypot" }}
-                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
                                 {{ else }}
                                     <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
                                         {{ if .label }}
@@ -44,92 +45,45 @@
                                 {{ end }}
                             {{ end }}
 
-                           <!-- Placeholder for reCAPTCHA widget -->
-                            <div id="recaptcha-{{ .modal.id }}" class="g-recaptcha"
-                                 data-sitekey="{{ site.Params.recaptcha_key }}"
-                                 data-callback="enableSubmitButton{{ .modal.id | safeJS }}"
-                                 data-expired-callback="recaptchaExpired{{ .modal.id | safeJS }}">
-                            </div>
-                            <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
-
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
+                    <div id="thank-you-message-{{ .modal.id }}" class="hidden text-center text-green-600 font-bold mt-4">Thank you! Your submission has been received.</div>
                     <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            // Attach event listener to buttons that open the modal
-                            const openButtons = document.querySelectorAll(`[data-modal-id="{{ .modal.id }}"]`);
-                            openButtons.forEach(button => {
-                                button.addEventListener('click', function() {
-                                    loadRecaptcha('{{ .modal.id }}');
-                                });
-                            });
+                        document.getElementById('form-{{ .modal.id }}').addEventListener('submit', function(event) {
+                            event.preventDefault();
+                            const form = event.target;
+                            const formData = new FormData(form);
 
-                            function loadRecaptcha(modalId) {
-                                if (!document.getElementById('recaptcha-script')) {
-                                    const script = document.createElement('script');
-                                    script.id = 'recaptcha-script';
-                                    script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoadCallback&render=explicit';
-                                    script.async = true;
-                                    script.defer = true;
-                                    document.body.appendChild(script);
+                            fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            }).then(response => {
+                                if (response.ok) {
+                                    // Show thank you message and close the modal after a delay
+                                    document.getElementById('thank-you-message-{{ .modal.id }}').classList.remove('hidden');
+                                    setTimeout(function() {
+                                        closeModal('{{ .modal.id }}');
+                                    }, 2000);
                                 } else {
-                                    renderRecaptcha(modalId);
+                                    console.error('Form submission failed.');
                                 }
-                            }
-
-                            window.onRecaptchaLoadCallback = function() {
-                                renderRecaptcha('{{ .modal.id }}');
-                            };
-
-                            function renderRecaptcha(modalId) {
-                                const recaptchaElement = document.getElementById('recaptcha-' + modalId);
-                                if (recaptchaElement && !recaptchaElement.hasChildNodes()) {
-                                    grecaptcha.render('recaptcha-' + modalId, {
-                                        sitekey: '{{ site.Params.recaptcha_key }}',
-                                        callback: 'enableSubmitButton' + modalId,
-                                        'expired-callback': 'recaptchaExpired' + modalId,
-                                    });
-                                }
-                            }
-
-                            function closeModal(modalId) {
-                                const modal = document.getElementById(modalId);
-                                modal.classList.add("hidden");
-                                document.body.classList.remove("modal-open");
-                            }
-
-                            window.enableSubmitButton = function(response, modalId) {
-                                if (!response) {
-                                    console.warn('No reCAPTCHA response token received');
-                                    return;
-                                }
-                                const submitButton = document.querySelector('.btn-submit-' + modalId);
-                                if (submitButton) {
-                                    submitButton.removeAttribute('disabled');
-                                }
-                            };
-
-                            window.recaptchaExpired = function(modalId) {
-                                const submitButton = document.querySelector('.btn-submit-' + modalId);
-                                if (submitButton) {
-                                    submitButton.setAttribute('disabled', 'disabled');
-                                }
-                            };
-
-                            (function() {
-                                var modalId = '{{ .modal.id | safeJS }}';
-                                window['enableSubmitButton' + modalId] = function(response) {
-                                    window.enableSubmitButton(response, modalId);
-                                };
-                                window['recaptchaExpired' + modalId] = function() {
-                                    window.recaptchaExpired(modalId);
-                                };
-                            })();
+                            }).catch(error => {
+                                console.error('There was an error!', error);
+                            });
                         });
+
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            modal.classList.add("hidden");
+                            document.body.classList.remove("modal-open");
+                        }
                     </script>
                 </div>
             </div>        
