@@ -159,7 +159,7 @@ params:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
             image: "images/home-valuation.jpg"
-            form_action: https://submit-form.com/Kv7aTCXly
+            form_action: "https://submit-form.com/Kv7aTCXly"
             button_text: "Request Valuation"
             fields:
                 - type: hidden
@@ -199,7 +199,7 @@ params:
             id: "buyer-modal"
             title: "Start Your Home Search"
             image: "images/home-search.jpg"
-            form_action: https://submit-form.com/0w7RCCsao
+            form_action: "https://submit-form.com/0w7RCCsao"
             button_text: "Find My Perfect Home"
             fields:
                 - type: hidden
