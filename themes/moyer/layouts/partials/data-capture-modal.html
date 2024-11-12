@@ -80,27 +80,9 @@
                                 body: formData,
                                 headers: {
                                     'Accept': 'application/json'
-                                }
-                            })
-                            .then(response => {
-                                if (response.ok) {
-                                    return response.json(); // Formspark returns JSON on success
-                                } else {
-                                    return response.json().then(errorData => {
-                                        throw new Error(errorData.message || 'Network response was not ok.');
-                                    });
-                                }
-                            })
-                            .then(data => {
-                                if (data.success) {
-                                    // Close the modal
-                                    closeModal("{{ .modal.id }}");
-
-                                    // Redirect to the thank-you page
-                                    window.location.href = fullRedirectURL;
-                                } else {
-                                    throw new Error(data.message || 'Form submission failed.');
-                                }
+                                },
+                                // Keep the request alive even if the page is unloaded
+                                keepalive: true
                             })
                             .catch(error => {
                                 console.error('There was a problem with the form submission:', error);
@@ -112,10 +94,17 @@
                                 // Re-enable the submit button
                                 submitButton.disabled = false;
                                 submitButton.textContent = '{{ .modal.button_text }}';
+                            })
+                            .finally(() => {
+                                // Close the modal
+                                closeModal("{{ .modal.id }}");
+
+                                // Redirect to the thank-you page
+                                window.location.href = fullRedirectURL;
                             });
                         });
 
-                        // Close modal function
+                        // Close modal function (centralized, defined here for redundancy)
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
@@ -126,3 +115,4 @@
             </div>        
         </div>
     </div>
+
