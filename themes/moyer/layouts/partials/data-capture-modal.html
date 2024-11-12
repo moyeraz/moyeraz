@@ -22,19 +22,19 @@
                                 {{ if eq .type "hidden" }}
                                     <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
                                 {{ else if eq .type "honeypot" }}
-                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
+                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off" style="display: none;">
                                 {{ else }}
-                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
+                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{ end }}">
                                         {{ if .label }}
                                             <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
                                         {{ if eq .type "textarea" }}
-                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
+                                            <textarea name="{{ .id }}" id="{{ .id }}" rows="{{ .rows }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
                                         {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
                                         {{ else if eq .type "select" }}
-                                            <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
-                                                <option selected>{{ .placeholder }}</option>
+                                            <select name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
+                                                <option value="" selected disabled>{{ .placeholder }}</option>
                                                 {{ range .options }}
                                                     <option value="{{ . | urlize }}">{{ . }}</option>
                                                 {{ end }}
@@ -44,69 +44,77 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- Add reCAPTCHA widget before the submit button -->
-                            <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" 
-                                    data-sitekey="{{ site.Params.recaptcha_key }}" 
-                                    data-callback="enableSubmitButton{{ .modal.id | safeJS }}" 
-                                    data-expired-callback="recaptchaExpired{{ .modal.id | safeJS }}"></div>
-                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
-                            </div>
-
+                            <!-- Submit Button and Message -->
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
+                                <div id="form-error-{{ .modal.id }}" class="text-red-500 text-sm hidden">An error occurred. Please try again.</div>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
                     <script>
-                        // Close modal on submission to navigate to thank-you page
-                        document.getElementById("form-{{ .modal.id }}").onsubmit = function() {
-                            closeModal("{{ .modal.id }}");
-                        };
+                        // Redirect URL - Change this to your actual thank-you page URL
+                        const thankYouPageURL = '/thank-you';
+
+                        // Handle form submission
+                        document.getElementById("form-{{ .modal.id }}").addEventListener("submit", function(event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            const form = event.target;
+                            const formData = new FormData(form);
+
+                            // Optional: Disable the submit button to prevent multiple submissions
+                            const submitButton = form.querySelector('button[type="submit"]');
+                            submitButton.disabled = true;
+                            submitButton.textContent = 'Submitting...';
+
+                            // Send the form data via fetch
+                            fetch(form.action, {
+                                method: form.method,
+                                body: formData,
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.json(); // Assuming the server returns JSON
+                                } else {
+                                    throw new Error('Network response was not ok.');
+                                }
+                            })
+                            .then(data => {
+                                // Optionally handle server response data
+                                // For example, check if the submission was successful
+                                // Assuming success if no error is returned
+                                
+                                // Close the modal
+                                closeModal("{{ .modal.id }}");
+
+                                // Redirect to the thank-you page
+                                window.location.href = thankYouPageURL;
+                            })
+                            .catch(error => {
+                                console.error('There was a problem with the form submission:', error);
+                                // Show an error message to the user
+                                const errorDiv = document.getElementById("form-error-{{ .modal.id }}");
+                                if (errorDiv) {
+                                    errorDiv.classList.remove("hidden");
+                                }
+                                // Re-enable the submit button
+                                submitButton.disabled = false;
+                                submitButton.textContent = '{{ .modal.button_text }}';
+                            });
+                        });
 
                         function closeModal(modalId) {
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
                             document.body.classList.remove("modal-open");
                         }
-
-                        // Define reCAPTCHA-enabled button management
-                        function getButtonSelector(modalId) {
-                            return '.btn-submit-' + modalId;
-                        }
-
-                        window.enableSubmitButton = function(response, modalId) {
-                            if (!response) {
-                                console.warn('No reCAPTCHA response token received');
-                                return;
-                            }
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            }
-                        };
-
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            }
-                        };
-
-                        // Wrapper functions for each modal to handle reCAPTCHA
-                        (function() {
-                            var modalId = '{{ .modal.id | safeJS }}';
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
-                            };
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
-                            };
-                        })();
                     </script>
                 </div>
             </div>        
         </div>
     </div>
-</div>
+
