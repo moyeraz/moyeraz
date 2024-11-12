@@ -1,46 +1,42 @@
-{{ range $key, $modal := site.Params.modals }}
-<div id="{{ $modal.id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ $modal.id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
+<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ .modal.id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
     <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
         <div class="relative bg-white rounded-lg shadow">
-            <!-- Content Container -->
-            <div id="modal-content-{{ $modal.id }}" class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                <!-- Image Section -->
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 <div class="h-full hidden lg:block">
-                    {{ partial "image.html" (dict "context" . "image" $modal.image "alt" $modal.title "object" "cover" "rounded" "rounded-lg") }}
+                    {{ partial "image.html" (dict "context" . "image" .modal.image "alt" .title "object" "cover" "rounded" "rounded-lg") }}
                 </div>
-                <!-- Form Section -->
                 <div class="py-5 px-4 md:py-12 md:px-10">
-                    <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ $modal.id }}')">
-                        <!-- Close Button SVG -->
-                        <!-- ... -->
+                    <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ .modal.id }}')">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
                     </button>
-                    <!-- Logo for Mobile View -->
-                    <!-- ... -->
-                    <h3 id="modal-title-{{ $modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ $modal.title }}</h3>
+                    <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
+                    <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
 
-                    <!-- Form Start -->
-                    <form id="form-{{ $modal.id }}" method="POST">
+                    <!-- Form Section -->
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
-                            <!-- Dynamic Form Fields -->
-                            {{ range $field := $modal.fields }}
-                                {{ if eq $field.type "hidden" }}
-                                    <input class="absolute" type="hidden" name="{{ $field.name }}" value="{{ if $field.url }}{{ site.BaseURL }}{{ end }}{{ $field.value }}">
-                                {{ else if eq $field.type "honeypot" }}
-                                    <input type="checkbox" name="{{ $field.id }}" tabindex="-1" autocomplete="off">
+                            {{ range .modal.fields }}
+                                {{ if eq .type "hidden" }}
+                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                {{ else if eq .type "honeypot" }}
+                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
                                 {{ else }}
-                                    <div class="col-span-2 {{ if not $field.full_width }}md:col-span-1{{end}}">
-                                        {{ if $field.label }}
-                                            <label for="{{ $field.id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ $field.label }}</label>
+                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
+                                        {{ if .label }}
+                                            <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
-                                        {{ if eq $field.type "textarea" }}
-                                            <textarea name="{{ $field.id }}" id="{{ $field.id }}" rows="{{ $field.rows }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ $field.placeholder }}" required></textarea>
-                                        {{ else if or (eq $field.type "text") (eq $field.type "email") (eq $field.type "tel") }}
-                                            <input type="{{ $field.type }}" name="{{ $field.id }}" id="{{ $field.id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ $field.placeholder }}" required>
-                                        {{ else if eq $field.type "select" }}
-                                            <select name="{{ $field.id }}" id="{{ $field.id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
-                                                <option value="" disabled selected>{{ $field.placeholder }}</option>
-                                                {{ range $option := $field.options }}
-                                                    <option value="{{ $option | urlize }}">{{ $option }}</option>
+                                        {{ if eq .type "textarea" }}
+                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
+                                        {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
+                                        {{ else if eq .type "select" }}
+                                            <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
+                                                <option selected>{{ .placeholder }}</option>
+                                                {{ range .options }}
+                                                    <option value="{{ . | urlize }}">{{ . }}</option>
                                                 {{ end }}
                                             </select>
                                         {{ end }}
@@ -48,143 +44,84 @@
                                 {{ end }}
                             {{ end }}
 
-                            <!-- reCAPTCHA Placeholder Div -->
+                            <!-- Placeholder for reCAPTCHA widget -->
                             <div class="col-span-2 mb-4">
-                                <div id="recaptcha-{{ $modal.id }}"></div>
-                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-{{ $modal.id }}">
+                                <div id="recaptcha-{{ .modal.id }}" class="g-recaptcha"></div>
                                 <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
                             </div>
 
-                            <!-- Submit Button -->
                             <div class="col-span-full">
-                                <button type="submit" class="btn btn-submit-{{ $modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ $modal.button_text }}</button>
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
-
-                    <!-- JavaScript Code -->
                     <script>
-                        // JavaScript code specific to this modal
-                        (function() {
-        var modalId = '{{ $modal.id | safeJS }}';
+                        document.getElementById('{{ .modal.id }}').addEventListener('click', function(event) {
+                            if (event.target.classList.contains('open-modal-button')) {
+                                loadRecaptcha('{{ .modal.id }}');
+                            }
+                        });
 
-        document.getElementById("form-" + modalId).onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
-            
-            // Retrieve the widget ID from the reCAPTCHA container
-            var recaptchaContainer = document.getElementById('recaptcha-' + modalId);
-            var widgetId = recaptchaContainer.getAttribute('data-widget-id');
-            
-            if (widgetId !== null) {
-                grecaptcha.execute(widgetId); // Execute the correct reCAPTCHA widget
-            } else {
-                console.error('reCAPTCHA widget ID not found for modal ' + modalId);
-            }
-        };
-
-        window['enableSubmitButton' + modalId] = function(token) {
-            if (!token) {
-                console.warn('No reCAPTCHA response token received');
-                return;
-            }
-            // Set the token in the hidden input
-            document.getElementById('g-recaptcha-response-' + modalId).value = token;
-            // Submit the form via AJAX
-            submitForm(modalId);
-        };
-
-                            window['recaptchaExpired' + modalId] = function() {
-                                const submitButton = document.querySelector('.btn-submit-' + modalId);
-                                if (submitButton) {
-                                    submitButton.setAttribute('disabled', 'disabled');
-                                }
-                                // Clear the token
-                                document.getElementById('g-recaptcha-response-' + modalId).value = '';
-                            };
-
-                            function submitForm(modalId) {
-                                const form = document.getElementById('form-' + modalId);
-                                const submitButton = document.querySelector('.btn-submit-' + modalId);
-                                submitButton.setAttribute('disabled', 'disabled');
-
-                                // Collect form data
-                                const formData = new FormData(form);
-
-                                // Send form data via AJAX to the form_action URL
-                                fetch('{{ $modal.form_action }}', {
-                                    method: 'POST',
-                                    body: formData,
-                                })
-                                .then(function(response) {
-                                    if (response.ok) {
-                                        showSuccessMessage(modalId);
-                                    } else {
-                                        showErrorMessage(modalId);
-                                    }
-                                })
-                                .catch(function(error) {
-                                    console.error('Form submission error:', error);
-                                    showErrorMessage(modalId);
+                        function loadRecaptcha(modalId) {
+                            if (!document.querySelector('#recaptcha-script')) {
+                                const script = document.createElement('script');
+                                script.id = 'recaptcha-script';
+                                script.src = 'https://www.google.com/recaptcha/api.js';
+                                script.defer = true;
+                                document.body.appendChild(script);
+                                script.onload = function() {
+                                    grecaptcha.render('recaptcha-' + modalId, {
+                                        sitekey: '{{ site.Params.recaptcha_key }}',
+                                        callback: 'enableSubmitButton' + modalId,
+                                        'expired-callback': 'recaptchaExpired' + modalId,
+                                    });
+                                };
+                            } else {
+                                grecaptcha.render('recaptcha-' + modalId, {
+                                    sitekey: '{{ site.Params.recaptcha_key }}',
+                                    callback: 'enableSubmitButton' + modalId,
+                                    'expired-callback': 'recaptchaExpired' + modalId,
                                 });
                             }
+                        }
 
-                            function showSuccessMessage(modalId) {
-                                const modalContent = document.getElementById('modal-content-' + modalId);
-                                modalContent.innerHTML = '<p class="text-center text-green-600">Thank you! Your form has been submitted successfully.</p>';
-                                setTimeout(function() {
-                                    closeModal(modalId);
-                                }, 3000); // Close after 3 seconds
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            modal.classList.add("hidden");
+                            document.body.classList.remove("modal-open");
+                        }
+
+                        window.enableSubmitButton = function(response, modalId) {
+                            if (!response) {
+                                console.warn('No reCAPTCHA response token received');
+                                return;
                             }
-
-                            function showErrorMessage(modalId) {
-                                const modalContent = document.getElementById('modal-content-' + modalId);
-                                modalContent.innerHTML = '<p class="text-center text-red-600">An error occurred while submitting the form. Please try again later.</p>';
+                            const submitButton = document.querySelector('.btn-submit-' + modalId);
+                            if (submitButton) {
+                                submitButton.removeAttribute('disabled');
                             }
+                        };
 
-                            function closeModal(modalId) {
-                                const modal = document.getElementById(modalId);
-                                modal.classList.add("hidden");
-                                document.body.classList.remove("modal-open");
+                        window.recaptchaExpired = function(modalId) {
+                            const submitButton = document.querySelector('.btn-submit-' + modalId);
+                            if (submitButton) {
+                                submitButton.setAttribute('disabled', 'disabled');
                             }
+                        };
 
-                            // Function to open the modal and load reCAPTCHA
-                            window['openModal' + modalId] = function() {
-                                const modal = document.getElementById(modalId);
-                                modal.classList.remove("hidden");
-                                document.body.classList.add("modal-open");
-
-                                if (typeof grecaptcha === 'undefined') {
-                                    const script = document.createElement('script');
-                                    script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad' + modalId + '&render=explicit';
-                                    script.async = true;
-                                    document.body.appendChild(script);
-                                } else {
-                                    renderRecaptcha(modalId);
-                                }
+                        (function() {
+                            var modalId = '{{ .modal.id | safeJS }}';
+                            window['enableSubmitButton' + modalId] = function(response) {
+                                window.enableSubmitButton(response, modalId);
                             };
-
-                            window['onRecaptchaLoad' + modalId] = function() {
-                                renderRecaptcha(modalId);
+                            window['recaptchaExpired' + modalId] = function() {
+                                window.recaptchaExpired(modalId);
                             };
-
-                            function renderRecaptcha(modalId) {
-                                const recaptchaContainer = document.getElementById('recaptcha-' + modalId);
-                                if (recaptchaContainer && !recaptchaContainer.hasAttribute('data-widget-id')) {
-                                    const widgetId = grecaptcha.render(recaptchaContainer, {
-                                        'sitekey': '{{ site.Params.recaptcha_key }}',
-                                        'size': 'invisible',
-                                        'callback': 'enableSubmitButton' + modalId,
-                                        'expired-callback': 'recaptchaExpired' + modalId
-                                    });
-                                    recaptchaContainer.setAttribute('data-widget-id', widgetId);
-                                }
-                            }
                         })();
                     </script>
                 </div>
-            </div>
+            </div>        
         </div>
     </div>
 </div>
-{{ end }}

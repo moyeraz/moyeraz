@@ -17,7 +17,7 @@
                 </a>
             </div>
             <div class="flex justify-end md:order-2 space-x-3 md:space-x-0">
-                <button onclick="openModalcontact-us-modal()" type="button" class="btn btn-contact btn-arrow{{ if eq $showcase "dark" }} btn-outline btn-white{{ else }} btn-solid btn-primary{{ end }}">Contact Us</button>
+                <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" type="button" class="btn btn-contact btn-arrow{{ if eq $showcase "dark" }} btn-outline btn-white{{ else }} btn-solid btn-primary{{ end }}">Contact Us</button>
                 <button data-collapse-toggle="navbar-sticky" type="button" class="navbar-toggler     inline-flex items-center justify-center [&>svg]:w-auto [&>svg]:h-8 hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 focus:outline-none xl:hidden" aria-controls="navbar-sticky" aria-expanded="false">
                     <span class="sr-only">Open main menu</span>
                     {{ readFile "static/icons/menu.svg" | safeHTML }}
@@ -30,7 +30,7 @@
                 <div class="container navbar-wrapper">
                     {{ partial "menu.html" (dict "menuID" "main" "page" . "showcase" $showcase) }}
                     <div class="navbar-btn-holder px-4 pb-4 xl:hidden">
-                        <button onclick="openModalcontact-us-modal()" type="button" class="btn btn-contact btn-arrow btn-solid btn-primary">Contact Us</button>
+                        <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" type="button" class="btn btn-contact btn-arrow btn-solid btn-primary">Contact Us</button>
                     </div>
                 </div>
             </div>

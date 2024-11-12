@@ -36,7 +36,7 @@ showcase:
         -
             title: Get Your Free Home Valuation
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "onclick='openModalseller-modal()'"
+            attr: "data-modal-target='seller-modal' data-modal-toggle='seller-modal'"
 meaning:
     title: What the NAR Settlement Means for Sellers
     media: images/seller-meaning.jpg
@@ -123,6 +123,6 @@ cta:
         -
             title: Get Your Free Home Valuation
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "onclick='openModalseller-modal()'"
+            attr: "data-modal-target='seller-modal' data-modal-toggle='seller-modal'"
 ---
 

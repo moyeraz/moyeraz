@@ -37,7 +37,7 @@ showcase:
         -
             title: Find Your Dream Home
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "onclick='openModalbuyer-modal()'"
+            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
 meaning:
     title: What the NAR Settlement Means for Buyers
     media: images/buyer-meaning.jpg
@@ -129,6 +129,6 @@ cta:
         -
             title: Start Your Home Search
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "onclick='openModalbuyer-modal()'"
+            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
 ---
 
