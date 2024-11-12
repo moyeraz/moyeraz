@@ -1,130 +1,126 @@
-{{/* 
-    data-capture-modal.html
-    This partial renders a modal form based on the provided modal data.
-    Ensure you pass the modal data when including this partial.
-  */}}
-  
-  <div id="{{ .id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ .id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
-      <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
-          <div class="relative bg-white rounded-lg shadow">
-              <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                  <div class="h-full hidden lg:block">
-                      {{ partial "image.html" (dict "context" . "image" .image "alt" $.Site.Title "object" "cover" "rounded" "rounded-lg") }}
-                  </div>
-                  <div class="py-5 px-4 md:py-12 md:px-10">
-                      <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ .id }}')">
-                          <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                          </svg>
-                          <span class="sr-only">Close modal</span>
-                      </button>
-                      <img src="/{{ .image }}" width="390" height="99" alt="{{ $.Site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
-                      <h3 id="modal-title-{{ .id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .title }}</h3>
-  
-                      <!-- Form Section -->
-                      <form id="form-{{ .id }}" action="{{ .form_action }}" method="POST" class="flex flex-col">
-                          <div class="grid gap-4 grid-cols-2">
-                              {{ range .fields }}
-                                  {{- if eq .type "hidden" }}
-                                      <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ $.Site.BaseURL }}{{ end }}{{ .value }}">
-                                  {{- else if eq .type "honeypot" }}
-                                      <div class="hidden">
-                                          <label for="{{ .id }}">Leave this field empty</label>
-                                          <input type="checkbox" name="{{ .id }}" id="{{ .id }}" tabindex="-1" autocomplete="off">
-                                      </div>
-                                  {{- else }}
-                                      <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{ end }}">
-                                          {{- if .label }}
-                                              <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
-                                          {{- end }}
-                                          {{- if eq .type "textarea" }}
-                                              <textarea name="{{ .id }}" id="{{ .id }}" rows="{{ .rows }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
-                                          {{- else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                              <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
-                                          {{- else if eq .type "select" }}
-                                              <select name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}" required>
-                                                  <option value="" selected disabled>{{ .placeholder }}</option>
-                                                  {{ range .options }}
-                                                      <option value="{{ . | urlize }}">{{ . }}</option>
-                                                  {{ end }}
-                                              </select>
-                                          {{- end }}
-                                      </div>
-                                  {{- end }}
-                              {{- end }}
-  
-                              <!-- Submit Button and Error Message -->
-                              <div class="col-span-full">
-                                  <button type="submit" class="btn btn-submit-{{ .id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .button_text }}</button>
-                                  <div id="form-error-{{ .id }}" class="text-red-500 text-sm hidden">An error occurred. Please try again.</div>
-                                  <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
-                              </div>
-                          </div>
-                      </form>
-                      <script>
-                          // Handle form submission for {{ .id }}
-                          document.getElementById("form-{{ .id }}").addEventListener("submit", function(event) {
-                              event.preventDefault(); // Prevent default form submission
-  
-                              const form = event.target;
-                              const formData = new FormData(form);
-  
-                              // Disable the submit button to prevent multiple submissions
-                              const submitButton = form.querySelector('button[type="submit"]');
-                              submitButton.disabled = true;
-                              submitButton.textContent = 'Submitting...';
-  
-                              // Extract the _redirect value from the form
-                              const redirectInput = form.querySelector('input[name="_redirect"]');
-                              const redirectURL = redirectInput ? redirectInput.value : '/thank-you/';
-                              const baseURL = "{{ .Site.BaseURL }}";
-                              const fullRedirectURL = redirectURL.startsWith('/') ? baseURL + redirectURL.slice(1) : redirectURL;
-  
-                              // Send the form data via fetch to Formspark
-                              fetch(form.action, {
-                                  method: form.method,
-                                  body: formData,
-                                  headers: {
-                                      'Accept': 'application/json'
-                                  }
-                              })
-                              .then(response => {
-                                  if (response.ok) {
-                                      return response.json(); // Formspark returns JSON on success
-                                  } else {
-                                      throw new Error('Network response was not ok.');
-                                  }
-                              })
-                              .then(data => {
-                                  if (data.success) {
-                                      // Redirect to the thank-you page
-                                      window.location.href = fullRedirectURL;
-                                  } else {
-                                      throw new Error('Form submission failed.');
-                                  }
-                              })
-                              .catch(error => {
-                                  console.error('There was a problem with the form submission:', error);
-                                  // Show an error message to the user
-                                  const errorDiv = document.getElementById("form-error-{{ .id }}");
-                                  if (errorDiv) {
-                                      errorDiv.classList.remove("hidden");
-                                  }
-                                  // Re-enable the submit button
-                                  submitButton.disabled = false;
-                                  submitButton.textContent = '{{ .button_text }}';
-                              });
-                          });
-  
-                          // Close modal function
-                          function closeModal(modalId) {
-                              const modal = document.getElementById(modalId);
-                              modal.classList.add("hidden");
-                              document.body.classList.remove("modal-open");
-                          }
-                      </script>
-                  </div>
-              </div>        
-          </div>
-      </div>
-  
+<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ .modal.id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
+    <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
+        <div class="relative bg-white rounded-lg shadow">
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <div class="h-full hidden lg:block">
+                    {{ partial "image.html" (dict "context" . "image" .modal.image "alt" .title "object" "cover" "rounded" "rounded-lg") }}
+                </div>
+                <div class="py-5 px-4 md:py-12 md:px-10">
+                    <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" onclick="closeModal('{{ .modal.id }}')">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                    <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
+                    <h3 id="modal-title-{{ .modal.id }}" class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
+
+                    <!-- Form Section -->
+                    <form id="form-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST" class="flex flex-col">
+                        <div class="grid gap-4 grid-cols-2">
+                            {{ range .modal.fields }}
+                                {{ if eq .type "hidden" }}
+                                    <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                {{ else if eq .type "honeypot" }}
+                                    <div class="hidden">
+                                        <label for="{{ .id }}">Leave this field empty</label>
+                                        <input type="checkbox" name="{{ .id }}" id="{{ .id }}" tabindex="-1" autocomplete="off">
+                                    </div>
+                                {{ else }}
+                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{ end }}">
+                                        {{ if .label }}
+                                            <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
+                                        {{ end }}
+                                        {{ if eq .type "textarea" }}
+                                            <textarea name="{{ .id }}" id="{{ .id }}" rows="{{ .rows }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
+                                        {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
+                                        {{ else if eq .type "select" }}
+                                            <select name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}" required>
+                                                <option value="" selected disabled>{{ .placeholder }}</option>
+                                                {{ range .options }}
+                                                    <option value="{{ . | urlize }}">{{ . }}</option>
+                                                {{ end }}
+                                            </select>
+                                        {{ end }}
+                                    </div>
+                                {{ end }}
+                            {{ end }}
+
+                            <!-- Submit Button and Error Message -->
+                            <div class="col-span-full">
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2">{{ .modal.button_text }}</button>
+                                <div id="form-error-{{ .modal.id }}" class="text-red-500 text-sm hidden">An error occurred. Please try again.</div>
+                                <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+                        // Handle form submission for {{ .modal.id }}
+                        document.getElementById("form-{{ .modal.id }}").addEventListener("submit", function(event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            const form = event.target;
+                            const formData = new FormData(form);
+
+                            // Disable the submit button to prevent multiple submissions
+                            const submitButton = form.querySelector('button[type="submit"]');
+                            submitButton.disabled = true;
+                            submitButton.textContent = 'Submitting...';
+
+                            // Extract the _redirect value from the form
+                            const redirectInput = form.querySelector('input[name="_redirect"]');
+                            const redirectURL = redirectInput ? redirectInput.value : '/thank-you/';
+                            const baseURL = "{{ site.BaseURL }}";
+                            const fullRedirectURL = redirectURL.startsWith('/') ? baseURL + redirectURL.slice(1) : redirectURL;
+
+                            // Send the form data via fetch to Formspark
+                            fetch(form.action, {
+                                method: form.method,
+                                body: formData,
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.json(); // Formspark returns JSON on success
+                                } else {
+                                    throw new Error('Network response was not ok.');
+                                }
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Close the modal
+                                    closeModal("{{ .modal.id }}");
+
+                                    // Redirect to the thank-you page
+                                    window.location.href = fullRedirectURL;
+                                } else {
+                                    throw new Error('Form submission failed.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('There was a problem with the form submission:', error);
+                                // Show an error message to the user
+                                const errorDiv = document.getElementById("form-error-{{ .modal.id }}");
+                                if (errorDiv) {
+                                    errorDiv.classList.remove("hidden");
+                                }
+                                // Re-enable the submit button
+                                submitButton.disabled = false;
+                                submitButton.textContent = '{{ .modal.button_text }}';
+                            });
+                        });
+
+                        // Close modal function
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            modal.classList.add("hidden");
+                            document.body.classList.remove("modal-open");
+                        }
+                    </script>
+                </div>
+            </div>        
+        </div>
+    </div>
