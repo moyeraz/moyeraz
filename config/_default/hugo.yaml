@@ -124,12 +124,12 @@ params:
             id: "contact-us-modal"
             title: "Get in Touch with Our Team"
             image: "images/get-in-touch.jpg"
-            form_action: https://submit-form.com/NcRDxU1ac 
+            form_action: "https://submit-form.com/NcRDxU1ac" 
             button_text: "Get in Touch"
             fields:
                 - type: hidden
                   name: _redirect
-                  value: thank-you/
+                  value: "/thank-you/"
                   url: true
                 - type: hidden
                   name: _append
@@ -155,8 +155,7 @@ params:
                   placeholder: "Tell us how we can assist you..."
                   rows: 6
                   full_width: true
-                - type: honeypot
-                  id: terms
+                
         seller:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
@@ -166,7 +165,7 @@ params:
             fields:
                 - type: hidden
                   name: _redirect
-                  value: thank-you/
+                  value: "/thank-you/"
                   url: true
                 - type: hidden
                   name: _append
@@ -197,8 +196,7 @@ params:
                   placeholder: "Tell us how we can assist you..."
                   rows: 6
                   full_width: true
-                - type: honeypot
-                  id: terms
+                
         buyer:
             id: "buyer-modal"
             title: "Start Your Home Search"
@@ -208,7 +206,7 @@ params:
             fields:
                 - type: hidden
                   name: _redirect
-                  value: thank-you/
+                  value: "/thank-you/"
                   url: true
                 - type: hidden
                   name: _append
@@ -251,5 +249,4 @@ params:
                   placeholder: "Tell us how we can assist you..."
                   rows: 6
                   full_width: true
-                - type: honeypot
-                  id: terms
+                

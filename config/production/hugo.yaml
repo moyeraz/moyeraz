@@ -11,4 +11,4 @@ minify:
 enableRobotsTXT: true
 
 params:
-  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"  # Place your actual site key here
+  recaptcha_key: ""  # Place your actual site key here
