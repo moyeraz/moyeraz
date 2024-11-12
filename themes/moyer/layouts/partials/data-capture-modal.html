@@ -57,68 +57,82 @@
                         </div>
                     </form>
                     <script>
-                        document.getElementById('{{ .modal.id }}').addEventListener('click', function(event) {
-                            if (event.target.classList.contains('open-modal-button')) {
-                                loadRecaptcha('{{ .modal.id }}');
-                            }
-                        });
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const modal = document.getElementById('{{ .modal.id }}');
 
-                        function loadRecaptcha(modalId) {
-                            if (!document.querySelector('#recaptcha-script')) {
-                                const script = document.createElement('script');
-                                script.id = 'recaptcha-script';
-                                script.src = 'https://www.google.com/recaptcha/api.js';
-                                script.defer = true;
-                                document.body.appendChild(script);
-                                script.onload = function() {
+                            const observer = new MutationObserver(function(mutationsList) {
+                                for (let mutation of mutationsList) {
+                                    if (mutation.attributeName === 'class') {
+                                        const isVisible = !modal.classList.contains('hidden');
+                                        if (isVisible) {
+                                            loadRecaptcha('{{ .modal.id }}');
+                                        }
+                                    }
+                                }
+                            });
+
+                            observer.observe(modal, { attributes: true });
+
+                            function loadRecaptcha(modalId) {
+                                if (!document.getElementById('recaptcha-script')) {
+                                    const script = document.createElement('script');
+                                    script.id = 'recaptcha-script';
+                                    script.src = 'https://www.google.com/recaptcha/api.js';
+                                    script.defer = true;
+                                    document.body.appendChild(script);
+                                    script.onload = function() {
+                                        renderRecaptcha(modalId);
+                                    };
+                                } else {
+                                    renderRecaptcha(modalId);
+                                }
+                            }
+
+                            function renderRecaptcha(modalId) {
+                                const recaptchaElement = document.getElementById('recaptcha-' + modalId);
+                                if (recaptchaElement && !recaptchaElement.hasChildNodes()) {
                                     grecaptcha.render('recaptcha-' + modalId, {
                                         sitekey: '{{ site.Params.recaptcha_key }}',
                                         callback: 'enableSubmitButton' + modalId,
                                         'expired-callback': 'recaptchaExpired' + modalId,
                                     });
+                                }
+                            }
+
+                            function closeModal(modalId) {
+                                const modal = document.getElementById(modalId);
+                                modal.classList.add("hidden");
+                                document.body.classList.remove("modal-open");
+                            }
+
+                            window.enableSubmitButton = function(response, modalId) {
+                                if (!response) {
+                                    console.warn('No reCAPTCHA response token received');
+                                    return;
+                                }
+                                const submitButton = document.querySelector('.btn-submit-' + modalId);
+                                if (submitButton) {
+                                    submitButton.removeAttribute('disabled');
+                                }
+                            };
+
+                            window.recaptchaExpired = function(modalId) {
+                                const submitButton = document.querySelector('.btn-submit-' + modalId);
+                                if (submitButton) {
+                                    submitButton.setAttribute('disabled', 'disabled');
+                                }
+                            };
+
+                            (function() {
+                                var modalId = '{{ .modal.id | safeJS }}';
+                                window['enableSubmitButton' + modalId] = function(response) {
+                                    window.enableSubmitButton(response, modalId);
                                 };
-                            } else {
-                                grecaptcha.render('recaptcha-' + modalId, {
-                                    sitekey: '{{ site.Params.recaptcha_key }}',
-                                    callback: 'enableSubmitButton' + modalId,
-                                    'expired-callback': 'recaptchaExpired' + modalId,
-                                });
-                            }
-                        }
-
-                        function closeModal(modalId) {
-                            const modal = document.getElementById(modalId);
-                            modal.classList.add("hidden");
-                            document.body.classList.remove("modal-open");
-                        }
-
-                        window.enableSubmitButton = function(response, modalId) {
-                            if (!response) {
-                                console.warn('No reCAPTCHA response token received');
-                                return;
-                            }
-                            const submitButton = document.querySelector('.btn-submit-' + modalId);
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            }
-                        };
-
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector('.btn-submit-' + modalId);
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            }
-                        };
-
-                        (function() {
-                            var modalId = '{{ .modal.id | safeJS }}';
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
-                            };
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
-                            };
-                        })();
+                                window['recaptchaExpired' + modalId] = function() {
+                                    window.recaptchaExpired(modalId);
+                                };
+                            })();
+                        });
                     </script>
                 </div>
             </div>        
