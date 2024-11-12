@@ -59,34 +59,30 @@
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             const modal = document.getElementById('{{ .modal.id }}');
+                            const openButtons = document.querySelectorAll(`[data-modal-id="{{ .modal.id }}"]`);
 
-                            const observer = new MutationObserver(function(mutationsList) {
-                                for (let mutation of mutationsList) {
-                                    if (mutation.attributeName === 'class') {
-                                        const isVisible = !modal.classList.contains('hidden');
-                                        if (isVisible) {
-                                            loadRecaptcha('{{ .modal.id }}');
-                                        }
-                                    }
-                                }
+                            openButtons.forEach(button => {
+                                button.addEventListener('click', function() {
+                                    loadRecaptcha('{{ .modal.id }}');
+                                });
                             });
-
-                            observer.observe(modal, { attributes: true });
 
                             function loadRecaptcha(modalId) {
                                 if (!document.getElementById('recaptcha-script')) {
                                     const script = document.createElement('script');
                                     script.id = 'recaptcha-script';
-                                    script.src = 'https://www.google.com/recaptcha/api.js';
+                                    script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoadCallback&render=explicit';
+                                    script.async = true;
                                     script.defer = true;
                                     document.body.appendChild(script);
-                                    script.onload = function() {
-                                        renderRecaptcha(modalId);
-                                    };
                                 } else {
                                     renderRecaptcha(modalId);
                                 }
                             }
+
+                            window.onRecaptchaLoadCallback = function() {
+                                renderRecaptcha('{{ .modal.id }}');
+                            };
 
                             function renderRecaptcha(modalId) {
                                 const recaptchaElement = document.getElementById('recaptcha-' + modalId);
