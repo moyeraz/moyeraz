@@ -1,4 +1,4 @@
-<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ .modal.id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
+<<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title-{{ .modal.id }}" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg modal-overlay">
     <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
         <div class="relative bg-white rounded-lg shadow">
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -83,6 +83,8 @@
                             const modal = document.getElementById(modalId);
                             modal.classList.add("hidden");
                             document.body.classList.remove("modal-open");
+                            // Remove dark overlay
+                            modal.classList.remove("modal-overlay");
                         }
                     </script>
                 </div>
