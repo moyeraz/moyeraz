@@ -1,2 +1,3 @@
-baseURL: ''
-enableRobotsTXT: true
+baseURL: 'http://localhost:1313'
+enableRobotsTXT: false
+disableKinds: ['RSS', 'sitemap']  # Disables RSS and sitemap generation in development

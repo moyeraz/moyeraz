@@ -1,4 +1,3 @@
-baseURL: ''
 languageCode: 'en-us'
 title: 'Moyer Realty Services'
 theme: 'moyer'
@@ -12,10 +11,6 @@ markup:
             attribute:
                 block: true
             wrapStandAloneImageWithinParagraph: false
-minify:
-    tdewolff:
-        html:
-            keepWhitespace: false
 
 menus:
     main:
@@ -56,6 +51,7 @@ module:
           target: assets
         - source: hugo_stats.json
           target: assets/watching/hugo_stats.json
+
 build:
     writeStats: true
     cachebusters:
@@ -83,7 +79,6 @@ params:
     author: James Moyer
     email: info@moyeraz.com
     tel: +1-520-200-1770
-    recaptcha_key: ""
     address:
         locality: Tucson
         region: Arizona

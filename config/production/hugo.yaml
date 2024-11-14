@@ -1,14 +1,19 @@
-baseURL: ''
+baseURL: 'https://www.moyeraz.com'
 minify:
   tdewolff:
     html:
-      minify: true  # Minify HTML
-      keepWhitespace: false  # Removes unnecessary whitespace
+      minify: true  
+      keepWhitespace: false  
     css:
-      minify: true  # Minify CSS files
+      minify: true  
     js:
-      minify: true  # Minify JavaScript files
+      minify: true  
 enableRobotsTXT: true
-
 params:
-  recaptcha_key: ""  # Place your actual site key here
+  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"  
+outputs:
+  home:
+    - html
+    - rss
+    - webappmanifest
+    - sitemap
