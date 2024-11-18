@@ -53,5 +53,5 @@ If the Tucson Down Payment Assistance Program sounds like a great fit, let’s c
 
 ### Additional Resources
 
-For more details about the program, check out the {{< external-link "City of Tucson’s official page" "https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Advancing-Affordable-Housing/Down-Payment-Assistance-Program" >}}.
+For more details about the program, check out the {{< external-link "City of Tucson’s official page" "https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Advancing-Affordable-Housing/Down-Payment-Assistance-Program" />}}.
 
