@@ -37,7 +37,7 @@ outputs:
         - webappmanifest
 
 permalinks:
-    categories: /articles/:title
+    articles: /:slug/
 
 taxonomies:
     category: categories

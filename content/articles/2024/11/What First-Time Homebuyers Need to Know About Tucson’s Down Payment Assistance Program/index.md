@@ -1,5 +1,6 @@
 ---
 title: "What First-Time Homebuyers Need to Know About Tucson’s Down Payment Assistance Program"
+slug: "tucson-down-payment-assistance"
 date: 2024-11-17T00:40:04-00:00
 lastmod: 2024-11-17T00:40:04-00:00
 draft: false
@@ -52,4 +53,5 @@ If you think the Down Payment Assistance Program could help you achieve your dre
 
 ### Additional Resources
 
-For more details about the program, check out the [City of Tucson’s official page](https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Advancing-Affordable-Housing/Down-Payment-Assistance-Program){:target="_blank"}.
+For more details about the program, check out the {{< external-link "https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Advancing-Affordable-Housing/Down-Payment-Assistance-Program" >}}City of Tucson’s official page{{< /external-link >}}.
+
