@@ -1,5 +1,5 @@
 ---
-Title: 
+Title: Southern Arizona Realty Digest
 aliases:
     - /categories/
 image: images/article-showcase.jpg
