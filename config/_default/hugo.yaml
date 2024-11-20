@@ -10,7 +10,7 @@ markup:
         parser:
             attribute:
                 block: true
-            wrapStandAloneImageWithinParagraph: false
+            wrapStandAloneImageWithinParagraph: false 
 
 menus:
     main:
