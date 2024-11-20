@@ -47,11 +47,4 @@ Saving for a down payment is one of the biggest hurdles for first-time buyers. W
 
 If the Tucson Down Payment Assistance Program sounds like a great fit, let’s connect! At **Moyer Realty Services**, we specialize in guiding first-time homebuyers through every step of the process.
 
-📞 **Contact us today** to learn more and begin your journey to owning your dream home!
-
----
-
-### Additional Resources
-
-For more details about the program, check out the {{< external-link "https://www.tucsonaz.gov/Departments/Housing-and-Community-Development/Advancing-Affordable-Housing/Down-Payment-Assistance-Program" "City of Tucson’s official page" >}}.
-
+**Contact us today** to learn more and begin your journey to owning your dream home!
