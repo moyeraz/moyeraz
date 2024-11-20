@@ -10,8 +10,7 @@ We will get back to you as soon as possible.
 <a href="/" class="btn btn-arrow btn-solid btn-primary">Back to Home</a>
 
 <script>
-    let timeLeft = 5;
-    
+    let timeLeft = 5;    
     function updateCountdown() {
         const secondsElement = document.getElementById('seconds');
         
@@ -20,14 +19,23 @@ We will get back to you as soon as possible.
         }
         
         if (timeLeft === 0) {
-            // Force a full reload to the homepage (or any specific URL if needed)
-            window.location.href = '/';
+            // Instead of using history.go(-1), we'll use a different approach
+            const previousPageUrl = document.referrer;
+            
+            if (previousPageUrl) {
+                // Force a fresh load of the previous page
+                window.location.href = previousPageUrl;
+            } else {
+                // Fallback if referrer is not available
+                window.location.reload();
+                window.history.back();
+            }
         } else {
             timeLeft--;
             setTimeout(updateCountdown, 1000);
         }
     }
     
-    // Start the countdown
+    // Start the countdown when the script loads
     updateCountdown();
 </script>

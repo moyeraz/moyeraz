@@ -4,13 +4,11 @@
         <div class="max-w-screen-xl mx-auto">
             <h1 class="text-heading-0 mb-12 inline-block relative text-center after:h-px after:w-1/3 after:bg-text-400 after:block after:absolute after:left-1/2 after:-bottom-[10px] after:-translate-x-1/2 lg:text-left lg:after:left-0 lg:after:-translate-x-0">{{ .Title }}</h1>
             <div class="flex flex-col mb-8 justify-between items-center lg:flex-row">
-                <div class="flex flex-col gap-2 items-center lg:items-start">
-                    <div class="flex gap-5">
-                        <span class="py-2 text-text-400 text-sm relative after:content-[''] after:h-4 after:w-px after:bg-text-400 after:block after:absolute after:-right-3 after:top-[10px]">{{ .Date.Format site.Params.dateformat }}</span>
-                        {{ if .Params.author }}<span class="py-2 text-text-400 text-sm relative after:content-[''] after:h-4 after:w-px after:bg-text-400 after:block after:absolute after:-right-3 after:top-[10px]">{{ .Params.author }}</span>{{ end }}
-                        <span class="py-2 text-text-400 text-sm">{{ .ReadingTime }} Mins</span>
-                    </div>
-            </div>
+                <div class="flex gap-5">
+                    <span class="py-2 text-text-400 text-sm relative after:content-[''] after:h-4 after:w-px after:bg-text-400 after:block after:absolute after:-right-3 after:top-[10px]">{{ .Date.Format site.Params.dateformat }}</span>
+                    {{ if .Params.author }}<span class="py-2 text-text-400 text-sm relative after:content-[''] after:h-4 after:w-px after:bg-text-400 after:block after:absolute after:-right-3 after:top-[10px]">{{ .Params.author }}</span>{{ end }}
+                    <span class="py-2 text-text-400 text-sm">{{ .ReadingTime }} Mins</span>
+                </div>
                 <div class="flex gap-2 lg:gap-4">
                     {{ range $i,$e := (.GetTerms "categories") }}
                     <a class="px-4 py-1 text-text-400 text-sm border rounded-lg inline-block hover:bg-primary-400 transition duration-300 hover:text-white hover:border-primary-400" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
@@ -19,15 +17,6 @@
             </div>
             <div class="md-content">
                 {{ .Content }}
-            </div>
-            <div class="flex gap-3 mt-6 pb-4 items-center justify-center">
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="text-text-400 text-sm hover:text-primary-600 transition duration-300">
-                Share on Facebook
-                </a>
-                <span class="border-l h-4 border-text-400 mx-2"></span>
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink }}&title={{ .Title }}" target="_blank" rel="noopener noreferrer" class="text-text-400 text-sm hover:text-primary-600 transition duration-300">
-                Share on LinkedIn
-                </a>
             </div>
         </div>
         {{ $pages := where .Site.RegularPages "Section" "articles" }}
@@ -68,50 +57,58 @@
 
 {{ define "structured" }}
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "@id": "{{ printf "%s%s" .Permalink "#blogposting" }}",
-    "headline": "{{ .Title }}",
-    "description": "{{ .Summary | plainify }}",
-    "url": "{{ .Permalink }}",
-    "datePublished": "{{ .Date }}",
-    "dateModified": "{{ .Lastmod }}",
-    "author": {
-        "@type": "Person",
-        "name": "{{ .Params.author }}",
-        "url": "{{ absURL "/about-us/" }}"
-    },
-    "image": {
-        "@type": "ImageObject",
-        {{- with .Resources.Get .Params.image }}
-            "url": "{{ .Permalink }}",
-            "width": "{{ .Width }}",
-            "height": "{{ .Height }}"
-        {{- end }}
-    },
-    "publisher": {
-        "@type": "Organization",
-        "@id": "{{ printf "%s%s" .Permalink "#organization" }}",
-        "name": "{{ site.Params.sitename }}",
-        "logo": {
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "@id": {{ printf "%s%s" .Permalink "#blogposting" }},
+        "headline": {{ .Title }},
+        "description": {{ .Summary | plainify }},
+        "url": {{ .Permalink }},
+        "datePublished": {{ .Date }},
+        "dateModified": {{ .Lastmod }},
+        "author": {
+            "@type": "Person",
+            "name": {{ .Params.author }},
+            "url": {{ absURL "/about-us/" }}
+        },
+        "image": {
             "@type": "ImageObject",
-            "url": "{{ absURL site.Params.logo.image }}"
+            {{- with .Resources.Get .Params.image }}
+                "url": {{ .Permalink }},
+                "width": "{{ .Width }}",
+                "height": "{{ .Height }}"
+            {{- end }}
+        },
+        "publisher": {
+            "@type": "Organization",
+            "@id": {{ printf "%s%s" .Permalink "#organization" }},
+            "name": {{ site.Params.sitename }},
+            "logo": {
+                "@type": "ImageObject",
+                "url": {{ absURL site.Params.logo.image }}
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": {{ .Permalink }}
+        },
+        {{/* "keywords": "{{ .Params.keywords }}", */}}
+        "wordCount": "{{ .WordCount }}",
+        "articleBody": "{{ .Plain | safeJS }}",
+        {{/* "articleSection": "{{ .Params.articleSection }}", */}}
+        "commentCount": 0,
+        "inLanguage": "en-US",
+        "isPartOf": {
+            "@type": "Blog",
+            "@id": {{ printf "%s%s" .Permalink "#blog" }},
+            "name": {{ .Page.Parent.Title }},
+            "url": {{ absURL "/articles/" }}
         }
-    },
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "{{ .Permalink }}"
-    },
-    "wordCount": "{{ .WordCount }}",
-    "articleBody": "{{ .Plain | safeJS }}",
-    "inLanguage": "en-US",
-    "isPartOf": {
-        "@type": "Blog",
-        "@id": "{{ printf "%s%s" .Permalink "#blog" }}",
-        "name": "{{ .Page.Parent.Title }}",
-        "url": "{{ absURL "/articles/" }}"
+        {{/* "potentialAction": {
+            "@type": "CommentAction",
+            "name": "Comment",
+            "target": "{{ .Permalink }}#comments"
+        } */}}
     }
-}
 </script>
 {{ end }}

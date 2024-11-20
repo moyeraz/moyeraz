@@ -3,3 +3,6 @@
 {{ partial "meta.html" . }}
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
+{{ if site.Params.google_analytics }}
+    {{ partialCached "ga.html" . }}
+{{ end }}

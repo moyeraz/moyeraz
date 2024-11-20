@@ -3,7 +3,6 @@
 <head>
     {{ partial "head.html" . }}
     {{ block "structured" . }}{{ end }}
-    {{ partial "head/js.html" . }}
 </head>
 <body class="text-text-600 bg-neutral-100 {{ block "body_classes" . }}{{ end }}">
     {{ partial "header.html" . }}
@@ -24,38 +23,6 @@
         {{ end }}
     {{ end }}
 
-        {{ partial "footer.html" . }}
-
-    <!-- Conditionally Load Swiper JavaScript and Initialization for Articles and Categories -->
-    {{ if or (eq .Page.Type "articles") (eq .Page.Type "categories") }}
-        <script defer src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const swiperEl = document.querySelector('.swiper');
-            if (swiperEl) {
-                const observer = new IntersectionObserver((entries) => {
-                    if (entries[0].isIntersecting) {
-                        // Initialize Swiper only when it becomes visible
-                        const swiper = new Swiper('.swiper', {
-                            loop: true,
-                            speed: 1000,
-                            spaceBetween: 30,
-                            pagination: {
-                                el: '.swiper-pagination',
-                                clickable: true
-                            },
-                            autoplay: {
-                                delay: 3000,
-                                pauseOnMouseEnter: true
-                            },
-                        });
-                        observer.disconnect(); // Stop observing after initialization
-                    }
-                });
-                observer.observe(swiperEl);
-            }
-        });
-        </script>
-    {{ end }}
+    {{ partial "footer.html" . }}
 </body>
 </html>

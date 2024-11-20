@@ -1,19 +1,8 @@
-baseURL: 'https://www.moyeraz.com'
+baseURL: ''
 minify:
-  tdewolff:
-    html:
-      minify: true  
-      keepWhitespace: false  
-    css:
-      minify: true  
-    js:
-      minify: true  
+    minifyOutput: true
 enableRobotsTXT: true
+
 params:
-  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"  
-outputs:
-  home:
-    - html
-    - rss
-    - webappmanifest
-    - sitemap
+    google_analytics: G-QWQ0H5N569
+    recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
