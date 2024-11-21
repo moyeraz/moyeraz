@@ -19,14 +19,15 @@ We will get back to you as soon as possible.
         }
         
         if (timeLeft === 0) {
-            // Instead of using history.go(-1), we'll use a different approach
+            // Set a flag to ensure the modal is closed on the previous page
+            sessionStorage.setItem('modal-closed', 'true');
+
+            // Redirect to the previous page, forcing a fresh load
             const previousPageUrl = document.referrer;
-            
+
             if (previousPageUrl) {
-                // Force a fresh load of the previous page
                 window.location.href = previousPageUrl;
             } else {
-                // Fallback if referrer is not available
                 window.location.reload();
                 window.history.back();
             }

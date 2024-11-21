@@ -83,7 +83,16 @@
                                 console.warn('Submit button not found for modal:', modalId);
                             }
                         };
-                        
+
+                        // Close modal if modal-closed flag is set
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const modalElement = document.getElementById('{{ .modal.id }}');
+                            if (sessionStorage.getItem('modal-closed') === 'true' && modalElement) {
+                                modalElement.classList.add('hidden');
+                                sessionStorage.removeItem('modal-closed');
+                            }
+                        });
+
                         // Create wrapper functions for each modal
                         (function() {
                             var modalId = '{{.modal.id | safeJS}}';
@@ -96,7 +105,7 @@
                                 window.recaptchaExpired(modalId);
                             };
                         })();
-                        </script>
+                    </script>
                 </div>
             </div>        
         </div>
