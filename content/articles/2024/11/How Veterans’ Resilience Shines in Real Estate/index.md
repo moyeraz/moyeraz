@@ -1,6 +1,7 @@
 ---
 slug: "veterans-day-service-sacrifice-real-estate"
 title: "How Veterans’ Resilience Shines in Real Estate"
+seoTitle: "How Veterans’ Resilience Shines in Real Estate"
 date: 2024-11-11T00:40:04-00:00
 lastmod: 2024-11-11T00:40:04-00:00
 draft: false
@@ -22,11 +23,11 @@ Veterans bring unmatched qualities of resilience, adaptability, and determinatio
 
 ## Navigating Market Uncertainty
 
-The housing market can present challenges, especially during times of economic fluctuation. As discussed in our article on **[Trump’s Reelection Housing Market Impact](#)**, rising mortgage rates and construction costs could make affordability a concern. Veterans are uniquely equipped to adapt to such challenges, using their disciplined problem-solving skills to secure stable investments.
+The housing market can present challenges, especially during times of economic fluctuation. As discussed in our article on **[Trump’s Reelection Housing Market Impact](/articles/trump-reelection-housing-market-2025/)**, rising mortgage rates and construction costs could make affordability a concern. Veterans are uniquely equipped to adapt to such challenges, using their disciplined problem-solving skills to secure stable investments.
 
 ## Why Support Programs Matter
 
-First-time buyers, including veterans, often face financial hurdles when saving for a down payment. Assistance programs like **[Tucson’s Down Payment Assistance](#)** not only reduce financial stress but also provide essential education through HUD-certified courses. This makes the dream of homeownership a reality for those who served our country.
+First-time buyers, including veterans, often face financial hurdles when saving for a down payment. Assistance programs like **[Tucson’s Down Payment Assistance](/articles/tucson-down-payment-aid-first-time-buyers/)** not only reduce financial stress but also provide essential education through HUD-certified courses. This makes the dream of homeownership a reality for those who served our country.
 
 ---
 
@@ -38,7 +39,7 @@ Veterans’ sacrifices extend beyond their years of service. Their resilience an
 
 ## Take the Next Step
 
-If you’re a veteran considering buying or selling a home, I’m here to guide you. At **Moyer Realty Services**, we understand the unique strengths veterans bring and the challenges they face. Whether you’re navigating programs like **[Tucson’s Down Payment Assistance](#)** or adapting to shifts in the market outlined in **[our article on Trump’s policies](#)**, we’re here to help.
+If you’re a veteran considering buying or selling a home, I’m here to guide you. At **Moyer Realty Services**, we understand the unique strengths veterans bring and the challenges they face. Whether you’re navigating programs like **[Tucson’s Down Payment Assistance](/articles/tucson-down-payment-aid-first-time-buyers/)** or adapting to shifts in the market outlined in **[our article on Trump’s policies](/articles/trump-reelection-housing-market-2025/)**, we’re here to help.
 
 ---
 
