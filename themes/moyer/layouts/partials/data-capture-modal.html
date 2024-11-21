@@ -64,22 +64,22 @@
                             const formElement = modalElement.querySelector('form');
                             const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
                             let recaptchaResponse = null;
-
+                    
                             // reCAPTCHA callbacks
-                            window.enableSubmitButton{{ .modal.id | safeJS }} = function (response) {
+                            window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
                                 recaptchaResponse = response; // Store the reCAPTCHA token
                                 if (submitButton) {
                                     submitButton.removeAttribute('disabled'); // Enable the submit button
                                 }
                             };
-
-                            window.recaptchaExpired{{ .modal.id | safeJS }} = function () {
+                    
+                            window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
                                 recaptchaResponse = null; // Clear the reCAPTCHA token
                                 if (submitButton) {
                                     submitButton.setAttribute('disabled', 'disabled'); // Disable the submit button
                                 }
                             };
-
+                    
                             // Form submission logic
                             formElement.addEventListener('submit', function (event) {
                                 event.preventDefault(); // Prevent default form submission
@@ -88,18 +88,18 @@
                                     alert('Please complete the reCAPTCHA verification.');
                                     return;
                                 }
-
+                    
                                 // Close the modal
                                 if (modalElement) {
                                     modalElement.classList.add('hidden');
                                 }
-
+                    
                                 // Redirect to Thank You page
                                 const thankYouPageUrl = '/thank-you';
                                 window.location.href = thankYouPageUrl;
                             });
                         });
-                    </script>
+                    </script>                    
                 </div>
             </div>        
         </div>
