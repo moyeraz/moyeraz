@@ -60,10 +60,35 @@
                         document.addEventListener('DOMContentLoaded', function () {
                             const modalElement = document.getElementById('{{ .modal.id }}');
                             const formElement = modalElement.querySelector('form');
+                            const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
+                            let recaptchaResponse = null;
 
-                            // Close the modal on submission
-                            formElement.addEventListener('submit', function () {
-                                modalElement.classList.add('hidden'); // Hide modal immediately
+                            // reCAPTCHA callbacks
+                            window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
+                                recaptchaResponse = response;
+                                if (submitButton) {
+                                    submitButton.removeAttribute('disabled'); // Enable submit button
+                                    submitButton.classList.add('btn-primary-enabled'); // Optional: Add a CSS class for visual change
+                                }
+                            };
+
+                            window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
+                                recaptchaResponse = null;
+                                if (submitButton) {
+                                    submitButton.setAttribute('disabled', 'disabled'); // Disable submit button
+                                    submitButton.classList.remove('btn-primary-enabled'); // Remove CSS class
+                                }
+                            };
+
+                            // Ensure the form closes modal and submits correctly
+                            formElement.addEventListener('submit', function (e) {
+                                if (!recaptchaResponse) {
+                                    e.preventDefault(); // Prevent form submission if no reCAPTCHA response
+                                    document.getElementById('recaptcha-error').classList.remove('hidden'); // Show error
+                                    return;
+                                }
+
+                                modalElement.classList.add('hidden'); // Hide the modal immediately
                             });
                         });
                     </script>
