@@ -1,4 +1,5 @@
 ---
+slug: veterans-day-tribute-service-sacrifice
 title: "A Tribute on Veterans Day: Reflecting on Service and Sacrifice"
 date: 2024-11-11T00:40:04-00:00
 lastmod: 2024-11-11T00:40:04-00:00
