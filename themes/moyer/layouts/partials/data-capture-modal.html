@@ -18,7 +18,7 @@
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
-                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                    <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
                                 {{ else if eq .type "honeypot" }}
                                     <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
                                 {{ else }}
@@ -27,9 +27,9 @@
                                             <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
                                         {{ if eq .type "textarea" }}
-                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
+                                            <textarea rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
                                         {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
                                         {{ else if eq .type "select" }}
                                             <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
                                                 <option selected>{{ .placeholder }}</option>
@@ -44,7 +44,11 @@
                             
                             <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{.modal.id | safeJS}}" data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}"></div>
+                                <div class="g-recaptcha" 
+                                     data-sitekey="{{ site.Params.recaptcha_key }}" 
+                                     data-callback="enableSubmitButton{{.modal.id | safeJS}}" 
+                                     data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}">
+                                </div>
                                 <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
                             </div>
 
@@ -58,17 +62,40 @@
                         document.addEventListener('DOMContentLoaded', function () {
                             const modalElement = document.getElementById('{{ .modal.id }}');
                             const formElement = modalElement.querySelector('form');
+                            const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
+                            let recaptchaResponse = null;
 
+                            // reCAPTCHA callbacks
+                            window.enableSubmitButton{{ .modal.id | safeJS }} = function (response) {
+                                recaptchaResponse = response; // Store the reCAPTCHA token
+                                if (submitButton) {
+                                    submitButton.removeAttribute('disabled'); // Enable the submit button
+                                }
+                            };
+
+                            window.recaptchaExpired{{ .modal.id | safeJS }} = function () {
+                                recaptchaResponse = null; // Clear the reCAPTCHA token
+                                if (submitButton) {
+                                    submitButton.setAttribute('disabled', 'disabled'); // Disable the submit button
+                                }
+                            };
+
+                            // Form submission logic
                             formElement.addEventListener('submit', function (event) {
                                 event.preventDefault(); // Prevent default form submission
+                                
+                                if (!recaptchaResponse) {
+                                    alert('Please complete the reCAPTCHA verification.');
+                                    return;
+                                }
 
                                 // Close the modal
                                 if (modalElement) {
-                                    modalElement.classList.add('hidden'); // Add 'hidden' class to close the modal
+                                    modalElement.classList.add('hidden');
                                 }
 
                                 // Redirect to Thank You page
-                                const thankYouPageUrl = '/thank-you'; // Set your Thank You page URL here
+                                const thankYouPageUrl = '/thank-you';
                                 window.location.href = thankYouPageUrl;
                             });
                         });
