@@ -1,6 +1,7 @@
 ---
 slug: "tucson-down-payment-aid-first-time-buyers"
 title: "Tucson’s Down Payment Assistance: A First-Time Buyer’s Guide"
+seoTitle: "Tucson Down Payment Assistance Guide for First-Time Buyers"
 date: 2024-11-17T00:40:04-00:00
 lastmod: 2024-11-17T00:40:04-00:00
 draft: false

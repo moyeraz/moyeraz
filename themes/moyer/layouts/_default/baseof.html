@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="{{ .Site.Language.LanguageCode }}" dir="{{ or .Site.Language.LanguageDirection `ltr` }}">
 <head>
+    <title>{{ with .Params.seoTitle }}{{ . }}{{ else }}{{ .Title }}{{ end }}</title>
     {{ partial "head.html" . }}
     {{ block "structured" . }}{{ end }}
 </head>
 <body class="text-text-600 bg-neutral-100 {{ block "body_classes" . }}{{ end }}">
     {{ partial "header.html" . }}
+
+    <!-- Showcase Section -->
     {{- with .Params.showcase }}
         {{ partial "showcase.html" . }}
     {{- end }}
+
     <main>
         {{ block "main" . }}{{ end }}
     </main>
     
-    <!-- Enable contact form for all pages, footer link -->
+    <!-- Contact Form -->
     {{ partial "data-capture-modal" (dict "id" "contact-us" "modal" (index $.Site.Params.modals "contact-us")) }}
     {{ if .Params.enableModals }}
         {{ range .Params.activeModals }}
