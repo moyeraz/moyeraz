@@ -14,7 +14,7 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form action="{{ .modal.form_action }}" method="POST">
+                    <form action="https://submit-form.com/{{ .Site.Params.formspark_form_id }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -41,14 +41,10 @@
                                     </div>
                                 {{ end }}
                             {{ end }}
-                            
+
                             <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
-                                <div class="g-recaptcha" 
-                                     data-sitekey="{{ site.Params.recaptcha_key }}" 
-                                     data-callback="enableSubmitButton{{.modal.id | safeJS}}" 
-                                     data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}">
-                                </div>
+                                <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{.modal.id | safeJS}}" data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}"></div>
                                 <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
                             </div>
 
@@ -64,60 +60,28 @@
                             const formElement = modalElement.querySelector('form');
                             const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
                             let recaptchaResponse = null;
-                    
+
                             // reCAPTCHA callbacks
                             window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
                                 recaptchaResponse = response;
                                 if (submitButton) {
-                                    submitButton.removeAttribute('disabled');
+                                    submitButton.removeAttribute('disabled'); // Enable submit button
                                 }
                             };
-                    
+
                             window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
                                 recaptchaResponse = null;
                                 if (submitButton) {
-                                    submitButton.setAttribute('disabled', 'disabled');
+                                    submitButton.setAttribute('disabled', 'disabled'); // Disable submit button
                                 }
                             };
-                    
-                            // Form submission logic
-                            formElement.addEventListener('submit', async function (event) {
-                                event.preventDefault(); // Prevent default form submission
-                    
-                                if (!recaptchaResponse) {
-                                    alert('Please complete the reCAPTCHA verification.');
-                                    return;
-                                }
-                    
-                                const formData = new FormData(formElement); // Gather form data
-                    
-                                try {
-                                    const response = await fetch(formElement.action, {
-                                        method: 'POST',
-                                        body: formData,
-                                        headers: { 'Accept': 'application/json' },
-                                    });
-                    
-                                    if (response.ok) {
-                                        // Close the modal
-                                        if (modalElement) {
-                                            modalElement.classList.add('hidden');
-                                        }
-                    
-                                        // Redirect to Thank You page
-                                        const thankYouPageUrl = '/thank-you';
-                                        window.location.href = thankYouPageUrl;
-                                    } else {
-                                        console.error('Form submission failed:', response);
-                                        alert('Something went wrong. Please try again.');
-                                    }
-                                } catch (error) {
-                                    console.error('Error submitting the form:', error);
-                                    alert('Something went wrong. Please try again.');
-                                }
+
+                            // Allow the form to submit and redirect on success
+                            formElement.addEventListener('submit', function () {
+                                modalElement.classList.add('hidden'); // Hide the modal
                             });
                         });
-                    </script>                                                            
+                    </script>
                 </div>
             </div>        
         </div>
