@@ -1,4 +1,4 @@
-<di<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
+<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
     <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
         <div class="relative bg-white rounded-lg shadow">
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -14,7 +14,7 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form action="{{ .modal.form_action }}" method="POST">
+                    <form id="modalForm-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
@@ -55,48 +55,53 @@
                         </div>
                     </form>
                     <script>
-                        // Create a function that returns the selector for a specific modal
-                        function getButtonSelector(modalId) {
-                            return '.btn-submit-' + modalId;
-                        }
-                        
-                        // Define the functions in window scope to be accessible by reCAPTCHA
-                        window.enableSubmitButton = function(response, modalId) {
-                            if (!response) {
-                                console.warn('No reCAPTCHA response token received');
-                                return;
-                            }
-                        
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            } else {
-                                console.warn('Submit button not found for modal:', modalId);
-                            }
-                        };
-                        
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            } else {
-                                console.warn('Submit button not found for modal:', modalId);
-                            }
-                        };
-                        
-                        // Create wrapper functions for each modal
-                        (function() {
-                            var modalId = '{{.modal.id | safeJS}}';
-                            
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const modalElement = document.getElementById('{{ .modal.id }}');
+                            const formElement = modalElement.querySelector('form');
+                            const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
+                            let recaptchaResponse = null;
+
+                            // reCAPTCHA callbacks
+                            window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
+                                recaptchaResponse = response;
+                                if (submitButton) {
+                                    submitButton.removeAttribute('disabled'); // Enable submit button
+                                }
                             };
-                            
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
+
+                            window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
+                                recaptchaResponse = null;
+                                if (submitButton) {
+                                    submitButton.setAttribute('disabled', 'disabled'); // Disable submit button
+                                }
                             };
-                        })();
-                        </script>
+
+                            // Handle form submission
+                            formElement.addEventListener('submit', function (e) {
+                                e.preventDefault(); // Prevent default submission
+                                
+                                const formData = new FormData(formElement);
+                                
+                                fetch(formElement.action, {
+                                    method: 'POST',
+                                    body: formData,
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        modalElement.classList.add('hidden'); // Close the modal
+                                        window.location.href = '/thank-you'; // Redirect to thank-you page
+                                    } else {
+                                        console.error('Form submission failed:', response.statusText);
+                                        alert('An error occurred. Please try again.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Form submission error:', error);
+                                    alert('An error occurred. Please try again.');
+                                });
+                            });
+                        });
+                    </script>
                 </div>
             </div>        
         </div>
