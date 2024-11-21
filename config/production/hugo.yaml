@@ -61,5 +61,4 @@ outputs:
     - rss
     - sitemap
     - json
-  breadcrumb:
-    - json
+  
