@@ -66,6 +66,7 @@
                             let recaptchaResponse = null;
                     
                             // reCAPTCHA callbacks
+                            {{/* Escape dynamic function names to prevent Hugo parsing */}}
                             window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
                                 recaptchaResponse = response; // Store the reCAPTCHA token
                                 if (submitButton) {
@@ -99,7 +100,7 @@
                                 window.location.href = thankYouPageUrl;
                             });
                         });
-                    </script>                    
+                    </script>                                        
                 </div>
             </div>        
         </div>
