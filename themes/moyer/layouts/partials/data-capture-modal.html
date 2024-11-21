@@ -55,56 +55,23 @@
                         </div>
                     </form>
                     <script>
-                        // Create a function that returns the selector for a specific modal
-                        function getButtonSelector(modalId) {
-                            return '.btn-submit-' + modalId;
-                        }
-                        
-                        // Define the functions in window scope to be accessible by reCAPTCHA
-                        window.enableSubmitButton = function(response, modalId) {
-                            if (!response) {
-                                console.warn('No reCAPTCHA response token received');
-                                return;
-                            }
-                        
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.removeAttribute('disabled');
-                            } else {
-                                console.warn('Submit button not found for modal:', modalId);
-                            }
-                        };
-                        
-                        window.recaptchaExpired = function(modalId) {
-                            const submitButton = document.querySelector(getButtonSelector(modalId));
-                            if (submitButton) {
-                                submitButton.setAttribute('disabled', 'disabled');
-                            } else {
-                                console.warn('Submit button not found for modal:', modalId);
-                            }
-                        };
-
-                        // Close modal if modal-closed flag is set
-                        document.addEventListener('DOMContentLoaded', function() {
+                        document.addEventListener('DOMContentLoaded', function () {
                             const modalElement = document.getElementById('{{ .modal.id }}');
-                            if (sessionStorage.getItem('modal-closed') === 'true' && modalElement) {
-                                modalElement.classList.add('hidden');
-                                sessionStorage.removeItem('modal-closed');
-                            }
-                        });
+                            const formElement = modalElement.querySelector('form');
 
-                        // Create wrapper functions for each modal
-                        (function() {
-                            var modalId = '{{.modal.id | safeJS}}';
-                            
-                            window['enableSubmitButton' + modalId] = function(response) {
-                                window.enableSubmitButton(response, modalId);
-                            };
-                            
-                            window['recaptchaExpired' + modalId] = function() {
-                                window.recaptchaExpired(modalId);
-                            };
-                        })();
+                            formElement.addEventListener('submit', function (event) {
+                                event.preventDefault(); // Prevent default form submission
+
+                                // Close the modal
+                                if (modalElement) {
+                                    modalElement.classList.add('hidden'); // Add 'hidden' class to close the modal
+                                }
+
+                                // Redirect to Thank You page
+                                const thankYouPageUrl = '/thank-you'; // Set your Thank You page URL here
+                                window.location.href = thankYouPageUrl;
+                            });
+                        });
                     </script>
                 </div>
             </div>        
