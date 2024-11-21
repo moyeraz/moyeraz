@@ -1,8 +1,69 @@
-baseURL: ''
+baseURL: https://www.moyeraz.com
+
 minify:
-    minifyOutput: true
+  tdewolff:
+    html:
+      keepWhitespace: false
+    css:
+      keepComments: false
+    js:
+      mangle: true
+      compress: true
+
 enableRobotsTXT: true
+robots:
+  disallow:
+    - /drafts/
+    - /admin/
+    - /search/
+  allow: /
+
+sitemap:
+  priority:
+    articles: 0.8
+    pages: 0.7
+  changefreq:
+    articles: weekly
+    pages: monthly
+  exclude:
+    - drafts
+    - admin
 
 params:
-    google_analytics: G-QWQ0H5N569
-    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil" 
+  google_analytics: "{{ if eq hugo.Environment `production` }}G-QWQ0H5N569{{ end }}"
+  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
+  image_processing:
+    enable: true
+    formats:
+      - webp
+      - avif
+    sizes:
+      default: 800
+      large: 1200
+      small: 400
+  og_metadata:
+    title: "Moyer Realty Services - Southern Arizona Real Estate Experts"
+    description: "Expert guidance for buying, selling, and investing in Southern Arizona properties. Your trusted real estate partner."
+    image: "/images/og-social-image.jpg"
+  security:
+    headers:
+      content_security_policy: "default-src 'self'; img-src 'self' data: https://*.moyeraz.com; script-src 'self' https://www.google-analytics.com; style-src 'self' 'unsafe-inline';"
+      strict_transport_security: "max-age=31536000; includeSubDomains"
+      x_content_type_options: "nosniff"
+      x_frame_options: "DENY"
+
+server:
+  gzip: true
+  brotli: true
+  cache:
+    max_age: 31536000
+    immutable: true
+
+outputs:
+  home:
+    - html
+    - rss
+    - sitemap
+    - json
+  breadcrumb:
+    - json
