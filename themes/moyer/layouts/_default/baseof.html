@@ -18,15 +18,20 @@
     </main>
     
     <!-- Contact Form -->
-    {{ partial "data-capture-modal" (dict "id" "contact-us" "modal" (index $.Site.Params.modals "contact-us")) }}
+    {{ with (index $.Site.Params.modals "contact-us") }}
+        {{ partial "data-capture-modal" (dict "id" "contact-us" "modal" .) }}
+    {{ end }}
     {{ if .Params.enableModals }}
         {{ range .Params.activeModals }}
             {{ $modalId := . }}
             {{ $modalConfig := index $.Site.Params.modals $modalId }}
-            {{ partial "data-capture-modal" (dict "id" $modalId "modal" $modalConfig) }}
+            {{ if $modalConfig }}
+                {{ partial "data-capture-modal" (dict "id" $modalId "modal" $modalConfig) }}
+            {{ end }}
         {{ end }}
     {{ end }}
 
     {{ partial "footer.html" . }}
 </body>
 </html>
+
