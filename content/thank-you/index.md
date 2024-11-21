@@ -10,21 +10,7 @@ We will get back to you as soon as possible.
 <a href="/" class="btn btn-arrow btn-solid btn-primary">Back to Home</a>
 
 <script>
-    let timeLeft = 5;
-
-    function closeModalAndOverlay() {
-        // Close the modal
-        const openModal = document.querySelector('.modal:not(.hidden), .open-modal');
-        if (openModal) {
-            openModal.classList.add('hidden'); // Add 'hidden' class to close the modal
-        }
-
-        // Remove the overlay
-        const overlay = document.querySelector('.modal-overlay, .overlay'); // Adjust class if necessary
-        if (overlay) {
-            overlay.classList.add('hidden'); // Hide overlay
-        }
-    }
+    let timeLeft = 5;    
 
     function updateCountdown() {
         const secondsElement = document.getElementById('seconds');
@@ -34,18 +20,8 @@ We will get back to you as soon as possible.
         }
 
         if (timeLeft === 0) {
-            closeModalAndOverlay(); // Ensure modal and overlay are closed before redirecting
-
-            const previousPageUrl = document.referrer;
-
-            if (previousPageUrl) {
-                // Redirect to the previous page
-                window.location.href = previousPageUrl;
-            } else {
-                // Fallback: reload or navigate back
-                window.location.reload();
-                window.history.back();
-            }
+            // Redirect to the home page
+            window.location.href = "/";
         } else {
             timeLeft--;
             setTimeout(updateCountdown, 1000);
