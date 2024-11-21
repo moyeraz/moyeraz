@@ -151,7 +151,7 @@ params:
                 -
                     type: hidden
                     name: _redirect
-                    value: thank-you/
+                    value: "https://www.moyeraz.com/thank-you"
                     url: true
                 -
                     type: hidden
@@ -192,7 +192,7 @@ params:
                 -
                     type: hidden
                     name: _redirect
-                    value: thank-you/
+                    value: "https://www.moyeraz.com/thank-you"
                     url: true
                 -
                     type: hidden
@@ -239,7 +239,7 @@ params:
                 -
                     type: hidden
                     name: _redirect
-                    value: thank-you/
+                    value: "https://www.moyeraz.com/thank-you"
                     url: true
                 -
                     type: hidden
