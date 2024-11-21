@@ -16,7 +16,7 @@ On Veterans Day, I reflect on my journey in the U.S. Army from 1998 to 2002 as a
 
 ## Veterans and Real Estate: A Unique Perspective
 
-Veterans bring unmatched qualities of resilience, adaptability, and determination to everything they do. These traits are especially valuable when navigating challenging housing markets or pursuing ambitious real estate goals. For example, veterans looking to buy a home in a competitive market might face unique hurdles, but programs like the **[Tucson Down Payment Assistance Program](#)** can offer critical support, making homeownership achievable.
+Veterans bring unmatched qualities of resilience, adaptability, and determination to everything they do. These traits are especially valuable when navigating challenging housing markets or pursuing ambitious real estate goals. For example, veterans looking to buy a home in a competitive market might face unique hurdles, but programs like the **[Tucson Down Payment Assistance Program](/articles/tucson-down-payment-aid-first-time-buyers/)** can offer critical support, making homeownership achievable.
 
 ---
 
