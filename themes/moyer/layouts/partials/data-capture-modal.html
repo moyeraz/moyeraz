@@ -1,4 +1,4 @@
-<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
+<di<div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
     <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
         <div class="relative bg-white rounded-lg shadow">
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -14,11 +14,11 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form action="https://submit-form.com/{{ .Site.Params.formspark_form_id }}" method="POST">
+                    <form action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
-                                    <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
                                 {{ else if eq .type "honeypot" }}
                                     <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
                                 {{ else }}
@@ -27,9 +27,9 @@
                                             <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
                                         {{ if eq .type "textarea" }}
-                                            <textarea rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
+                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
                                         {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
                                         {{ else if eq .type "select" }}
                                             <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
                                                 <option selected>{{ .placeholder }}</option>
@@ -41,7 +41,7 @@
                                     </div>
                                 {{ end }}
                             {{ end }}
-
+                            
                             <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
                                 <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{.modal.id | safeJS}}" data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}"></div>
@@ -55,33 +55,48 @@
                         </div>
                     </form>
                     <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const modalElement = document.getElementById('{{ .modal.id }}');
-                            const formElement = modalElement.querySelector('form');
-                            const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
-                            let recaptchaResponse = null;
-
-                            // reCAPTCHA callbacks
-                            window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
-                                recaptchaResponse = response;
-                                if (submitButton) {
-                                    submitButton.removeAttribute('disabled'); // Enable submit button
-                                }
+                        // Create a function that returns the selector for a specific modal
+                        function getButtonSelector(modalId) {
+                            return '.btn-submit-' + modalId;
+                        }
+                        
+                        // Define the functions in window scope to be accessible by reCAPTCHA
+                        window.enableSubmitButton = function(response, modalId) {
+                            if (!response) {
+                                console.warn('No reCAPTCHA response token received');
+                                return;
+                            }
+                        
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
+                                submitButton.removeAttribute('disabled');
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
+                            }
+                        };
+                        
+                        window.recaptchaExpired = function(modalId) {
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
+                                submitButton.setAttribute('disabled', 'disabled');
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
+                            }
+                        };
+                        
+                        // Create wrapper functions for each modal
+                        (function() {
+                            var modalId = '{{.modal.id | safeJS}}';
+                            
+                            window['enableSubmitButton' + modalId] = function(response) {
+                                window.enableSubmitButton(response, modalId);
                             };
-
-                            window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
-                                recaptchaResponse = null;
-                                if (submitButton) {
-                                    submitButton.setAttribute('disabled', 'disabled'); // Disable submit button
-                                }
+                            
+                            window['recaptchaExpired' + modalId] = function() {
+                                window.recaptchaExpired(modalId);
                             };
-
-                            // Allow the form to submit and redirect on success
-                            formElement.addEventListener('submit', function () {
-                                modalElement.classList.add('hidden'); // Hide the modal
-                            });
-                        });
-                    </script>
+                        })();
+                        </script>
                 </div>
             </div>        
         </div>

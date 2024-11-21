@@ -10,24 +10,33 @@ We will get back to you as soon as possible.
 <a href="/" class="btn btn-arrow btn-solid btn-primary">Back to Home</a>
 
 <script>
-    let timeLeft = 5;    
+    let timeLeft = 5;
+
+    function closeModal() {
+        // Find any open modal window by class or ID
+        const openModal = document.querySelector('.modal:not(.hidden), .open-modal');
+        if (openModal) {
+            openModal.classList.add('hidden'); // Add 'hidden' class to close the modal
+        }
+    }
+
     function updateCountdown() {
         const secondsElement = document.getElementById('seconds');
-        
+
         if (secondsElement) {
             secondsElement.textContent = timeLeft;
         }
-        
-        if (timeLeft === 0) {
-            // Set a flag to ensure the modal is closed on the previous page
-            sessionStorage.setItem('modal-closed', 'true');
 
-            // Redirect to the previous page, forcing a fresh load
+        if (timeLeft === 0) {
+            closeModal(); // Ensure modal is closed before redirecting
+
             const previousPageUrl = document.referrer;
 
             if (previousPageUrl) {
+                // Redirect to the previous page
                 window.location.href = previousPageUrl;
             } else {
+                // Fallback: reload or navigate back
                 window.location.reload();
                 window.history.back();
             }
@@ -36,7 +45,7 @@ We will get back to you as soon as possible.
             setTimeout(updateCountdown, 1000);
         }
     }
-    
+
     // Start the countdown when the script loads
     updateCountdown();
 </script>
