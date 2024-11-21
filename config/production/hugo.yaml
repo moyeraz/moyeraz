@@ -19,18 +19,14 @@ robots:
   allow: /
 
 sitemap:
-  priority:
-    articles: 0.8
-    pages: 0.7
-  changefreq:
-    articles: weekly
-    pages: monthly
-  exclude:
+  changeFreq: "weekly"  # Default change frequency for all items in the sitemap
+  priority: 0.5         # Default priority for all items in the sitemap
+  exclude:              # Exclude specific sections or types of content
     - drafts
     - admin
 
 params:
-  google_analytics: "{{ if eq hugo.Environment `production` }}G-QWQ0H5N569{{ end }}"
+  google_analytics: "{{ if eq hugo.Environment `production` }}G-QWQ0H5N569{{ end }}"  # Only enable GA in production
   recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
   image_processing:
     enable: true
@@ -56,8 +52,8 @@ server:
   gzip: true
   brotli: true
   cache:
-    max_age: 31536000
-    immutable: true
+    max_age: 31536000  # Cache assets for 1 year
+    immutable: true    # Use immutable caching for static assets
 
 outputs:
   home:
