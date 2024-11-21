@@ -1,38 +1,24 @@
-{{ if .modal }}
 <div id="{{ .modal.id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full rounded-lg">
     <div class="relative p-1 w-full max-w-3xl max-h-full lg:p-4 lg:max-w-6xl">
         <div class="relative bg-white rounded-lg shadow">
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                <!-- Modal Image Section -->
-                {{ if .modal.image }}
                 <div class="h-full hidden lg:block">
                     {{ partial "image.html" (dict "context" . "image" .modal.image "alt" .title "object" "cover" "rounded" "rounded-lg") }}
                 </div>
-                {{ end }}
-                
                 <div class="py-5 px-4 md:py-12 md:px-10">
-                    <!-- Close Button -->
                     <button type="button" class="absolute top-2 right-2 text-slate-400 bg-transparent hover:bg-slate-200 hover:text-text-600 rounded text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-colors lg:w-9 lg:h-9 xl:top-3 xl:right-3" data-modal-hide="{{ .modal.id }}">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
-
-                    <!-- Mobile Logo -->
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
-
-                    <!-- Modal Title -->
-                    {{ if .modal.title }}
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    {{ end }}
-
-                    <!-- Modal Form -->
                     <form action="{{ .modal.form_action }}" method="POST">
                         <div class="grid gap-4 grid-cols-2">
                             {{ range .modal.fields }}
                                 {{ if eq .type "hidden" }}
-                                    <input type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
                                 {{ else if eq .type "honeypot" }}
                                     <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
                                 {{ else }}
@@ -41,11 +27,11 @@
                                             <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
                                         {{ end }}
                                         {{ if eq .type "textarea" }}
-                                            <textarea rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required></textarea>
+                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
                                         {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
                                         {{ else if eq .type "select" }}
-                                            <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                                            <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
                                                 <option selected>{{ .placeholder }}</option>
                                                 {{ range .options }}
                                                     <option value="{{ . | urlize }}">{{ . }}</option>
@@ -56,57 +42,63 @@
                                 {{ end }}
                             {{ end }}
                             
-                            <!-- reCAPTCHA Section -->
+                            <!-- Add reCAPTCHA widget before the submit button -->
                             <div class="col-span-2 mb-4">
                                 <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{.modal.id | safeJS}}" data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}"></div>
                                 <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
                             </div>
 
-                            <!-- Submit Button -->
                             <div class="col-span-full">
                                 <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
                                 <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
                             </div>
                         </div>
                     </form>
-
-                    <!-- JavaScript for reCAPTCHA -->
                     <script>
+                        // Create a function that returns the selector for a specific modal
                         function getButtonSelector(modalId) {
                             return '.btn-submit-' + modalId;
                         }
-
+                        
+                        // Define the functions in window scope to be accessible by reCAPTCHA
                         window.enableSubmitButton = function(response, modalId) {
-                            if (!response) return;
+                            if (!response) {
+                                console.warn('No reCAPTCHA response token received');
+                                return;
+                            }
+                        
                             const submitButton = document.querySelector(getButtonSelector(modalId));
                             if (submitButton) {
                                 submitButton.removeAttribute('disabled');
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
                             }
                         };
-
+                        
                         window.recaptchaExpired = function(modalId) {
                             const submitButton = document.querySelector(getButtonSelector(modalId));
                             if (submitButton) {
                                 submitButton.setAttribute('disabled', 'disabled');
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
                             }
                         };
-
+                        
+                        // Create wrapper functions for each modal
                         (function() {
                             var modalId = '{{.modal.id | safeJS}}';
+                            
                             window['enableSubmitButton' + modalId] = function(response) {
                                 window.enableSubmitButton(response, modalId);
                             };
+                            
                             window['recaptchaExpired' + modalId] = function() {
                                 window.recaptchaExpired(modalId);
                             };
                         })();
-                    </script>
+                        </script>
                 </div>
             </div>        
         </div>
     </div>
 </div>
-{{ else }}
-<!-- Optional fallback or error message -->
-<div class="hidden">Modal data is missing.</div>
-{{ end }}

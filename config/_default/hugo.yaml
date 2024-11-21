@@ -1,146 +1,145 @@
-baseURL: ''  # Dynamic environment handling
+baseURL: ''
 languageCode: 'en-us'
 title: 'Moyer Realty Services'
 theme: 'moyer'
-
 pagination:
-  pagerSize: 6
-  pagerPath: "page"  # Ensures consistent pagination URL structure
-
+    pagerSize: 6
 markup:
-  goldmark:
-    renderer:
-      unsafe: true  # Allow rendering of raw HTML (ensure security elsewhere)
-    parser:
-      attribute:
-        block: true
-      wrapStandAloneImageWithinParagraph: false
-
+    goldmark:
+        renderer:
+            unsafe: true
+        parser:
+            attribute:
+                block: true
+            wrapStandAloneImageWithinParagraph: false
 minify:
-  tdewolff:
-    html:
-      keepWhitespace: false
-    css:
-      keepComments: false
-    js:
-      mangle: true
-      compress: true
+    tdewolff:
+        html:
+            keepWhitespace: false
 
 menus:
-  main:
-    - name: 'Home'
-      pageRef: '/'
-      weight: 10
-    - name: 'Buyers'
-      pageRef: '/buyers/'
-      weight: 20
-    - name: 'Sellers'
-      pageRef: '/sellers/'
-      weight: 30
-    - name: 'Articles'
-      pageRef: '/articles/'
-      weight: 40
-    - name: 'About Us'
-      pageRef: '/about-us/'
-      weight: 50
+    main:
+        -
+            name: 'Home'
+            pageRef: '/'
+            weight: 10
+        -
+            name: 'Buyers'
+            pageRef: '/buyers/'
+            weight: 20
+        -
+            name: 'Sellers'
+            pageRef: '/sellers/'
+            weight: 30
+        -
+            name: 'Articles'
+            pageRef: '/articles/'
+            weight: 40
+        -
+            name: 'About Us'
+            pageRef: '/about-us/'
+            weight: 50
+        # -
+        #     name: Hugo
+        #     pre: <i class="fa fa-heart"></i>
+        #     url: https://gohugo.io/
+        #     weight: 40
+        #     params:
+        #         rel: external
 
 outputs:
-  home:
-    - html
-    - rss
-    - webappmanifest
-    - sitemap
+    home:
+        - html
+        - rss
+        - webappmanifest
 
 permalinks:
-  articles: /articles/:slug/  # SEO-friendly article URLs
+  articles: /articles/:slug/
 
 taxonomies:
-  category: categories  # Use categories for taxonomy filtering
+    category: categories
 
 module:
-  hugoVersion:
-    extended: true  # For SASS and other advanced Hugo features
-    min: 0.115.0  # Ensure compatibility with modern Hugo versions
-  mounts:
-    - source: assets
-      target: assets
-    - source: hugo_stats.json
-      target: assets/watching/hugo_stats.json
-
+    hugoVersion:
+        extended: false
+        min: 0.112.0
+    mounts:
+        -
+            source: assets
+            target: assets
+        -
+            source: hugo_stats.json
+            target: assets/watching/hugo_stats.json
 build:
-  writeStats: true  # Generate hugo_stats.json for build analysis
-  cachebusters:
-    - source: assets/watching/hugo_stats\.json
-      target: main\.scss
-    - source: (postcss|tailwind)\.config\.js
-      target: css
-    - source: assets/.*\.(js|ts|jsx|tsx)
-      target: js
-    - source: assets/.*\.(.*)$
-      target: $1
+    writeStats: true
+    cachebusters:
+        -
+            source: assets/watching/hugo_stats\.json
+            target: main\.scss
+        -
+            source: (postcss|tailwind)\.config\.js
+            target: css
+        -
+            source: assets/.*\.(js|ts|jsx|tsx)
+            target: js
+        -
+            source: assets/.*\.(.*)$
+            target: $1
+
 
 params:
-  dateformat: "January 2, 2006"
-  sitename: "Moyer Realty Services"
-  logo:
-    image: /images/logo_moyer-realty-services.svg
-    width: 440
-    height: 150
-  linkedin: https://www.linkedin.com/company/moyer/
-  facebook: https://www.facebook.com/moyer.realty/
-  instagram: https://www.instagram.com/moyer.az/
-  youtube: https://www.youtube.com/@moyeraz
-  description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
-  author: "James Moyer"
-  email: info@moyeraz.com
-  tel: +1-520-200-1770
-  recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
-  address:
-    locality: "Tucson"
-    region: "Arizona"
-    code: 85706
-    country: "United States"
-  founder:
-    name: "James Moyer"
-    date: 2009
-  working_hours:
-    - days:
-        - Monday
-        - Tuesday
-        - Wednesday
-        - Thursday
-        - Friday
-      opens: "08:30"
-      closes: "18:00"
-    - days:
-        - Saturday
-        - Sunday
-      opens: "ByAppointment"
-      closes: "ByAppointment"
-  area_served:
-    - Benson Arizona
-    - Green Valley Arizona
-    - Marana Arizona
-    - Oro Valley Arizona
-    - Red Rock Arizona
-    - Rio Rico Arizona
-    - Saddlebrooke Arizona
-    - Sahuarita Arizona
-    - Tubac Arizona
-    - Tucson Arizona
-    - Vail Arizona
-  price_range: "$100,000 - $30,000,000"
-  og_metadata:
-    title: "Moyer Realty Services - Southern Arizona Real Estate Experts"
-    description: "Expert guidance for buying, selling, and investing in Southern Arizona properties. Your trusted real estate partner."
-    image: "/images/og-social-image.jpg"
-  security:
-    headers:
-      content_security_policy: "default-src 'self'; img-src 'self' data: https://*.moyeraz.com; script-src 'self' https://www.google-analytics.com; style-src 'self' 'unsafe-inline';"
-      strict_transport_security: "max-age=31536000; includeSubDomains"
-      x_content_type_options: "nosniff"
-      x_frame_options: "DENY"
-
+    dateformat: "January 2, 2006"
+    sitename: Moyer Realty Services
+    logo:
+        image: /images/logo_moyer-realty-services.svg
+        width: 440
+        height: 150
+    linkedin: https://www.linkedin.com/company/moyer/
+    facebook: https://www.facebook.com/moyer.realty/
+    instagram: https://www.instagram.com/moyer.az/
+    youtube: https://www.youtube.com/@moyeraz
+    description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
+    author: James Moyer
+    email: info@moyeraz.com
+    tel: +1-520-200-1770
+    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
+    address:
+        locality: Tucson
+        region: Arizona
+        code: 85706
+        country: United States
+    founder:
+        name: James Moyer
+        date: 2009
+    working_hours:
+        -
+            days:
+                - Monday
+                - Tuesday
+                - Wednesday
+                - Thursday
+                - Friday
+            opens: 08:30
+            closes: 18:00
+        -
+            days:
+                - Saturday
+                - Sunday
+            opens: ByAppointment
+            closes: ByAppointment
+    area_served:
+        - Benson Arizona
+        - Green Valley Arizona
+        - Marana Arizona
+        - Oro Valley Arizona
+        - Red Rock Arizona
+        - Rio Rico Arizona
+        - Saddlebrooke Arizona
+        - Sahuarita Arizona
+        - Tubac Arizona
+        - Tucson Arizona
+        - Vail Arizona
+    price_range: $100,000 - $30,000,000
     modals:
         contact-us:
             id: "contact-us-modal"
@@ -187,7 +186,7 @@ params:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
             image: "images/home-valuation.jpg"
-            form_action: "https://submit-form.com/QB44ICYPE"
+            form_action: https://submit-form.com/Kv7aTCXly
             button_text: "Request Valuation"
             fields:
                 -
@@ -234,7 +233,7 @@ params:
             id: "buyer-modal"
             title: "Start Your Home Search"
             image: "images/home-search.jpg"
-            form_action: "https://submit-form.com/gqvryfRu3"
+            form_action: https://submit-form.com/0w7RCCsao
             button_text: "Find My Perfect Home"
             fields:
                 -
