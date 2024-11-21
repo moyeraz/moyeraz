@@ -66,41 +66,58 @@
                             let recaptchaResponse = null;
                     
                             // reCAPTCHA callbacks
-                            {{/* Escape dynamic function names to prevent Hugo parsing */}}
                             window["enableSubmitButton" + "{{ .modal.id | safeJS }}"] = function (response) {
-                                recaptchaResponse = response; // Store the reCAPTCHA token
+                                recaptchaResponse = response;
                                 if (submitButton) {
-                                    submitButton.removeAttribute('disabled'); // Enable the submit button
+                                    submitButton.removeAttribute('disabled');
                                 }
                             };
                     
                             window["recaptchaExpired" + "{{ .modal.id | safeJS }}"] = function () {
-                                recaptchaResponse = null; // Clear the reCAPTCHA token
+                                recaptchaResponse = null;
                                 if (submitButton) {
-                                    submitButton.setAttribute('disabled', 'disabled'); // Disable the submit button
+                                    submitButton.setAttribute('disabled', 'disabled');
                                 }
                             };
                     
                             // Form submission logic
-                            formElement.addEventListener('submit', function (event) {
+                            formElement.addEventListener('submit', async function (event) {
                                 event.preventDefault(); // Prevent default form submission
-                                
+                    
                                 if (!recaptchaResponse) {
                                     alert('Please complete the reCAPTCHA verification.');
                                     return;
                                 }
                     
-                                // Close the modal
-                                if (modalElement) {
-                                    modalElement.classList.add('hidden');
-                                }
+                                const formData = new FormData(formElement); // Gather form data
                     
-                                // Redirect to Thank You page
-                                const thankYouPageUrl = '/thank-you';
-                                window.location.href = thankYouPageUrl;
+                                try {
+                                    const response = await fetch(formElement.action, {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: { 'Accept': 'application/json' },
+                                    });
+                    
+                                    if (response.ok) {
+                                        // Close the modal
+                                        if (modalElement) {
+                                            modalElement.classList.add('hidden');
+                                        }
+                    
+                                        // Redirect to Thank You page
+                                        const thankYouPageUrl = '/thank-you';
+                                        window.location.href = thankYouPageUrl;
+                                    } else {
+                                        console.error('Form submission failed:', response);
+                                        alert('Something went wrong. Please try again.');
+                                    }
+                                } catch (error) {
+                                    console.error('Error submitting the form:', error);
+                                    alert('Something went wrong. Please try again.');
+                                }
                             });
                         });
-                    </script>                                        
+                    </script>                                                            
                 </div>
             </div>        
         </div>
