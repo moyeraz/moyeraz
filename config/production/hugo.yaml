@@ -5,4 +5,4 @@ enableRobotsTXT: true
 
 params:
     google_analytics: G-QWQ0H5N569
-    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
+    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil" 
