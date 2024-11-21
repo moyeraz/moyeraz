@@ -102,7 +102,7 @@ params:
     author: James Moyer
     email: info@moyeraz.com
     tel: +1-520-200-1770
-    recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
+    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
     address:
         locality: Tucson
         region: Arizona
@@ -145,7 +145,7 @@ params:
             id: "contact-us-modal"
             title: "Get in Touch with Our Team"
             image: "images/get-in-touch.jpg"
-            form_action: "https://submit-form.com/NcRDxU1ac" 
+            form_action: "https://submit-form.com/RfXSUZM4z" 
             button_text: "Get in Touch"
             fields:
                 -
