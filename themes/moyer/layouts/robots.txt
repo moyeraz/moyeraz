@@ -1,8 +1,6 @@
 User-agent: *
-{{ range .Pages }}
-Disallow: {{ .RelPermalink }}
-{{ end }}
 Disallow: /view-quote.php
 Disallow: /cgi-bin/
+Disallow: /thank-you/
 
-Sitemap: {{ .Site.BaseURL }}sitemap.xml
+Sitemap: https://www.moyeraz.com/sitemap.xml
