@@ -1,6 +1,6 @@
 baseURL: 'https://www.moyeraz.com/'
 minify:
-    minifyOutput: true
+    minifyOutput: false
 enableRobotsTXT: true
 
 params:
