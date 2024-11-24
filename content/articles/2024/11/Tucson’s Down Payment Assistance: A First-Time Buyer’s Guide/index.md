@@ -9,6 +9,7 @@ categories:
   - Buying Tips
 author: "James Moyer"
 image: 'Tucson-Down-Payment-Assistance.jpg'
+alt: 'Photo of real estate agent giving young couple the keys to their new home.'
 description: "Learn how Tucson’s Down Payment Assistance Program helps first-time buyers achieve their dream of homeownership."
 featured: true
 ---

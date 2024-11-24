@@ -10,6 +10,7 @@ categories:
     - Financing
 author: "James Moyer"
 image: '2025-Housing-Market.jpg'
+alt: 'Photo of people standing in line to vote with american flag behind them.'
 description: "Donald Trump’s reelection could reshape the 2025 housing market through policies affecting tariffs, labor supply, and market stability."
 featured: true
 ---

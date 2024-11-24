@@ -9,6 +9,7 @@ categories:
     - Market Updates
 author: "James Moyer"
 image: 'moyer-army.jpg'
+alt: 'Photo of James Moyer in the Army.'
 description: "Discover how veterans’ resilience and service translate into success in real estate and homeownership."
 featured: true
 ---
