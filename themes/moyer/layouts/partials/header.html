@@ -15,14 +15,21 @@
                 <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="logo-scroll w-auto h-[30px] md:h-[36px] lg:h-[42px] xl:h-[46px]" loading="lazy">
             </a>
         </div>
-        
+
         <!-- Contact & Menu Buttons -->
         <div class="flex justify-end md:order-2 space-x-3 md:space-x-0">
+            <!-- WhatsApp Contact Button -->
             <a href="https://wa.me/14808614328" target="_blank" class="btn btn-contact btn-arrow{{ if eq $showcase "dark" }} btn-outline btn-white{{ else }} btn-solid btn-primary{{ end }}">
                 <i class="fab fa-whatsapp"></i> Contact Us
             </a>
+
+            <!-- Mobile Menu Toggle Button (Restored) -->
+            <button data-collapse-toggle="navbar-sticky" type="button" class="navbar-toggler inline-flex items-center justify-center [&>svg]:w-auto [&>svg]:h-8 hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 focus:outline-none xl:hidden" aria-controls="navbar-sticky" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                {{ readFile "static/icons/menu.svg" | safeHTML }}
+            </button>
         </div>
-        
+
         <!-- Mobile Menu -->
         <div class="absolute top-full inset-x-0 items-center justify-between hidden xl:static xl:flex xl:w-auto" id="navbar-sticky">
             <div class="container navbar-wrapper">
