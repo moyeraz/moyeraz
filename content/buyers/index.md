@@ -37,7 +37,7 @@ showcase:
         -
             title: Find Your Dream Home
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
+            link: "https://wa.me/14808614328?text=I%20would%20like%20to%20start%20the%20home%20buying%20process%20and%20would%20like%20a%20buyers%20agent%20to%20contact%20me."
 meaning:
     title: What the NAR Settlement Means for Buyers
     media: images/buyer-meaning.jpg
@@ -129,6 +129,6 @@ cta:
         -
             title: Start Your Home Search
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
+            link: "https://wa.me/14808614328?text=I%20would%20like%20to%20start%20the%20home%20buying%20process%20and%20would%20like%20a%20buyers%20agent%20to%20contact%20me."
 ---
 

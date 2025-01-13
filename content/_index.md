@@ -60,7 +60,7 @@ sellers:
         -
             title: Get Your Free Home Valuation
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "data-modal-target='seller-modal' data-modal-toggle='seller-modal'"
+            link: "https://wa.me/14808614328?text=I'm%20thinking%20about%20selling%20and%20I%20would%20like%20a%20free%20home%20valuation."
 articles:
     title: Recent Articles
 enableModals: true
