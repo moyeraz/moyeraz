@@ -47,9 +47,10 @@ buyers:
     icon: static/icons/house-key.svg
     buttons:
         -
-            title: Start Your Home Search
+            title: Contact Us on WhatsApp
             classes: btn btn-solid btn-arrow btn-primary
-            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
+            link: "https://wa.me/15551234567?text=I%20would%20like%20to%20start%20the%20home%20buying%20process%20and%20would%20like%20a%20buyers%20agent%20to%20contact%20me."
+
 sellers:
     title: For Sellers
     subtitle: Discover how we can help you sell your home faster and for top dollar, starting with a free valuation.
