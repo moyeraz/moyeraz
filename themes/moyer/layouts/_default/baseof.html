@@ -4,7 +4,6 @@
     <title>{{ with .Params.seoTitle }}{{ . }}{{ else }}{{ .Title }}{{ end }}</title>
     {{ partial "head.html" . }}
     {{ block "structured" . }}{{ end }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLR0r6WmY5m5D6l5N5F5F5A5R5U5U5F5E5F5F5D5F5" crossorigin="anonymous">
 </head>
 <body class="text-text-600 bg-neutral-100 {{ block "body_classes" . }}{{ end }}">
     {{ partial "header.html" . }}
