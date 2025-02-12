@@ -14,64 +14,89 @@
                     </button>
                     <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="mx-auto mb-7 h-[60px] self-center lg:hidden" loading="lazy">
                     <h3 class="text-heading-4 mb-4 text-center lg:text-left">{{ .modal.title }}</h3>
-                    <form id="modalForm-{{ .modal.id }}" action="{{ .modal.form_action }}" method="POST">
-                        {{ range .modal.fields }}
-                            {{ if eq .type "hidden" }}
-                                <input type="hidden" name="{{ .name }}" value="{{ .value }}">
-                            {{ else if eq .type "honeypot" }}
-                                <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
-                            {{ else }}
-                                <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
-                                    {{ if .label }}
-                                        <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
-                                    {{ end }}
-                                    {{ if eq .type "textarea" }}
-                                        <textarea name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" rows="{{ .rows }}" required></textarea>
-                                    {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
-                                        <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required>
-                                    {{ else if eq .type "select" }}
-                                        <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
-                                            <option selected>{{ .placeholder }}</option>
-                                            {{ range .options }}
-                                                <option value="{{ . | urlize }}">{{ . }}</option>
-                                            {{ end }}
-                                        </select>
-                                    {{ end }}
-                                </div>
+                    <form action="{{ .modal.form_action }}" method="POST">
+                        <div class="grid gap-4 grid-cols-2">
+                            {{ range .modal.fields }}
+                                {{ if eq .type "hidden" }}
+                                    <input class="absolute" type="hidden" name="{{ .name }}" value="{{ if .url }}{{ site.BaseURL }}{{ end }}{{ .value }}">
+                                {{ else if eq .type "honeypot" }}
+                                    <input type="checkbox" name="{{ .id }}" tabindex="-1" autocomplete="off">
+                                {{ else }}
+                                    <div class="col-span-2 {{ if not .full_width }}md:col-span-1{{end}}">
+                                        {{ if .label }}
+                                            <label for="{{ .id }}" class="block mb-2 leading-5 font-bold text-text-600">{{ .label }}</label>
+                                        {{ end }}
+                                        {{ if eq .type "textarea" }}
+                                            <textarea type="{{ .type }}" rows="{{ .rows }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required=""></textarea>
+                                        {{ else if or (eq .type "text") (eq .type "email") (eq .type "tel") }}
+                                            <input type="{{ .type }}" name="{{ .id }}" id="{{ .id }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{ .placeholder }}" required="">
+                                        {{ else if eq .type "select" }}
+                                            <select name="{{ .id }}" id="{{ .id }}" placeholder="{{ .placeholder }}" class="bg-gray-50 border border-gray-300 text-text-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" aria-label="{{ .placeholder }}">
+                                                <option selected>{{ .placeholder }}</option>
+                                                {{ range .options }}
+                                                    <option value="{{ . | urlize }}">{{ . }}</option>
+                                                {{ end }}
+                                            </select>
+                                        {{ end }}
+                                    </div>
+                                {{ end }}
                             {{ end }}
-                        {{ end }}
+                            
+                            <!-- Add reCAPTCHA widget before the submit button -->
+                            <div class="col-span-2 mb-4">
+                                <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{.modal.id | safeJS}}" data-expired-callback="recaptchaExpired{{.modal.id | safeJS}}"></div>
+                                <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
+                            </div>
 
-                        <div class="col-span-2 mb-4">
-                            <div class="g-recaptcha" data-sitekey="{{ site.Params.recaptcha_key }}" data-callback="enableSubmitButton{{ .modal.id }}" data-expired-callback="recaptchaExpired{{ .modal.id }}"></div>
-                            <div id="recaptcha-error" class="text-red-500 text-sm hidden">Please complete the reCAPTCHA</div>
-                        </div>
-
-                        <div class="col-span-full">
-                            <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
-                            <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
+                            <div class="col-span-full">
+                                <button type="submit" class="btn btn-submit-{{ .modal.id }} btn-solid btn-arrow btn-primary w-full mb-2" disabled>{{ .modal.button_text }}</button>
+                                <div class="italic text-sm text-gray-900">Your information is safe and secure with us</div>
+                            </div>
                         </div>
                     </form>
                     <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const formElement = document.getElementById('modalForm-{{ .modal.id }}');
-                            const submitButton = formElement.querySelector('.btn-submit-{{ .modal.id }}');
-
-                            // Enable/Disable submit button via reCAPTCHA
-                            window["enableSubmitButton{{ .modal.id }}"] = function () {
+                        // Create a function that returns the selector for a specific modal
+                        function getButtonSelector(modalId) {
+                            return '.btn-submit-' + modalId;
+                        }
+                        
+                        // Define the functions in window scope to be accessible by reCAPTCHA
+                        window.enableSubmitButton = function(response, modalId) {
+                            if (!response) {
+                                console.warn('No reCAPTCHA response token received');
+                                return;
+                            }
+                        
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
                                 submitButton.removeAttribute('disabled');
-                            };
-
-                            window["recaptchaExpired{{ .modal.id }}"] = function () {
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
+                            }
+                        };
+                        
+                        window.recaptchaExpired = function(modalId) {
+                            const submitButton = document.querySelector(getButtonSelector(modalId));
+                            if (submitButton) {
                                 submitButton.setAttribute('disabled', 'disabled');
+                            } else {
+                                console.warn('Submit button not found for modal:', modalId);
+                            }
+                        };
+                        
+                        // Create wrapper functions for each modal
+                        (function() {
+                            var modalId = '{{.modal.id | safeJS}}';
+                            
+                            window['enableSubmitButton' + modalId] = function(response) {
+                                window.enableSubmitButton(response, modalId);
                             };
-
-                            // Ensure form submission redirects properly
-                            formElement.addEventListener('submit', function () {
-                                const modalElement = document.getElementById('{{ .modal.id }}');
-                                modalElement.classList.add('hidden'); // Hide modal
-                            });
-                        });
-                    </script>
+                            
+                            window['recaptchaExpired' + modalId] = function() {
+                                window.recaptchaExpired(modalId);
+                            };
+                        })();
+                        </script>
                 </div>
             </div>
         </div>
