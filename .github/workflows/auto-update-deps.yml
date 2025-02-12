@@ -1,0 +1,33 @@
+name: Monthly Dependency Update
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Runs at midnight UTC on the 1st of every month
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install npm-check-updates
+        run: npm install -g npm-check-updates
+
+      - name: Update Dependencies
+        run: npx npm-check-updates -u && npm install
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "chore: Automated dependency update"
+          git push origin main
