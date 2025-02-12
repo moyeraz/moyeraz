@@ -3,22 +3,30 @@
     {{ range where .Site.Pages "Params.sitemap_exclude" "ne" true }}
         {{- if .Permalink -}}
             <url>
-                <loc>{{ .Permalink }}</loc>
+                <loc>{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}</loc>
                 {{ if not .Lastmod.IsZero }}
                     <lastmod>{{ safeHTML (.Lastmod.Format "2006-01-02T15:04:05-07:00") }}</lastmod>
                 {{ end }}
-                <changefreq>
-                    {{ if eq .RelPermalink "/privacy-policy/" }}yearly
-                    {{ else if eq .Section "articles" }}monthly
-                    {{ else if or (eq .RelPermalink "/categories/") (eq .RelPermalink "/") }}weekly
-                    {{ else }}monthly{{ end }}
-                </changefreq>
-                <priority>
-                    {{ if eq .RelPermalink "/privacy-policy/" }}0.3
-                    {{ else if eq .RelPermalink "/" }}1.0
-                    {{ else if eq .Section "articles" }}0.6
-                    {{ else }}0.8{{ end }}
-                </priority>
+                {{ with .Sitemap.ChangeFreq }}
+                    <changefreq>{{ . }}</changefreq>
+                {{ end }}
+                {{ if ge .Sitemap.Priority 0.0 }}
+                    <priority>{{ .Sitemap.Priority }}</priority>
+                {{ end }}
+                {{ if .IsTranslated }}
+                    {{ range .Translations }}
+                        <xhtml:link
+                            rel="alternate"
+                            hreflang="{{ .Language.LanguageCode }}"
+                            href="{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}"
+                        />
+                    {{ end }}
+                    <xhtml:link
+                        rel="alternate"
+                        hreflang="{{ .Language.LanguageCode }}"
+                        href="{{ .Permalink | replaceRE "^(https?://)(www\\.)?" "${1}www." }}"
+                    />
+                {{ end }}
             </url>
         {{- end -}}
     {{ end }}

@@ -49,8 +49,7 @@ buyers:
         -
             title: Start Your Home Search
             classes: btn btn-solid btn-arrow btn-primary
-            link: "https://wa.me/14808614328?text=I%20would%20like%20to%20start%20the%20home%20buying%20process%20and%20would%20like%20a%20buyers%20agent%20to%20contact%20me."
-
+            attr: "data-modal-target='buyer-modal' data-modal-toggle='buyer-modal'"
 sellers:
     title: For Sellers
     subtitle: Discover how we can help you sell your home faster and for top dollar, starting with a free valuation.
@@ -60,7 +59,7 @@ sellers:
         -
             title: Get Your Free Home Valuation
             classes: btn btn-solid btn-arrow btn-primary
-            link: "https://wa.me/14808614328?text=I'm%20thinking%20about%20selling%20and%20I%20would%20like%20a%20free%20home%20valuation."
+            attr: "data-modal-target='seller-modal' data-modal-toggle='seller-modal'"
 articles:
     title: Recent Articles
 enableModals: true

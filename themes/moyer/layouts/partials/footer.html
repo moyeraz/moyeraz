@@ -19,13 +19,11 @@
                 <div class="ft-contact-info flex gap-2 flex-col items-center text-[#666] xl:items-start">
                     <div class="flex gap-3 items-center">
                         <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/phone.svg" | safeHTML }}</div>
-                        <a href="tel:14808614328" class="hover:underline">(480) 861-4328</a>
+                        <a href="tel:(520) 200-1770" class="hover:underline">(520) 200-1770</a>
                     </div>
                     <div class="flex gap-3 items-center">
                         <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/envelope.svg" | safeHTML }}</div>
-                        <a href="https://wa.me/14808614328" target="_blank" class="btn btn-primary">
-                         Contact Us
-                          </a>                          
+                        <btn data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" class="cursor-pointer hover:underline">Contact Us</btn>
                     </div>
                     <div class="flex gap-3 items-center">
                         <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/document-shield.svg" | safeHTML }}</div>

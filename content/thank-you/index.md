@@ -11,23 +11,31 @@ We will get back to you as soon as possible.
 
 <script>
     let timeLeft = 5;    
-
     function updateCountdown() {
         const secondsElement = document.getElementById('seconds');
-
+        
         if (secondsElement) {
             secondsElement.textContent = timeLeft;
         }
-
+        
         if (timeLeft === 0) {
-            // Redirect to the home page
-            window.location.href = "/";
+            // Instead of using history.go(-1), we'll use a different approach
+            const previousPageUrl = document.referrer;
+            
+            if (previousPageUrl) {
+                // Force a fresh load of the previous page
+                window.location.href = previousPageUrl;
+            } else {
+                // Fallback if referrer is not available
+                window.location.reload();
+                window.history.back();
+            }
         } else {
             timeLeft--;
             setTimeout(updateCountdown, 1000);
         }
     }
-
+    
     // Start the countdown when the script loads
     updateCountdown();
 </script>

@@ -1,8 +1,8 @@
-baseURL: 'https://www.moyeraz.com/'
+baseURL: ''
 minify:
-    minifyOutput: false
+    minifyOutput: true
 enableRobotsTXT: true
 
 params:
     google_analytics: G-QWQ0H5N569
-    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil" 
+    recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"

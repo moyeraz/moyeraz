@@ -54,7 +54,7 @@ outputs:
         - webappmanifest
 
 permalinks:
-  articles: /articles/:slug/
+    categories: /articles/:title
 
 taxonomies:
     category: categories
@@ -102,7 +102,7 @@ params:
     author: James Moyer
     email: info@moyeraz.com
     tel: +1-520-200-1770
-    recaptcha_key: "6LfurHAqAAAAANhAmqivzCi7eBPRv8mihPHB_qil"
+    recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
     address:
         locality: Tucson
         region: Arizona
@@ -145,13 +145,13 @@ params:
             id: "contact-us-modal"
             title: "Get in Touch with Our Team"
             image: "images/get-in-touch.jpg"
-            form_action: "https://submit-form.com/RfXSUZM4z" 
+            form_action: "https://submit-form.com/NcRDxU1ac" 
             button_text: "Get in Touch"
             fields:
                 -
                     type: hidden
                     name: _redirect
-                    value: "https://www.moyeraz.com/thank-you"
+                    value: thank-you/
                     url: true
                 -
                     type: hidden
@@ -186,13 +186,13 @@ params:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
             image: "images/home-valuation.jpg"
-            form_action: "https://submit-form.com/QB44ICYPE"
+            form_action: https://submit-form.com/Kv7aTCXly
             button_text: "Request Valuation"
             fields:
                 -
                     type: hidden
                     name: _redirect
-                    value: "https://www.moyeraz.com/thank-you"
+                    value: thank-you/
                     url: true
                 -
                     type: hidden
@@ -233,13 +233,13 @@ params:
             id: "buyer-modal"
             title: "Start Your Home Search"
             image: "images/home-search.jpg"
-            form_action: "https://submit-form.com/gqvryfRu3"
+            form_action: https://submit-form.com/0w7RCCsao
             button_text: "Find My Perfect Home"
             fields:
                 -
                     type: hidden
                     name: _redirect
-                    value: "https://www.moyeraz.com/thank-you"
+                    value: thank-you/
                     url: true
                 -
                     type: hidden
