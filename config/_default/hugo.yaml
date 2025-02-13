@@ -1,4 +1,4 @@
-baseURL: ''
+baseURL: 'https://www.moyeraz.com/'
 languageCode: 'en-us'
 title: 'Moyer Realty Services'
 theme: 'moyer'
@@ -16,26 +16,44 @@ minify:
     tdewolff:
         html:
             keepWhitespace: false
+        js:
+            keepVarNames: false
+            keepClassNames: false
+        css:
+            keepCSS2: false
+        svg:
+            precision: 2
+
+outputFormats:
+    json:
+        baseName: "index"
+        mediaType: "application/json"
+        isPlainText: true
 
 menus:
     main:
         -
+            identifier: 'home'
             name: 'Home'
             pageRef: '/'
             weight: 10
         -
+            identifier: 'buyers'
             name: 'Buyers'
             pageRef: '/buyers/'
             weight: 20
         -
+            identifier: 'sellers'
             name: 'Sellers'
             pageRef: '/sellers/'
             weight: 30
         -
+            identifier: 'articles'
             name: 'Articles'
             pageRef: '/articles/'
             weight: 40
         -
+            identifier: 'about'
             name: 'About Us'
             pageRef: '/about-us/'
             weight: 50
@@ -52,16 +70,24 @@ outputs:
         - html
         - rss
         - webappmanifest
+        - json  # Structured data (for rich snippets)
+    section:
+        - html
+        - rss
+    taxonomy:
+        - html
+    term:
+        - html
 
 permalinks:
-    categories: /articles/:title
+    categories: /articles/:slug/
 
 taxonomies:
     category: categories
 
 module:
     hugoVersion:
-        extended: false
+        extended: true
         min: 0.112.0
     mounts:
         -
@@ -86,6 +112,9 @@ build:
             source: assets/.*\.(.*)$
             target: $1
 
+    noChmod: true
+    noTimes: true
+
 
 params:
     dateformat: "January 2, 2006"
@@ -95,11 +124,13 @@ params:
         width: 440
         height: 150
     linkedin: https://www.linkedin.com/company/moyer/
-    facebook: https://www.facebook.com/moyer.realty/
-    instagram: https://www.instagram.com/moyer.az/
     youtube: https://www.youtube.com/@moyeraz
     description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
     author: James Moyer
+    og_image: "/images/social-share.jpg"
+    twitter:
+        card: "summary_large_image"
+        site: "@moyeraz"
     email: info@moyeraz.com
     tel: +1-520-200-1770
     recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
