@@ -118,11 +118,12 @@ build:
 
 params:
     dateformat: "January 2, 2006"
-    sitename: Moyer Realty Services
+    sitename: "Moyer Realty Services"
     logo:
-        image: /images/logo_moyer-realty-services.svg
+        image: "/images/logo_moyer-realty-services.svg"
         width: 440
         height: 150
+    image: "/images/social-share.jpg"  
     linkedin: https://www.linkedin.com/company/moyer/
     youtube: https://www.youtube.com/@moyeraz
     description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
