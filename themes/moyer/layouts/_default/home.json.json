@@ -8,10 +8,9 @@
         {
             "title": {{ $page.Title | jsonify }},
             "url": {{ $page.Permalink | jsonify }},
-            "summary": {{ $page.Summary | plainify | jsonify }}
+            "summary": {{ $page.Summary | plainify | replaceRE "[\r\n]+" " " | jsonify }}
         }{{ if lt (add $index 1) (len $.Site.RegularPages) }},{{ end }}
         {{- end }}
     ]
 }
 {{- end }}
-
