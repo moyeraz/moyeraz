@@ -2,8 +2,10 @@ baseURL: 'https://www.moyeraz.com/'
 languageCode: 'en-us'
 title: 'Moyer Realty Services'
 theme: 'moyer'
+
 pagination:
     pagerSize: 6
+
 markup:
     goldmark:
         renderer:
@@ -12,6 +14,7 @@ markup:
             attribute:
                 block: true
             wrapStandAloneImageWithinParagraph: false
+
 minify:
     tdewolff:
         html:
@@ -32,38 +35,26 @@ outputFormats:
 
 menus:
     main:
-        -
-            identifier: 'home'
-            name: 'Home'
-            pageRef: '/'
-            weight: 10
-        -
-            identifier: 'buyers'
-            name: 'Buyers'
-            pageRef: '/buyers/'
-            weight: 20
-        -
-            identifier: 'sellers'
-            name: 'Sellers'
-            pageRef: '/sellers/'
-            weight: 30
-        -
-            identifier: 'articles'
-            name: 'Articles'
-            pageRef: '/articles/'
-            weight: 40
-        -
-            identifier: 'about'
-            name: 'About Us'
-            pageRef: '/about-us/'
-            weight: 50
-        # -
-        #     name: Hugo
-        #     pre: <i class="fa fa-heart"></i>
-        #     url: https://gohugo.io/
-        #     weight: 40
-        #     params:
-        #         rel: external
+        - identifier: 'home'
+          name: 'Home'
+          pageRef: '/'
+          weight: 10
+        - identifier: 'buyers'
+          name: 'Buyers'
+          pageRef: '/buyers/'
+          weight: 20
+        - identifier: 'sellers'
+          name: 'Sellers'
+          pageRef: '/sellers/'
+          weight: 30
+        - identifier: 'articles'
+          name: 'Articles'
+          pageRef: '/articles/'
+          weight: 40
+        - identifier: 'about'
+          name: 'About Us'
+          pageRef: '/about-us/'
+          weight: 50
 
 outputs:
     home:
@@ -90,31 +81,24 @@ module:
         extended: true
         min: 0.112.0
     mounts:
-        -
-            source: assets
-            target: assets
-        -
-            source: hugo_stats.json
-            target: assets/watching/hugo_stats.json
+        - source: assets
+          target: assets
+        - source: hugo_stats.json
+          target: assets/watching/hugo_stats.json
+
 build:
     writeStats: true
     cachebusters:
-        -
-            source: assets/watching/hugo_stats\.json
-            target: main\.scss
-        -
-            source: (postcss|tailwind)\.config\.js
-            target: css
-        -
-            source: assets/.*\.(js|ts|jsx|tsx)
-            target: js
-        -
-            source: assets/.*\.(.*)$
-            target: $1
-
+        - source: assets/watching/hugo_stats\.json
+          target: main\.scss
+        - source: (postcss|tailwind)\.config\.js
+          target: css
+        - source: assets/.*\.(js|ts|jsx|tsx)
+          target: js
+        - source: assets/.*\.(.*)$
+          target: $1
     noChmod: true
     noTimes: true
-
 
 params:
     dateformat: "January 2, 2006"
@@ -123,203 +107,176 @@ params:
         image: "/images/logo_moyer-realty-services.svg"
         width: 440
         height: 150
-    image: "/images/social-share.jpg"  
-    linkedin: https://www.linkedin.com/company/moyer/
-    youtube: https://www.youtube.com/@moyeraz
+    image: "/images/social-share.jpg"
+    linkedin: "https://www.linkedin.com/company/moyer/"
+    youtube: "https://www.youtube.com/@moyeraz"
     description: "Discover premier real estate solutions with Moyer Realty Services. Expert guidance for buying, selling, and investing in properties."
-    author: James Moyer
+    author: "James Moyer"
     og_image: "/images/social-share.jpg"
     twitter:
         card: "summary_large_image"
         site: "@moyeraz"
-    email: info@moyeraz.com
-    tel: +1-520-200-1770
+    email: "info@moyeraz.com"
+    tel: "+1-520-200-1770"
     recaptcha_key: "6Le0yXcqAAAAAODFVOrAptYNEvJ0Ox327pmmsSYh"
     address:
-        locality: Tucson
-        region: Arizona
-        code: 85706
-        country: United States
+        locality: "Tucson"
+        region: "Arizona"
+        code: "85706"
+        country: "United States"
     founder:
-        name: James Moyer
-        date: 2009
+        name: "James Moyer"
+        date: "2009"
     working_hours:
-        -
-            days:
-                - Monday
-                - Tuesday
-                - Wednesday
-                - Thursday
-                - Friday
-            opens: 08:30
-            closes: 18:00
-        -
-            days:
-                - Saturday
-                - Sunday
-            opens: ByAppointment
-            closes: ByAppointment
+        - days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+          opens: "08:30"
+          closes: "18:00"
+        - days: ["Saturday", "Sunday"]
+          opens: "ByAppointment"
+          closes: "ByAppointment"
     area_served:
-        - Benson Arizona
-        - Green Valley Arizona
-        - Marana Arizona
-        - Oro Valley Arizona
-        - Red Rock Arizona
-        - Rio Rico Arizona
-        - Saddlebrooke Arizona
-        - Sahuarita Arizona
-        - Tubac Arizona
-        - Tucson Arizona
-        - Vail Arizona
-    price_range: $100,000 - $30,000,000
+        - "Benson, Arizona"
+        - "Green Valley, Arizona"
+        - "Marana, Arizona"
+        - "Oro Valley, Arizona"
+        - "Red Rock, Arizona"
+        - "Rio Rico, Arizona"
+        - "Saddlebrooke, Arizona"
+        - "Sahuarita, Arizona"
+        - "Tubac, Arizona"
+        - "Tucson, Arizona"
+        - "Vail, Arizona"
+    price_range: "$100,000 - $30,000,000"
+
     modals:
         contact-us:
             id: "contact-us-modal"
             title: "Get in Touch with Our Team"
-            image: "images/get-in-touch.jpg"
-            form_action: "https://submit-form.com/NcRDxU1ac" 
+            image: "/images/get-in-touch.jpg"
+            form_action: "https://submit-form.com/NcRDxU1ac"
             button_text: "Get in Touch"
             fields:
-                -
-                    type: hidden
-                    name: _redirect
-                    value: thank-you/
-                    url: true
-                -
-                    type: hidden
-                    name: _append
-                    value: false
-                - 
-                    label: Name
-                    type: text
-                    id: name
-                    placeholder: "Your Full Name"
-                    full_width: false
-                - 
-                    label: Phone Number
-                    type: tel
-                    id: phone_number
-                    placeholder: "Your Phone Number"
-                    full_width: false
-                - 
-                    label: Email Address
-                    type: email
-                    id: email_address
-                    placeholder: "Your Email Address"
-                    full_width: true
-                - 
-                    label: Message
-                    type: textarea
-                    id: message
-                    placeholder: "Tell us how we can assist you..."
-                    rows: 6
-                    full_width: true
+                - type: hidden
+                  name: _redirect
+                  value: "thank-you/"
+                  url: true
+                - type: hidden
+                  name: _append
+                  value: false
+                - label: "Name"
+                  type: text
+                  id: name
+                  placeholder: "Your Full Name"
+                  full_width: false
+                - label: "Phone Number"
+                  type: tel
+                  id: phone_number
+                  placeholder: "Your Phone Number"
+                  full_width: false
+                - label: "Email Address"
+                  type: email
+                  id: email_address
+                  placeholder: "Your Email Address"
+                  full_width: true
+                - label: "Message"
+                  type: textarea
+                  id: message
+                  placeholder: "Tell us how we can assist you..."
+                  rows: 6
+                  full_width: true
+
         seller:
             id: "seller-modal"
             title: "Get a Free Home Valuation"
-            image: "images/home-valuation.jpg"
-            form_action: https://submit-form.com/Kv7aTCXly
+            image: "/images/home-valuation.jpg"
+            form_action: "https://submit-form.com/Kv7aTCXly"
             button_text: "Request Valuation"
             fields:
-                -
-                    type: hidden
-                    name: _redirect
-                    value: thank-you/
-                    url: true
-                -
-                    type: hidden
-                    name: _append
-                    value: false
-                - 
-                    label: Name
-                    type: text
-                    id: name
-                    placeholder: "Your Full Name"
-                    full_width: false
-                - 
-                    label: Phone Number
-                    type: tel
-                    id: phone_number
-                    placeholder: "Your Phone Number"
-                    full_width: false
-                - 
-                    label: Email Address
-                    type: email
-                    id: email_address
-                    placeholder: "Your Email Address"
-                    full_width: true
-                - 
-                    label: Property Address
-                    type: text
-                    id: property_address
-                    placeholder: "Your Property Address"
-                    full_width: true
-                - 
-                    label: Message
-                    type: textarea
-                    id: message
-                    placeholder: "Tell us how we can assist you..."
-                    rows: 6
-                    full_width: true
+                - type: hidden
+                  name: _redirect
+                  value: "thank-you/"
+                  url: true
+                - type: hidden
+                  name: _append
+                  value: false
+                - label: "Name"
+                  type: text
+                  id: name
+                  placeholder: "Your Full Name"
+                  full_width: false
+                - label: "Phone Number"
+                  type: tel
+                  id: phone_number
+                  placeholder: "Your Phone Number"
+                  full_width: false
+                - label: "Email Address"
+                  type: email
+                  id: email_address
+                  placeholder: "Your Email Address"
+                  full_width: true
+                - label: "Property Address"
+                  type: text
+                  id: property_address
+                  placeholder: "Your Property Address"
+                  full_width: true
+                - label: "Message"
+                  type: textarea
+                  id: message
+                  placeholder: "Tell us how we can assist you..."
+                  rows: 6
+                  full_width: true
+
         buyer:
             id: "buyer-modal"
             title: "Start Your Home Search"
-            image: "images/home-search.jpg"
-            form_action: https://submit-form.com/0w7RCCsao
+            image: "/images/home-search.jpg"
+            form_action: "https://submit-form.com/0w7RCCsao"
             button_text: "Find My Perfect Home"
             fields:
-                -
-                    type: hidden
-                    name: _redirect
-                    value: thank-you/
-                    url: true
-                -
-                    type: hidden
-                    name: _append
-                    value: false
-                - 
-                    label: Name
-                    type: text
-                    id: name
-                    placeholder: "Your Full Name"
-                    full_width: false
-                - 
-                    label: Phone Number
-                    type: tel
-                    id: phone_number
-                    placeholder: "Your Phone Number"
-                    full_width: false
-                - 
-                    label: Email Address
-                    type: email
-                    id: email_address
-                    placeholder: "Your Email Address"
-                    full_width: true
-                - 
-                    label: Preferred Location
-                    type: select
-                    id: preferred-location
-                    placeholder: "City or Neighborhood"
-                    full_width: true
-                    options:
-                        - Benson
-                        - Green Valley
-                        - Marana
-                        - Oro Valley
-                        - Red Rock
-                        - Rio Rico
-                        - Saddlebrooke
-                        - Sahuarita
-                        - Tubac
-                        - Tucson
-                        - Vail
-                - 
-                    label: Message
-                    type: textarea
-                    id: message
-                    placeholder: "Tell us how we can assist you..."
-                    rows: 6
-                    full_width: true
-                -
-                    type: honeypot
-                    id: terms
+                - type: hidden
+                  name: _redirect
+                  value: "thank-you/"
+                  url: true
+                - type: hidden
+                  name: _append
+                  value: false
+                - label: "Name"
+                  type: text
+                  id: name
+                  placeholder: "Your Full Name"
+                  full_width: false
+                - label: "Phone Number"
+                  type: tel
+                  id: phone_number
+                  placeholder: "Your Phone Number"
+                  full_width: false
+                - label: "Email Address"
+                  type: email
+                  id: email_address
+                  placeholder: "Your Email Address"
+                  full_width: true
+                - label: "Preferred Location"
+                  type: select
+                  id: preferred-location
+                  placeholder: "City or Neighborhood"
+                  full_width: true
+                  options:
+                      - "Benson"
+                      - "Green Valley"
+                      - "Marana"
+                      - "Oro Valley"
+                      - "Red Rock"
+                      - "Rio Rico"
+                      - "Saddlebrooke"
+                      - "Sahuarita"
+                      - "Tubac"
+                      - "Tucson"
+                      - "Vail"
+                - label: "Message"
+                  type: textarea
+                  id: message
+                  placeholder: "Tell us how we can assist you..."
+                  rows: 6
+                  full_width: true
+                - type: honeypot
+                  id: terms

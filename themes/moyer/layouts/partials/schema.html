@@ -1,86 +1,78 @@
 <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        {{- if eq .Params.structured_data.type "Organization" }}
-            "@type": "Organization",
-            "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
-        {{- else if eq .Params.structured_data.type "RealEstateAgent" }}
-            "@type": "RealEstateAgent",
-            "@id": {{ printf "%s%s" site.BaseURL "#realestateagent" }},
-        {{- end }}
-        "name": {{ site.Params.sitename }},
-        "url": {{ .Permalink }},
+        "@type": "{{ if eq .Params.structured_data.type "Organization" }}Organization{{ else if eq .Params.structured_data.type "RealEstateAgent" }}RealEstateAgent{{ end }}",
+        "@id": "{{ site.BaseURL | absURL }}#{{ if eq .Params.structured_data.type "Organization" }}organization{{ else }}realestateagent{{ end }}",
+        "name": "{{ site.Params.sitename }}",
+        "url": "{{ .Permalink }}",
         "logo": {
             "@type": "ImageObject",
-            "url": {{ absURL site.Params.logo.image }},
+            "url": "{{ absURL site.Params.logo.image }}",
             "width": "{{ site.Params.logo.width }}",
             "height": "{{ site.Params.logo.height }}"
         },
-        "image": {{ absURL site.Params.image }}, 
-        "description": {{ .Params.structured_data.description }},
+        "image": {
+            "@type": "ImageObject",
+            "url": "{{ absURL site.Params.image }}"
+        },
+        "description": "{{ .Params.structured_data.description }}",
         "address": {
             "@type": "PostalAddress",
-            "addressLocality": {{ site.Params.address.locality }},
-            "addressRegion": {{ site.Params.address.region }},
-            "postalCode": {{ site.Params.address.code }},
-            "addressCountry": {{ site.Params.address.country }}
+            "addressLocality": "{{ site.Params.address.locality }}",
+            "addressRegion": "{{ site.Params.address.region }}",
+            "postalCode": "{{ site.Params.address.code }}",
+            "addressCountry": "{{ site.Params.address.country }}"
         },
-        "telephone": {{ site.Params.tel }},
-        "email": {{ site.Params.email }},
+        "telephone": "{{ site.Params.tel }}",
+        "email": "{{ site.Params.email }}",
         "foundingDate": "{{ site.Params.founder.date }}",
         "founder": {
             "@type": "Person",
-            "name": {{ site.Params.founder.name }}
+            "name": "{{ site.Params.founder.name }}"
         },
         "sameAs": [
-            {{ site.Params.linkedin }},
-            {{ site.Params.facebook }},
-            {{ site.Params.instagram }},
-            {{ site.Params.youtube }}
+            {{ with site.Params.linkedin }}"{{ . }}",{{ end }}
+            {{ with site.Params.youtube }}"{{ . }}"{{ end }}
         ],
         "openingHoursSpecification": [
-            {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
+            {{- range $i, $e := site.Params.working_hours }}
             {
                 "@type": "OpeningHoursSpecification",
                 "dayOfWeek": [
-                    {{- range $in, $el := $e.days }}
-                        {{ $el }}{{ if ne (add $in 1) ($e.days | len) }},{{ end }}
-                    {{- end }}
+                    {{- range $in, $el := $e.days }}"{{ $el }}"{{ if ne (add $in 1) ($e.days | len) }},{{ end }}{{- end }}
                 ],
-                "opens": {{ $e.opens }},
-                "closes": {{ $e.closes }}
-            }
+                "opens": "{{ $e.opens }}",
+                "closes": "{{ $e.closes }}"
+            }{{ if ne (add $i 1) (len site.Params.working_hours) }},{{ end }}
             {{- end }}
         ],
         "areaServed": [
-            {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
-                {{ $e }}
-            {{- end }}
+            {{- range $i, $e := site.Params.area_served }}"{{ $e }}"{{ if ne (add $i 1) (len site.Params.area_served) }},{{ end }}{{- end }}
         ],
-        "priceRange": {{ site.Params.price_range }}{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
+        "priceRange": "{{ site.Params.price_range }}"{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
         {{- if .Params.structured_data.offers }}
-            "makesOffer": [
-                {{- range $i, $e := .Params.structured_data.offers }}{{ if $i }},{{ end }}
-                {
-                    "@type": "Offer",
-                    "name": {{ .name }},
-                    "description": {{ .description }}
-                }
-                {{- end }}
-            ],
+        "makesOffer": [
+            {{- range $i, $e := .Params.structured_data.offers }}
+            {
+                "@type": "Offer",
+                "name": "{{ .name }}",
+                "description": "{{ .description }}"
+            }{{ if ne (add $i 1) (len .Params.structured_data.offers) }},{{ end }}
+            {{- end }}
+        ]{{ if .Params.structured_data.employees }},{{ end }}
         {{- end }}
         {{- if .Params.structured_data.employees }}
-            "employee": [
-                {{- range $ind, $emp := .Params.structured_data.employees }}{{ if $ind }},{{ end }}
-                    {
-                        "@type": "Person",
-                        "name": {{ $emp.name }},
-                        "jobTitle": {{ $emp.job_title }},
-                        "telephone": {{ $emp.tel }},
-                        "email": {{ $emp.email }}
-                    }
-                {{- end }}
-            ]
+        "employee": [
+            {{- range $ind, $emp := .Params.structured_data.employees }}
+            {
+                "@type": "Person",
+                "name": "{{ $emp.name }}",
+                "jobTitle": "{{ $emp.job_title }}",
+                "telephone": "{{ $emp.tel }}",
+                "email": "{{ $emp.email }}"
+            }{{ if ne (add $ind 1) (len .Params.structured_data.employees) }},{{ end }}
+            {{- end }}
+        ]
         {{- end }}
     }
 </script>

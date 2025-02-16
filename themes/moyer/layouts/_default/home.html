@@ -1,9 +1,5 @@
 {{ define "main" }}
     {{ .Content }}
-    {{/* {{ range site.RegularPages }}
-        <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-        {{ .Summary }}
-    {{ end }} */}}
 
     <div class="box-features py-spacer">
         <div class="container">
@@ -36,7 +32,6 @@
     {{ partial "highlight.html" (dict "context" . "info" .Params.sellers "order" "reverse" "classes" "bg-white mb-spacer") }}
 {{ end }}
 
-
 {{ define "structured" }}
 <script type="application/ld+json">
     {
@@ -44,76 +39,77 @@
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
-                "name": {{ site.Params.sitename }},
-                "url": {{ .Permalink }},
+                "@id": "{{ site.BaseURL | absURL }}#organization",
+                "name": "{{ site.Params.sitename }}",
+                "url": "{{ .Permalink }}",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": {{ absURL site.Params.logo.image }},
+                    "url": "{{ absURL site.Params.logo.image }}",
                     "width": "{{ site.Params.logo.width }}",
                     "height": "{{ site.Params.logo.height }}"
                 },
-                "description": {{ .Params.structured_data.description }},
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "{{ absURL site.Params.image }}",
+                    "width": "1200",
+                    "height": "800"
+                },
+                "description": "{{ .Params.structured_data.description }}",
                 "address": {
                     "@type": "PostalAddress",
-                    "addressLocality": {{ site.Params.address.locality }},
-                    "addressRegion": {{ site.Params.address.region }},
-                    "postalCode": {{ site.Params.address.code }},
-                    "addressCountry": {{ site.Params.address.country }}
+                    "addressLocality": "{{ site.Params.address.locality }}",
+                    "addressRegion": "{{ site.Params.address.region }}",
+                    "postalCode": "{{ site.Params.address.code }}",
+                    "addressCountry": "{{ site.Params.address.country }}"
                 },
-                "telephone": {{ site.Params.tel }},
-                "email": {{ site.Params.email }},
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": "32.2226",
+                    "longitude": "-110.9747"
+                },
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "{{ site.Params.tel }}",
+                    "contactType": "customer service",
+                    "areaServed": "US",
+                    "availableLanguage": ["English"]
+                },
                 "foundingDate": "{{ site.Params.founder.date }}",
                 "founder": {
                     "@type": "Person",
-                    "name": {{ site.Params.founder.name }}
+                    "name": "{{ site.Params.founder.name }}"
                 },
                 "sameAs": [
-                    {{ site.Params.linkedin }},
-                    {{ site.Params.facebook }},
-                    {{ site.Params.instagram }},
-                    {{ site.Params.youtube }}
+                    {{ with site.Params.linkedin }}"{{ . }}",{{ end }}
+                    {{ with site.Params.youtube }}"{{ . }}"{{ end }}
                 ],
-                {{/* "openingHoursSpecification": [
-                    {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
-                    {
-                        "@type": "OpeningHoursSpecification",
-                        "dayOfWeek": [
-                            {{- range $in, $el := $e.days }}{{ if $in }},{{ end }}
-                                {{ $el }}
-                            {{- end }}
-                        ],
-                        "opens": {{ $e.opens }},
-                        "closes": {{ $e.closes }}
-                    }
-                    {{- end }}
-                ], */}}
+                "hasOfferCatalog": {
+                    "@type": "OfferCatalog",
+                    "name": "Real Estate Services",
+                    "itemListElement": [
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": "Home Buying Assistance"
+                            }
+                        },
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": "Home Selling Services"
+                            }
+                        }
+                    ]
+                },
                 "areaServed": [
                     {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
-                        {{ $e }}
+                        "{{ $e }}"
                     {{- end }}
-                ]
-                {{/* "priceRange": {{ site.Params.price_range }} */}}
+                ],
+                "priceRange": "$100,000+"
             }
-            {{/* {
-                "@type": "WebSite",
-                "@id": "https://www.moyeraz.com/#website",
-                "url": "https://www.moyeraz.com",
-                "name": "Moyer Realty Services",
-                "publisher": {
-                    "@id": "https://www.moyeraz.com/#organization"
-                },
-                "potentialAction": [
-                    {
-                        "@type": "SearchAction",
-                        "target": {
-                            "@type": "EntryPoint",
-                            "urlTemplate": "https://www.moyeraz.com/search?q={search_term_string}"
-                        },
-                        "query-input": "required name=search_term_string"
-                    }
-                ]
-            } */}}
         ]
     }
 </script>
