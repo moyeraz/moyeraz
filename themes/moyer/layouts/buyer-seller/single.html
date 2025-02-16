@@ -106,30 +106,39 @@
     {
         "@context": "https://schema.org",
         "@type": "RealEstateAgent",
-        "@id": {{ printf "%s%s" .Permalink "#realestateagent" }},
-        "name": {{ site.Params.sitename }},
-        "url": {{ .Permalink }},
+        "@id": {{ printf "%s%s" .Permalink "#realestateagent" | jsonify }},
+        "name": {{ site.Params.sitename | jsonify }},
+        "url": {{ .Permalink | jsonify }},
         "logo": {
             "@type": "ImageObject",
-            "url": {{ absURL site.Params.logo.image }},
+            "url": {{ absURL site.Params.logo.image | jsonify }},
             "width": "{{ site.Params.logo.width }}",
             "height": "{{ site.Params.logo.height }}"
         },
-        "description": {{ .Params.structured_data.description }},
+        "image": {
+            "@type": "ImageObject",
+            "url": {{ absURL site.Params.image | jsonify }}
+        },
+        "description": {{ .Params.structured_data.description | plainify | jsonify }},
         "address": {
             "@type": "PostalAddress",
-            "addressLocality": {{ site.Params.address.locality }},
-            "addressRegion": {{ site.Params.address.region }},
-            "postalCode": {{ site.Params.address.code }},
-            "addressCountry": {{ site.Params.address.country }}
+            "streetAddress": {{ site.Params.address.streetAddress | jsonify }},
+            "addressLocality": {{ site.Params.address.locality | jsonify }},
+            "addressRegion": {{ site.Params.address.region | jsonify }},
+            "postalCode": {{ site.Params.address.code | jsonify }},
+            "addressCountry": {
+                "@type": "Country",
+                "name": "US"
+            }
         },
-        "telephone": {{ site.Params.tel }},
-        "email": {{ site.Params.email }},
+        "telephone": {{ site.Params.tel | jsonify }},
+        "email": {{ site.Params.email | jsonify }},
         "areaServed": [
             {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
-                {{ $e }}
+                {{ $e | jsonify }}
             {{- end }}
         ],
+        "priceRange": "$100,000+",
         {{- if .Params.structured_data.offer_catalog.items }}
             "hasOfferCatalog": {
                 "@type": "OfferCatalog",
@@ -140,13 +149,13 @@
                             "@type": "Offer",
                             "itemOffered": {
                                 "@type": "Service",
-                                "name": {{ .name }},
-                                "description": {{ .description }}
+                                "name": {{ .name | jsonify }},
+                                "description": {{ .description | plainify | jsonify }}
                             }
                         }
                     {{- end }}
                 ]
-            }
+            },
         {{ end }}
         {{- if .Params.structured_data.offers }}
             "makesOffer": [
@@ -155,8 +164,8 @@
                         "@type": "Offer",
                         "itemOffered": {
                             "@type": "Service",
-                            "name": {{ .name }},
-                            "description": {{ .description }}
+                            "name": {{ .name | jsonify }},
+                            "description": {{ .description | plainify | jsonify }}
                         }
                     }
                 {{- end }}
@@ -164,6 +173,7 @@
         {{- end }}
     }
 </script>
+
 <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -180,7 +190,7 @@
             }
         }
         {{- end }}
-    ]
+        ]
     }
 </script>
 {{ end }}
