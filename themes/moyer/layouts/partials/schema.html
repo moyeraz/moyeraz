@@ -22,8 +22,11 @@
             "addressLocality": {{ site.Params.address.locality | jsonify }},
             "addressRegion": {{ site.Params.address.region | jsonify }},
             "postalCode": {{ site.Params.address.code | jsonify }},
-            "addressCountry": "{{ if eq site.Params.address.country "US" }}United States{{ else }}{{ site.Params.address.country }}{{ end }}"
-        },        
+            "addressCountry": {
+                "@type": "Country",
+                "name": "United States"
+            }
+        },       
         "telephone": "{{ site.Params.tel }}",
         "email": "{{ site.Params.email }}",
         "foundingDate": "{{ site.Params.founder.date }}",
