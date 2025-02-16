@@ -1,14 +1,14 @@
 {{- with .Site }}
 {
-    "siteName": "{{ .Title }}",
-    "baseURL": "{{ .BaseURL }}",
-    "description": "{{ .Params.description }}",
+    "siteName": {{ .Title | jsonify }},
+    "baseURL": {{ .BaseURL | jsonify }},
+    "description": {{ .Params.description | jsonify }},
     "pages": [
         {{- range $index, $page := .RegularPages }}
         {
-            "title": "{{ $page.Title }}",
-            "url": "{{ $page.Permalink }}",
-            "summary": "{{ $page.Summary }}"
+            "title": {{ $page.Title | jsonify }},
+            "url": {{ $page.Permalink | jsonify }},
+            "summary": {{ $page.Summary | plainify | jsonify }}
         }{{ if ne (add $index 1) (len $.Site.RegularPages) }},{{ end }}
         {{- end }}
     ]
