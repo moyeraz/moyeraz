@@ -122,7 +122,7 @@
         "description": {{ .Params.structured_data.description | plainify | jsonify }},
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": {{ site.Params.address.streetAddress | jsonify }},
+            "streetAddress": "N/A",
             "addressLocality": {{ site.Params.address.locality | jsonify }},
             "addressRegion": {{ site.Params.address.region | jsonify }},
             "postalCode": {{ site.Params.address.code | jsonify }},
@@ -194,3 +194,4 @@
     }
 </script>
 {{ end }}
+
