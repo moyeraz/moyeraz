@@ -22,7 +22,7 @@
             "addressLocality": {{ site.Params.address.locality | jsonify }},
             "addressRegion": {{ site.Params.address.region | jsonify }},
             "postalCode": {{ site.Params.address.code | jsonify }},
-            "addressCountry": {{ site.Params.address.country | jsonify }}
+            "addressCountry": "{{ if eq site.Params.address.country "US" }}United States{{ else }}{{ site.Params.address.country }}{{ end }}"
         },        
         "telephone": "{{ site.Params.tel }}",
         "email": "{{ site.Params.email }}",
