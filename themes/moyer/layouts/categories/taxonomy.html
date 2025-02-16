@@ -88,48 +88,50 @@
     {
         "@context": "https://schema.org",
         "@type": "Blog",
-        "@id": {{ printf "%s%s" .Permalink "#blog" }},
-        "name": {{ .Title }},
-        "description": {{ .Params.structured_data.description }},
-        "url": {{ .Permalink }},
+        "@id": {{ printf "%s%s" .Permalink "#blog" | jsonify }},
+        "name": {{ .Title | jsonify }},
+        "description": {{ with .Params.structured_data.description }}{{ . | jsonify }}{{ else }}"Articles and insights on {{ .Title }}"{{ end }},
+        "url": {{ .Permalink | jsonify }},
         "publisher": {
             "@type": "Organization",
-            "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
-            "name": {{ site.Params.sitename }},
+            "@id": {{ printf "%s%s" site.BaseURL "#organization" | jsonify }},
+            "name": {{ site.Params.sitename | jsonify }},
             "logo": {
                 "@type": "ImageObject",
-                "url": {{ absURL site.Params.logo.image }}
+                "url": {{ absURL site.Params.logo.image | jsonify }}
             }
         },
+        {{- if .Data.Pages }}
         "blogPost": [
             {{- range $i, $e := .Data.Pages }}{{ if $i }},{{ end }}
-                {
-                    "@type": "BlogPosting",
-                    "headline": {{ $e.Title }},
-                    "description": {{ $e.Summary | plainify }},
-                    "url": {{ $e.Permalink }},
-                    "datePublished": {{ $e.Date }},
-                    "dateModified": {{ $e.Lastmod }},
-                    "author": {
-                        "@type": "Person",
-                        "name": {{ $e.Params.author }},
-                        "url": {{ absURL "/about-us/" }}
-                    },
-                    "image": {
-                        "@type": "ImageObject",
-                        {{- with .Resources.Get $e.Params.image }}
-                            "url": {{ .Permalink }},
-                            "width": "{{ .Width }}",
-                            "height": "{{ .Height }}"
-                        {{- end }}
-                    },
-                    "mainEntityOfPage": {
-                        "@type": "WebPage",
-                        "@id": {{ .Permalink }}
-                    }
+            {
+                "@type": "BlogPosting",
+                "headline": {{ $e.Title | jsonify }},
+                "description": {{ $e.Summary | plainify | jsonify }},
+                "url": {{ $e.Permalink | jsonify }},
+                "datePublished": "{{ $e.Date }}",
+                "dateModified": "{{ $e.Lastmod }}",
+                "author": {
+                    "@type": "Person",
+                    "name": {{ $e.Params.author | jsonify }},
+                    "url": {{ absURL "/about-us/" | jsonify }}
+                },
+                {{- with $e.Resources.Get $e.Params.image }}
+                "image": {
+                    "@type": "ImageObject",
+                    "url": {{ .Permalink | jsonify }},
+                    "width": "{{ .Width }}",
+                    "height": "{{ .Height }}"
+                },
+                {{- end }}
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": {{ $e.Permalink | jsonify }}
                 }
+            }
             {{- end }}
         ]
+        {{- end }}
     }
 </script>
 {{ end }}

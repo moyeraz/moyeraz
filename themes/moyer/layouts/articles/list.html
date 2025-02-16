@@ -82,44 +82,45 @@
     {
         "@context": "https://schema.org",
         "@type": "Blog",
-        "@id": {{ printf "%s%s" .Permalink "#blog" }},
-        "name": {{ .Title }},
-        "description": {{ .Params.structured_data.description }},
-        "url": {{ .Permalink }},
+        "@id": {{ printf "%s%s" .Permalink "#blog" | jsonify }},
+        "name": {{ .Title | jsonify }},
+        "description": {{ .Params.structured_data.description | plainify | jsonify }},
+        "url": {{ .Permalink | jsonify }},
         "publisher": {
             "@type": "Organization",
-            "@id": {{ printf "%s%s" site.BaseURL "#organization" }},
-            "name": {{ site.Params.sitename }},
+            "@id": {{ printf "%s%s" site.BaseURL "#organization" | jsonify }},
+            "name": {{ site.Params.sitename | jsonify }},
             "logo": {
                 "@type": "ImageObject",
-                "url": {{ absURL site.Params.logo.image }}
+                "url": {{ absURL site.Params.logo.image | jsonify }}
             }
         },
         "blogPost": [
-            {{- range $i, $e := .Data.Pages }}{{ if $i }},{{ end }}
+            {{- range $i, $e := .Data.Pages }}
+                {{ if $i }},{{ end }}
                 {
                     "@type": "BlogPosting",
-                    "headline": {{ $e.Title }},
-                    "description": {{ $e.Summary | plainify }},
-                    "url": {{ $e.Permalink }},
-                    "datePublished": {{ $e.Date }},
-                    "dateModified": {{ $e.Lastmod }},
+                    "headline": {{ $e.Title | jsonify }},
+                    "description": {{ $e.Summary | plainify | jsonify }},
+                    "url": {{ $e.Permalink | jsonify }},
+                    "datePublished": "{{ $e.Date.Format "2006-01-02T15:04:05Z07:00" }}",
+                    "dateModified": "{{ $e.Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
                     "author": {
                         "@type": "Person",
-                        "name": {{ $e.Params.author }},
-                        "url": {{ absURL "/about-us/" }}
+                        "name": {{ $e.Params.author | jsonify }},
+                        "url": {{ absURL "/about-us/" | jsonify }}
                     },
+                    {{- with $e.Resources.GetMatch $e.Params.image }}
                     "image": {
                         "@type": "ImageObject",
-                        {{- with .Resources.Get $e.Params.image }}
-                            "url": {{ .Permalink }},
-                            "width": "{{ .Width }}",
-                            "height": "{{ .Height }}"
-                        {{- end }}
+                        "url": {{ .Permalink | jsonify }},
+                        "width": "{{ .Width }}",
+                        "height": "{{ .Height }}"
                     },
+                    {{- end }}
                     "mainEntityOfPage": {
                         "@type": "WebPage",
-                        "@id": {{ .Permalink }}
+                        "@id": {{ $e.Permalink | jsonify }}
                     }
                 }
             {{- end }}

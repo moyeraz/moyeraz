@@ -57,74 +57,82 @@
     {
         "@context": "https://schema.org",
         "@type": "RealEstateAgent",
-        "name": {{ site.Params.sitename }},
-        "url": {{ .Permalink }},
+        "name": {{ site.Params.sitename | jsonify }},
+        "url": {{ .Permalink | jsonify }},
         "logo": {
             "@type": "ImageObject",
-            "url": {{ absURL site.Params.logo.image }},
+            "url": {{ absURL site.Params.logo.image | jsonify }},
             "width": "{{ site.Params.logo.width }}",
             "height": "{{ site.Params.logo.height }}"
         },
-        "description": {{ .Params.structured_data.description }},
+        "description": {{ .Params.structured_data.description | plainify | jsonify }},
         "address": {
             "@type": "PostalAddress",
-            "addressLocality": {{ site.Params.address.locality }},
-            "addressRegion": {{ site.Params.address.region }},
-            "postalCode": {{ site.Params.address.code }},
-            "addressCountry": {{ site.Params.address.country }}
+            "streetAddress": "N/A",
+            "addressLocality": {{ site.Params.address.locality | jsonify }},
+            "addressRegion": {{ site.Params.address.region | jsonify }},
+            "postalCode": {{ site.Params.address.code | jsonify }},
+            "addressCountry": {
+                "@type": "Country",
+                "name": "US"
+            }
         },
-        "telephone": {{ site.Params.tel }},
-        "email": {{ site.Params.email }},
+        "telephone": {{ site.Params.tel | jsonify }},
+        "email": {{ site.Params.email | jsonify }},
         "foundingDate": "{{ site.Params.founder.date }}",
         "founder": {
             "@type": "Person",
-            "name": {{ site.Params.founder.name }}
+            "name": {{ site.Params.founder.name | jsonify }}
         },
         "sameAs": [
-            {{ site.Params.linkedin }},
-            {{ site.Params.facebook }},
-            {{ site.Params.instagram }},
-            {{ site.Params.youtube }}
+            {{ with site.Params.linkedin }}{{ . | jsonify }},{{ end }}
+            {{ with site.Params.facebook }}{{ . | jsonify }},{{ end }}
+            {{ with site.Params.instagram }}{{ . | jsonify }},{{ end }}
+            {{ with site.Params.youtube }}{{ . | jsonify }}{{ end }}
         ],
         "openingHoursSpecification": [
-        {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
+            {{- range $i, $e := site.Params.working_hours }}{{ if $i }},{{ end }}
             {
                 "@type": "OpeningHoursSpecification",
                 "dayOfWeek": [
                     {{- range $in, $el := $e.days }}{{ if $in }},{{ end }}
-                        {{ $el }}
+                    {{ $el | jsonify }}
                     {{- end }}
                 ],
-                "opens": {{ $e.opens }},
-                "closes": {{ $e.closes }}
+                "opens": {{ $e.opens | jsonify }},
+                "closes": {{ $e.closes | jsonify }}
             }
             {{- end }}
         ],
         "areaServed": [
             {{- range $i, $e := site.Params.area_served }}{{ if $i }},{{ end }}
-                {{ $e }}
+            {{ $e | jsonify }}
             {{- end }}
         ],
+        {{- if .Params.structured_data.offers }}
         "makesOffer": [
             {{- range $i, $e := .Params.structured_data.offers }}{{ if $i }},{{ end }}
             {
                 "@type": "Offer",
-                "name": {{ .name }},
-                "description": {{ .description }}
+                "name": {{ .name | jsonify }},
+                "description": {{ .description | plainify | jsonify }}
             }
             {{- end }}
         ],
+        {{- end }}
+        {{- if .Params.structured_data.employees }}
         "employee": [
             {{- range $ind, $emp := .Params.structured_data.employees }}{{ if $ind }},{{ end }}
-                {
-                    "@type": "Person",
-                    "name": {{ $emp.name }},
-                    "jobTitle": {{ $emp.job_title }},
-                    "telephone": {{ $emp.tel }},
-                    "email": {{ $emp.email }}
-                }
+            {
+                "@type": "Person",
+                "name": {{ $emp.name | jsonify }},
+                "jobTitle": {{ $emp.job_title | jsonify }},
+                "telephone": {{ $emp.tel | jsonify }},
+                "email": {{ $emp.email | jsonify }}
+            }
             {{- end }}
         ]
+        {{- end }}
     }
 </script>
 {{ end }}
