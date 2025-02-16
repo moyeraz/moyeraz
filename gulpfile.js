@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const rename = require('gulp-rename');
-const changed = require('gulp-changed'); // ✅ Prevents reprocessing unchanged images
+const newer = require('gulp-newer'); // ✅ Replacement for gulp-changed
 
 gulp.task('img-min', async () => {
     const imagemin = (await import("gulp-imagemin")).default;
@@ -11,24 +11,20 @@ gulp.task('img-min', async () => {
 
     return gulp
         .src('public/**/*.{jpg,png}')
-        .pipe(changed('public')) // ✅ Process only new/modified images
+        .pipe(newer('public')) // ✅ Now using gulp-newer instead of gulp-changed
         .pipe(imagemin([
-            mozjpeg({ quality: 80, progressive: true }), // ✅ Compress JPG
-            optipng({ optimizationLevel: 5 }) // ✅ Compress PNG
+            mozjpeg({ quality: 80, progressive: true }),
+            optipng({ optimizationLevel: 5 })
         ]))
-        .pipe(gulp.dest('public')) // ✅ Save compressed JPG/PNG
+        .pipe(gulp.dest('public')) // ✅ Save optimized JPG/PNG
 
         // Generate WebP versions
-        .pipe(imagemin([
-            imageminWebp({ quality: 50 })
-        ]))
+        .pipe(imagemin([imageminWebp({ quality: 50 })]))
         .pipe(rename({ extname: '.webp' }))
         .pipe(gulp.dest('public'))
 
         // Generate AVIF versions
-        .pipe(imagemin([
-            imageminAvif({ quality: 50 })
-        ]))
+        .pipe(imagemin([imageminAvif({ quality: 50 })]))
         .pipe(rename({ extname: '.avif' }))
         .pipe(gulp.dest('public'));
 });
