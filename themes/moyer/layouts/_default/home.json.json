@@ -1,0 +1,16 @@
+{{- with .Site }}
+{
+    "siteName": "{{ .Title }}",
+    "baseURL": "{{ .BaseURL }}",
+    "description": "{{ .Params.description }}",
+    "pages": [
+        {{ range .RegularPages }}
+        {
+            "title": "{{ .Title }}",
+            "url": "{{ .Permalink }}",
+            "summary": "{{ .Summary }}"
+        }{{ if not (eq .RelPermalink .Last.RelPermalink) }},{{ end }}
+        {{ end }}
+    ]
+}
+{{- end }}
