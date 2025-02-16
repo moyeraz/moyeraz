@@ -2,7 +2,7 @@
 {
     "siteName": {{ .Title | jsonify }},
     "baseURL": {{ .BaseURL | jsonify }},
-    "description": {{ .Params.description | jsonify }},
+    "description": {{ .Params.description | plainify | jsonify }},
     "pages": [
         {{- range $index, $page := .RegularPages }}
         {
