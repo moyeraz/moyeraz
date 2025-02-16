@@ -18,11 +18,12 @@
         "description": "{{ .Params.structured_data.description }}",
         "address": {
             "@type": "PostalAddress",
-            "addressLocality": "{{ site.Params.address.locality }}",
-            "addressRegion": "{{ site.Params.address.region }}",
-            "postalCode": "{{ site.Params.address.code }}",
-            "addressCountry": "{{ site.Params.address.country }}"
-        },
+            "streetAddress": {{ site.Params.address.streetAddress | jsonify }},
+            "addressLocality": {{ site.Params.address.locality | jsonify }},
+            "addressRegion": {{ site.Params.address.region | jsonify }},
+            "postalCode": {{ site.Params.address.code | jsonify }},
+            "addressCountry": {{ site.Params.address.country | jsonify }}
+        },        
         "telephone": "{{ site.Params.tel }}",
         "email": "{{ site.Params.email }}",
         "foundingDate": "{{ site.Params.founder.date }}",
