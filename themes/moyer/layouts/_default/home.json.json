@@ -4,13 +4,13 @@
     "baseURL": "{{ .BaseURL }}",
     "description": "{{ .Params.description }}",
     "pages": [
-        {{ range .RegularPages }}
+        {{- range $index, $page := .RegularPages }}
         {
-            "title": "{{ .Title }}",
-            "url": "{{ .Permalink }}",
-            "summary": "{{ .Summary }}"
-        }{{ if not (eq .RelPermalink .Last.RelPermalink) }},{{ end }}
-        {{ end }}
+            "title": "{{ $page.Title }}",
+            "url": "{{ $page.Permalink }}",
+            "summary": "{{ $page.Summary }}"
+        }{{ if ne (add $index 1) (len $.Site.RegularPages) }},{{ end }}
+        {{- end }}
     ]
 }
 {{- end }}
