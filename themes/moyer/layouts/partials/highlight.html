@@ -1,25 +1,36 @@
-<div class="box-hightlight relative {{ .classes }}">
-    <div class="container py-5 flex flex-col items-center {{ if ne .order "reverse" }} justify-end{{ end }} lg:py-0 lg:min-h-[426px] lg:flex-row">
+<div class="box-highlight relative {{ .classes }}">
+    <div class="container py-6 flex flex-col items-center {{ if ne .order "reverse" }} justify-end{{ end }} lg:py-0 lg:min-h-[426px] lg:flex-row">
+        
+        <!-- Image Section -->
         <div class="bh-media h-[400px] lg:absolute lg:top-0{{ if eq .order "reverse" }} lg:right-0{{ else }} lg:left-0{{ end }} lg:h-full lg:w-1/2 {{ .image_holder_classes }}">
-            {{ partial "image.html" (dict "context" . "image" .info.media "alt" .info.title "rounded" .rounded) }}
+            {{ partial "image-srcset.html" (dict "context" . "image" .info.media "alt" .info.title "rounded" .rounded "srcset" (slice "600" "900" "1200")) }}
         </div>
+
+        <!-- Text Section -->
         <div class="bh-text pt-5 text-center lg:py-10{{ if eq .order "reverse" }} lg:pr-8{{ else }}{{ if eq .context.Type "about-us" }} lg:pl-8{{ else }} lg:pl-16 xl:pl-32{{ end }}{{ end }} lg:w-1/2 lg:text-left">
+            
+            <!-- Icon (Optional) -->
             {{ if .info.icon }}
-                <div class="bh-icon mb-5 fill-primary-600 [&>svg]:mx-auto [&>svg]:w-10 [&>svg]:h-10 lg:[&>svg]:mx-0">
+                <div class="bh-icon mb-5 fill-primary-600 [&>svg]:mx-auto [&>svg]:w-10 [&>svg]:h-10 lg:[&>svg]:mx-0" aria-hidden="true">
                     {{ readFile .info.icon | safeHTML }}
                 </div>
             {{ end }}
+
+            <!-- Title & Subtitle -->
             <h3 class="mb-4 text-heading-4 lg:mb-5">{{ .info.title }}</h3>
             <div class="bh-info{{ if ne .context.Type "about-us" }} max-w-[400px]{{ end }} text-text-400">{{ .info.subtitle }}</div>
-            <div class="bh-action mt-5 flex gap-8 flex-wrap justify-center lg:mt-6 lg:justify-start">
+
+            <!-- Buttons -->
+            <div class="bh-action mt-5 flex gap-4 flex-wrap justify-center lg:mt-6 lg:justify-start">
                 {{ range .info.buttons }}
                     {{ if .link }}
-                        <a {{ .attr | safeHTMLAttr}} href="{{ .link | safeURL }}" class="{{ .classes }}">{{ .title }}</a>
+                        <a {{ .attr | safeHTMLAttr}} href="{{ .link | safeURL }}" class="{{ .classes }}" aria-label="{{ .title }}">{{ .title }}</a>
                     {{ else }}
-                        <button class="{{ .classes }}" {{ .attr | safeHTMLAttr}}>{{ .title }}</button>
+                        <button class="{{ .classes }}" {{ .attr | safeHTMLAttr}} aria-label="{{ .title }}">{{ .title }}</button>
                     {{ end }}
                 {{ end }}
             </div>
         </div>
     </div>
 </div>
+
