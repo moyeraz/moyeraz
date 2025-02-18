@@ -9,15 +9,15 @@
             </div>
             <div class="sc-action mt-5 flex gap-4 flex-wrap items-center xl:gap-8 xl:flex-row">
                 {{ range .buttons }}
-                    {{ with .link }}
-                        <a {{ .attr | safeHTMLAttr }} href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}">
-                            {{ $.title }}
-                        </a>
-                    {{ else }}
-                        <button class="{{ $.classes }}" {{ $.attr | safeHTMLAttr }} aria-label="{{ $.title }}">
-                            {{ $.title }}
-                        </button>
-                    {{ end }}
+                {{- with .link }}
+                <a href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}" {{ if .attr }}{{ .attr | safeHTMLAttr }}{{ end }}>
+                    {{ $.title }}
+                </a>
+            {{ else }}
+                <button class="{{ $.classes }}" {{ if $.attr }}{{ $.attr | safeHTMLAttr }}{{ end }} aria-label="{{ $.title }}">
+                    {{ $.title }}
+                </button>
+            {{ end }}            
                 {{ end }}
             </div>
         </div>
