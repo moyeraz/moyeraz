@@ -1,61 +1,60 @@
 {{- /*
-Renders a menu for the given menu ID.
-
-@context {page} page The current page.
-@context {string} menuID The menu ID.
-
-@example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
-*/}}
-
-{{- $page := .page }}
-{{- $menuID := .menuID }}
-{{- $showcase := .showcase }}
-
-{{- with index site.Menus $menuID }}
-    <nav class="nav-main">
-        <ul class="flex flex-col p-4 xl:p-0 font-medium xl:flex-row">
-            {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" . "showcase_inline" $showcase) }}
-        </ul>
-    </nav>
-{{- end }}
-
-{{- define "partials/inline/menu/walk.html" }}
+  Renders a menu for the given menu ID.
+  
+  @context {page} page The current page.
+  @context {string} menuID The menu ID.
+  
+  @example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+  */}}
+  
   {{- $page := .page }}
-    {{- $menu_classes := "block py-2 px-3 xl:hover:bg-transparent md:hover:text-primary-600 xl:p-0 xl:px-2" }}
-    {{- $menu_classes_active := "active relative block py-2 px-4 text-white font-bold bg-primary-600 before:absolute before:bottom-0 before:left-1/2 before:-ml-[17px] before:w-[34px] before:h-[1px] before:bg-primary-600 xl:bg-transparent xl:p-0 xl:px-2" }}
-    {{- if .showcase_inline }}
-        {{- $menu_classes = "block py-2 px-3 xl:hover:bg-transparent xl:hover:text-primary-600 xl:p-0 xl:px-2" }}
-        {{- $menu_classes_active = "active relative block py-2 px-4 font-bold bg-primary-600 before:absolute before:bottom-0 before:left-1/2 before:-ml-[17px] before:w-[34px] before:h-[1px] before:bg-primary-600 xl:bg-transparent xl:p-0 xl:px-2" }}
-    {{- end }}
-
-  {{- range .menuEntries }}
-    {{- $attrs := dict "href" .URL }}
-    {{- if $page.IsMenuCurrent .Menu . }}
-      {{- $attrs = merge $attrs (dict "class" $menu_classes_active "aria-current" "page") }}
-    {{- else if $page.HasMenuCurrent .Menu .}}
-      {{- $attrs = merge $attrs (dict "class" $menu_classes_active "aria-current" "true") }}
-    {{- else }}
-      {{- $attrs = merge $attrs (dict "class" $menu_classes) }}
-    {{- end }}
-    {{- $name := .Name }}
-    {{- with .Identifier }}
-      {{- with T . }}
-        {{- $name = . }}
-      {{- end }}
-    {{- end }}
-    <li>
-      <a
-        {{- range $k, $v := $attrs }}
-          {{- with $v }}
-            {{- printf " %s=%q" $k $v | safeHTMLAttr }}
-          {{- end }}
-        {{- end -}}
-      >{{ $name }}</a>
-      {{- with .Children }}
-        <ul>
-          {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
-        </ul>
-      {{- end }}
-    </li>
+  {{- $menuID := .menuID }}
+  {{- $showcase := .showcase }}
+  
+  {{- with index site.Menus $menuID }}
+      <nav class="nav-main hidden xl:block" data-menu-id="{{ $menuID }}">
+          <ul class="flex flex-col p-4 xl:p-0 font-medium xl:flex-row">
+              {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" . "showcase_inline" $showcase) }}
+          </ul>
+      </nav>
+  
+      <!-- Mobile Menu Button -->
+      <button id="menu-toggle" class="xl:hidden p-4">
+          <span class="sr-only">Toggle menu</span> ☰
+      </button>
   {{- end }}
-{{- end }}
+  
+  {{- define "partials/inline/menu/walk.html" }}
+    {{- $page := .page }}
+      {{- $menu_classes := "block py-2 px-3 xl:hover:bg-transparent md:hover:text-primary-600 xl:p-0 xl:px-2" }}
+      {{- $menu_classes_active := "active relative block py-2 px-4 text-white font-bold bg-primary-600 xl:bg-transparent xl:p-0 xl:px-2" }}
+  
+    {{- range .menuEntries }}
+      {{- $attrs := dict "href" .URL "aria-label" .Name }}
+      {{- if or ($page.IsMenuCurrent .Menu .) ($page.HasMenuCurrent .Menu .) }}
+        {{- $attrs = merge $attrs (dict "class" $menu_classes_active "aria-current" "page") }}
+      {{- else }}
+        {{- $attrs = merge $attrs (dict "class" $menu_classes) }}
+      {{- end }}
+  
+      <li>
+        <a {{ range $k, $v := $attrs }} {{ with $v }} {{ printf " %s=%q" $k $v | safeHTMLAttr }} {{ end }} {{ end }}>
+          {{ .Name }}
+        </a>
+        {{- with .Children }}
+          <ul>
+            {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+          </ul>
+        {{- end }}
+      </li>
+    {{- end }}
+  {{- end }}
+  
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+        let menu = document.querySelector("[data-menu-id='main']");
+        menu.classList.toggle("hidden");
+    });
+  </script>
+  
