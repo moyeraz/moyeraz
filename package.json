@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf public",
     "build": "hugo --gc",
     "build:kinsta": "hugo --gc -b https://www.moyeraz.com/ && npx avif --input=\"./public/**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min",
     "build:netlify": "hugo --gc -b https://moyer-realty.netlify.app/ && npx avif --input=\"./public/**/*.{jpg,jpeg,png}\" --overwrite --verbose && npx gulp img-min",
@@ -39,11 +38,17 @@
     "lodash": "^4.17.21",
     "minimatch": "^10.0.1",
     "node-fetch": "^3.3.2",
+    "request": "^2.88.2",
     "semver-regex": "^4.0.5",
     "svgo": "^3.3.2",
     "tough-cookie": "^5.1.1",
     "trim-newlines": "^5.0.0",
     "tunnel-agent": "^0.6.0",
     "uuid": "^11.0.5"
-  }
+  },
+  "overrides": {
+  "svgo": "^3.3.2",
+  "stable": ">=1.0.0"
+}
+
 }

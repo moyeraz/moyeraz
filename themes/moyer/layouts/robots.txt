@@ -1,8 +1,9 @@
 User-agent: *
-Disallow: /view-quote.php
+{{/* {{- range .Pages -}}
+Disallow: {{ .RelPermalink }}
+{{ end -}}
+Disallow: /view-quote.php  -}}
+Disallow: */ -}}
 Disallow: /cgi-bin/
-Disallow: /private/
-Disallow: /admin/
-Disallow: /tmp/
 
-Sitemap: {{ .Site.BaseURL | relURL }}sitemap.xml
+Sitemap: {{ .Site.BaseURL }}sitemap.xml

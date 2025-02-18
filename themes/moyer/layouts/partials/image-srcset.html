@@ -1,50 +1,90 @@
+{{/* <picture class="d-flex justify-content-center">
+    <source srcset="{{ $smallImg.RelPermalink }}" type="{{ $smallImg.MediaType }}" media="(max-width: 576px)" width="{{ $smallImg.Width }}" height="{{ $smallImg.Height }}">
+    <img class="post-featured-img h-auto w-auto mb-3" alt="{{ $alt }}" src="{{ $largeImg.RelPermalink }}" width="{{ $largeImg.Width }}" height="{{ $largeImg.Height }}">
+</picture> */}}
+
 {{- $image := "" }}
 {{- if .resource }}
     {{- $image = .context.Resources.Get .image }}
 {{- else }}
-    {{- $image = resources.Get (.image | safeURL) | default (resources.Get "/images/default-placeholder.jpg") }}
+    {{- $image = resources.Get (.image | safeURL) }}
 {{- end }}
-
 {{- $ext := path.Ext .image }}
 {{- $filename := strings.TrimSuffix $ext .image }}
 
 {{ if eq $ext ".svg" }}
-    <!-- SVG Handling -->
     <picture class="{{ .classes }}">
-        <img class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}" 
-            src="{{ $image.RelPermalink }}" 
-            width="{{ .width }}" 
-            height="{{ .height }}" 
-            {{ if ne .loading "eager" }}loading="lazy"{{ end }} 
-            alt="{{ .alt | default "Site image" }}">
+        <img class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}" src="{{ $image.RelPermalink }}" width="{{ .width }}" height="{{ .height }}"{{ if ne .loading "eager" }} loading="lazy"{{ end }} alt="{{ .alt }}">
     </picture>
 {{ else }}
-    <!-- Responsive Image Handling -->
-    {{- $image_small := $image.Resize "600x auto" }}
-    {{- $image_medium := $image.Resize "900x auto" }}
-    {{- $image_large := $image.Resize "1200x auto" }}
-    {{- $image_avif := $image.Resize "1200x auto avif" }}
-    {{- $image_webp := $image.Resize "1200x auto webp" }}
-
     <picture class="{{ .classes }}">
-        <!-- Modern Formats (AVIF & WebP) -->
-        <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
-        <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
+        {{- $image_name := strings.TrimSuffix $ext $image }}
+        {{ $set := slice }}
+        {{ $set_jpg := slice }}
+        {{ $set_jpg_final := slice }}
+        {{ $set_jpg_pack := slice }}
+        {{ if .srcset }}
+            {{ range $i, $e := .srcset }}
+                {{ $set = $set | append (printf "%s_%s._extension_ %sw" $image_name (string $e) (string $e)) }}
+                {{ $set_jpg = $set_jpg | append (printf "%s_%s.jpg" $filename (string $e)) }}
+            {{ end }}
+            {{ $set = delimit $set ", " }}
+            {{/* $set_jpg */}}
+            {{ range $i, $e := $set_jpg }}
+                {{ $set_jpg_final = $set_jpg_final | append (resources.Get $e) }}
+            {{ end }}
+            {{ range $i, $e := .srcset }}
+                {{ $set_jpg_pack = $set_jpg_pack | append (printf "%s %sw" (index $set_jpg_final $i).Permalink (string $e)) }}
+            {{ end }}
+            {{/* $set_jpg_pack */}}
+        {{ end }}
         
-        <!-- Responsive Image Sizes -->
-        <source srcset="{{ $image_small.RelPermalink }}" media="(max-width: 600px)">
-        <source srcset="{{ $image_medium.RelPermalink }}" media="(max-width: 900px)">
-        <source srcset="{{ $image_large.RelPermalink }}" media="(min-width: 901px)">
-        
-        <!-- Fallback Image -->
+        {{ if hugo.IsProduction }}
+            <source srcset="{{ replace $set "_extension_" "avif" }}" type="image/avif">
+            <source srcset="{{ replace $set "_extension_" "webp" }}" type="image/webp">
+        {{ end }}
         <img
-            class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}"
-            src="{{ $image_large.RelPermalink }}"
-            width="{{ $image_large.Width }}"
-            height="{{ $image_large.Height }}"
+            class="w-full h-full object-{{ if .object }}{{ .object }}{{ else }}cover{{ end }}{{ if .rounded }} {{ .rounded }}{{ end }}"
+            src="{{ $image.RelPermalink }}"
+            width="{{ $image.Width }}"
+            height="{{ $image.Height }}"
             {{ if ne .loading "eager" }}loading="lazy"{{ end }}
-            alt="{{ .alt | default "Site image" }}"
+            {{ if .srcset }}srcset="{{ delimit $set_jpg_pack ", " }}"{{ end }}
+            {{ if .sizes }}sizes="95vw"{{ end }}
+            alt="{{ .alt }}"
         >
     </picture>
 {{ end }}
 
+
+
+<!-- <picture>
+    <source
+        type="image/webp"
+        sizes="(max-width: 767px) 100vw,
+            (max-width: 1023px) calc(33vw - 42px),
+            596px"
+        srcset="image_218x122.webp 218w,
+            image_280x157.webp 280w,
+            image_384x215.webp 384w,
+            image_442x247.webp 442w,
+            image_480x270.webp 480w,
+            image_767x432.webp 767w,
+            image_960x540.webp 960w,
+            image_1534x864.webp 1534w">
+    <img
+        sizes="(max-width: 767px) 100vw,
+            (max-width: 1023px) calc(33vw - 42px),
+            596px"
+        srcset="image_218x122.jpg 218w,
+            image_280x157.jpg 280w,
+            image_384x215.jpg 384w,
+            image_442x247.jpg 442w,
+            image_480x270.jpg 480w,
+            image_767x432.jpg 767w,
+            image_960x540.jpg 960w,
+            image_1534x864.jpg 1534w"
+        src="image_448x250.jpg"
+        alt="Alt text"
+    />
+</picture> -->

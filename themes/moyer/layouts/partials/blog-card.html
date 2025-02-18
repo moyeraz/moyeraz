@@ -1,29 +1,14 @@
 <div class="card-blog mx-auto max-w-[390px] bg-white rounded-lg shadow-xl">
-    <!-- Blog Image -->
     <a href="{{ .Permalink }}" class="block lg:px-5 lg:pt-5">
-        {{ partial "image-srcset.html" (dict "context" . "image" .Params.image "alt" .Title "classes" "block aspect-[4/3]" "rounded" "rounded-t-lg lg:rounded-lg" "srcset" (slice "600" "900" "1200")) }}
+        {{ partial "image.html" (dict "context" . "resource" "page" "image" .Params.image "alt" .Title "classes" "block aspect-[4/3]" "rounded" "rounded-t-lg lg:rounded-lg") }}
+        <!-- <img class="rounded-lg aspe" src="{{ .Params.image }}" alt="{{ .Title }}"> -->
     </a>
-
-    <!-- Blog Content -->
     <div class="p-5 flex flex-col items-start">
-        <!-- Title -->
-        <h3 class="mb-4 text-lg font-bold font-display lg:text-xl">
-            <a class="block hover:underline transition duration-300" href="{{ .Permalink }}" aria-label="Read more about {{ .Title }}">
-                {{ .Title }}
-            </a>
-        </h3>
-
-        <!-- Date -->
+        <h3 class="mb-4 text-lg font-bold font-display lg:text-xl"><a class="block hover:underline transition duration-300" href="{{ .Permalink }}">{{ .Title }}</a></h3>
         <div class="mb-4 text-text-400 text-sm">{{ .Date.Format site.Params.dateformat }}</div>
-
-        <!-- Summary -->
         <div class="mb-5 text-text-400 line-clamp-3">
-            {{ .Summary | plainify | truncate 300 }}
+            {{ slicestr .Summary 0 300 | plainify }}...
         </div>
-
-        <!-- Read More Button -->
-        <a href="{{ .Permalink }}" class="btn btn-arrow btn-outline btn-primary" aria-label="Read full article: {{ .Title }}">
-            Read More
-        </a>
+        <a href="{{ .Permalink }}" class="btn btn-arrow btn-outline btn-primary">Read More</a>
     </div>
 </div>

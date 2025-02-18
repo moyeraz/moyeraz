@@ -2,26 +2,20 @@
 <div class="page-name-holder">
     <span>{{ .Title }}</span>
 </div>
-
 <div id="categories-page">
     <div class="row justify-content-center">
-        {{- $categories := .Site.Taxonomies.categories.ByCount -}}
-        {{- if gt (len $categories) 0 -}}
-            {{ range $categories }}
-            <div class="col-12 col-md-4">
-                <div class="category-card">
-                    <div class="category-card-details">
-                        <a class="category-card-title" href="{{ .Page.Permalink }}">{{ .Page.Title }}
-                            ({{ $pageCount := len .Pages }}
-                            {{ $pageCount }} post{{ if ne $pageCount 1 }}s{{ end }} )
-                        </a>
-                    </div>
+        {{ range .Data.Terms.ByCount }}
+        <div class="col-md-4">
+            <div class="category-card">
+                <div class="category-card-details">
+                    <a class="category-card-title" href="{{ .Page.Permalink }}">{{ .Page.Title }}
+                        ({{ $pageCount := len .Pages }}
+                        {{ $pageCount }} post{{ if ne $pageCount 1 }}s{{ end }} )
+                    </a>
                 </div>
             </div>
-            {{ end }}
-        {{- else -}}
-            <p class="text-center text-muted">No categories found.</p>
-        {{- end -}}
+        </div>
+        {{ end }}
     </div>
 </div>
 
