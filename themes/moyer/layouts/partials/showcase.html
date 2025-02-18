@@ -10,11 +10,11 @@
             <div class="sc-action mt-5 flex gap-4 flex-wrap items-center xl:gap-8 xl:flex-row">
                 {{ range .buttons }}
                     {{ with .link }}
-                        <a {{ .attr | safeHTMLAttr}} href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}">
+                        <a {{ .attr | safeHTMLAttr }} href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}">
                             {{ $.title }}
                         </a>
                     {{ else }}
-                        <button class="{{ $.classes }}" {{ $.attr | safeHTMLAttr}} aria-label="{{ $.title }}">
+                        <button class="{{ $.classes }}" {{ $.attr | safeHTMLAttr }} aria-label="{{ $.title }}">
                             {{ $.title }}
                         </button>
                     {{ end }}
@@ -25,6 +25,6 @@
     
     <!-- Background Image -->
     <div class="sc-media absolute inset-0 -z-10 before:absolute before:inset-0 before:bg-secondary-600 before:bg-opacity-60">
-        {{ partial "image-srcset.html" (dict "context" . "image" .media "alt" .alt | default .title "loading" "eager" "srcset" (slice "640" "1280" "1920")) }}
+        {{ partial "image-srcset.html" (dict "context" . "image" .media "alt" (default .alt .title) "loading" "eager" "srcset" (slice "640" "1280" "1920")) }}
     </div>
 </section>
