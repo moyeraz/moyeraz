@@ -1,18 +1,29 @@
-{{- $page := .page }}
-{{- $taxonomy := .taxonomy }}
-
-{{- with $page.GetTerms $taxonomy }}
-  {{- if gt (len .) 0 }}
-    <div>
-      <ul>
-        {{- range . }}
-          <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+{{- /*
+  For a given taxonomy, renders a list of terms assigned to the page.
+  
+  @context {page} page The current page.
+  @context {string} taxonomy The taxonomy.
+  
+  @example: {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+  */}}
+  
+  {{- $page := .page }}
+  {{- $taxonomy := .taxonomy }}
+  {{- $terms := $page.GetTerms $taxonomy | sort "LinkTitle" }}  {{/* Sort terms alphabetically */}}
+  
+  {{- if gt (len $terms) 0 }}  {{/* Check if terms exist */}}
+    {{- $label := (index $terms 0).Parent.LinkTitle }}  {{/* Safely get taxonomy label */}}
+  
+    <div class="mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">{{ $label }}:</h3>
+      <ul class="list-disc list-inside ml-4">
+        {{- range $terms }}
+          <li>
+            <a class="text-link-600 hover:text-link-600/80 transition-colors duration-200" 
+               href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          </li>
         {{- end }}
       </ul>
     </div>
-  {{- else }}
-    <p>No terms found for this taxonomy.</p>
   {{- end }}
-{{- else }}
-  <p>No terms available for this taxonomy.</p>
-{{- end }}
+  
