@@ -1,9 +1,34 @@
 <!-- Google tag (gtag.js) -->
-<script defer src="https://www.googletagmanager.com/gtag/js?id={{ site.Params.google_analytics }}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.Params.google_analytics }}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  
+  // Default consent mode for GDPR compliance
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied'
+  });
 
-  gtag('config', '{{ site.Params.google_analytics }}');
+  gtag('js', new Date());
+  gtag('config', '{{ site.Params.google_analytics }}', {
+    'anonymize_ip': true,
+    'send_page_view': true,
+    'allow_google_signals': false,
+    'allow_ad_personalization_signals': false
+  });
+
+  // Track "Contact Us" button clicks
+  document.addEventListener("DOMContentLoaded", function() {
+    let contactButtons = document.querySelectorAll("[data-modal-target='contact-us-modal']");
+    contactButtons.forEach(button => {
+      button.addEventListener("click", function() {
+        gtag('event', 'contact_us_clicked', {
+          'event_category': 'CTA',
+          'event_label': 'Contact Us Button'
+        });
+      });
+    });
+  });
 </script>
+

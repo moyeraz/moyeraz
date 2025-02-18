@@ -1,7 +1,11 @@
 <footer id="footer" class="pt-16 pb-6 bg-white">
     <div class="container">
         <div class="grid gap-y-8 grid-cols-1 xl:gap-x-5 xl:grid-cols-[2fr_1.2fr_1.2fr]">
-            <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" loading="lazy" class="mx-auto h-[63px] self-center xl:mx-0 xl:h-[99px]">
+            <!-- Company Logo -->
+            <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" 
+                 loading="lazy" class="mx-auto h-[63px] xl:mx-0 xl:h-[99px]">
+            
+            <!-- Quick Links -->
             <div class="ft-links text-center xl:text-left">
                 <div class="ft-title mb-1 font-display font-bold xl:mb-4">Quick Links</div>
                 <ul class="flex gap-x-3 flex-wrap justify-center xl:block">
@@ -14,34 +18,60 @@
                     {{- end }}
                 </ul>
             </div>
+
+            <!-- Contact Information -->
             <div class="ft-contact text-center xl:text-left">
                 <div class="ft-title mb-1 font-display font-bold xl:mb-4">Contact Information</div>
                 <div class="ft-contact-info flex gap-2 flex-col items-center text-[#666] xl:items-start">
+                    <!-- Phone -->
                     <div class="flex gap-3 items-center">
-                        <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/phone.svg" | safeHTML }}</div>
+                        <svg class="w-[16px] h-auto fill-[#666]">
+                            <use xlink:href="/icons.svg#icon-phone"></use>
+                        </svg>
                         <a href="tel:(480) 861-4328" class="hover:underline">(480) 861-4328</a>
                     </div>
+                    <!-- Contact Us Button -->
                     <div class="flex gap-3 items-center">
-                        <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/envelope.svg" | safeHTML }}</div>
-                        <btn data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" class="cursor-pointer hover:underline">Contact Us</btn>
+                        <svg class="w-[16px] h-auto fill-[#666]">
+                            <use xlink:href="/icons.svg#icon-envelope"></use>
+                        </svg>
+                        <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" 
+                                class="cursor-pointer hover:underline">
+                            Contact Us
+                        </button>
                     </div>
+                    <!-- Privacy Policy -->
                     <div class="flex gap-3 items-center">
-                        <div class="[&>svg]:w-[16px] [&>svg]:h-auto fill-[#666]">{{ readFile "static/icons/document-shield.svg" | safeHTML }}</div>
+                        <svg class="w-[16px] h-auto fill-[#666]">
+                            <use xlink:href="/icons.svg#icon-document-shield"></use>
+                        </svg>
                         <a href="/privacy-policy/" class="hover:underline">Privacy Policy</a>
                     </div>
                 </div>
+
+                <!-- Social Media Links -->
                 <div class="ft-social mt-8 flex gap-4 flex-wrap items-center justify-center xl:gap-6 xl:justify-start">
-                    <a href="{{ site.Params.linkedin }}" target="_blank" aria-label="LinkedIn" class="w-[30px] h-[30px] flex items-center justify-center border border-primary-600 rounded-full stroke-text-600 bg-white [&>svg]:w-auto [&>svg]:h-[14px] hover:stroke-white hover:bg-primary-600 xl:w-11 xl:h-11 xl:[&>svg]:h-5">
-                        {{ readFile "static/icons/icon-linkedin.svg" | safeHTML }}
+                    <a href="{{ site.Params.linkedin }}" target="_blank" rel="noopener" aria-label="Follow us on LinkedIn" 
+                       class="w-[30px] h-[30px] flex items-center justify-center border border-primary-600 rounded-full 
+                              stroke-text-600 bg-white hover:stroke-white hover:bg-primary-600 xl:w-11 xl:h-11 xl:[&>svg]:h-5">
+                        <svg class="w-auto h-[14px]">
+                            <use xlink:href="/icons.svg#icon-linkedin"></use>
+                        </svg>
                     </a>
-                    <a href="{{ site.Params.youtube }}" target="_blank" aria-label="Youtube" class="w-[30px] h-[30px] flex items-center justify-center border border-primary-600 rounded-full stroke-text-600 bg-white [&>svg]:w-auto [&>svg]:h-[14px] hover:stroke-white hover:bg-primary-600 xl:w-11 xl:h-11 xl:[&>svg]:h-5">
-                        {{ readFile "static/icons/icon-youtube.svg" | safeHTML }}
+                    <a href="{{ site.Params.youtube }}" target="_blank" rel="noopener" aria-label="Follow us on YouTube"
+                       class="w-[30px] h-[30px] flex items-center justify-center border border-primary-600 rounded-full 
+                              stroke-text-600 bg-white hover:stroke-white hover:bg-primary-600 xl:w-11 xl:h-11 xl:[&>svg]:h-5">
+                        <svg class="w-auto h-[14px]">
+                            <use xlink:href="/icons.svg#icon-youtube"></use>
+                        </svg>
                     </a>
                 </div>
             </div>
         </div>
+
+        <!-- Copyright -->
         <div class="pt-7 text-sm text-center lg:pt-16 lg:text-base">
-            Copyright {{ now.Year }} <span>{{ site.Title }}</span> <span class="hidden xl:inline">|</span> <span class="mt-1.5 block xl:mt-0 xl:inline">Equal Housing  Opportunity</span>
+            Copyright {{ now.Year }} <span>{{ site.Title }}</span> | Equal Housing Opportunity
         </div>
     </div>
 </footer>

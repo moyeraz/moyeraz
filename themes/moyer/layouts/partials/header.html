@@ -6,34 +6,50 @@
 {{- else if eq .Params.header_type "dark-light" }}
     {{- $showcase = "dark-light" }}
 {{- end }}
+
 <header id="header" class="{{ if eq $showcase "dark" }}header-dark{{ else if eq $showcase "dark-light" }}header-dark-light{{ else }}header-light{{ end }} fixed z-40 top-0 start-0 w-full flex items-center">
     <nav class="container grid gap-2 grid-cols-2 items-center justify-between xl:grid-cols-3">
-        <!-- <div class=""> -->
-            <div class="logo-holder flex xl:order-1 xl:justify-center">
-                <a href="/" class="block items-center">
-                    <img src="/images/logo_moyer-realty-services_w.svg" width="390" height="99" alt="{{ site.Title }} logo" class="logo-main w-auto h-[30px] md:h-[36px] lg:h-[42px] xl:h-[46px]">
-                    <img src="/images/logo_moyer-realty-services.svg" width="390" height="99" alt="{{ site.Title }} logo" class="logo-scroll w-auto h-[30px] md:h-[36px] lg:h-[42px] xl:h-[46px]" loading="lazy">
-                    <!-- {{ site.Title }} -->
-                </a>
-            </div>
-            <div class="flex justify-end md:order-2 space-x-3 md:space-x-0">
-                <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" type="button" class="btn btn-contact btn-arrow{{ if eq $showcase "dark" }} btn-outline btn-white{{ else }} btn-solid btn-primary{{ end }}">Contact Us</button>
-                <button data-collapse-toggle="navbar-sticky" type="button" class="navbar-toggler     inline-flex items-center justify-center [&>svg]:w-auto [&>svg]:h-8 hover:bg-white hover:bg-opacity-20 focus:bg-white focus:bg-opacity-20 focus:outline-none xl:hidden" aria-controls="navbar-sticky" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    {{ readFile "static/icons/menu.svg" | safeHTML }}
-                    <!-- <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                    </svg> -->
-                </button>
-            </div>
-            <div class="absolute top-full inset-x-0 items-center justify-between hidden xl:static xl:flex xl:w-auto" id="navbar-sticky">
-                <div class="container navbar-wrapper">
-                    {{ partial "menu.html" (dict "menuID" "main" "page" . "showcase" $showcase) }}
-                    <div class="navbar-btn-holder px-4 pb-4 xl:hidden">
-                        <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal" type="button" class="btn btn-contact btn-arrow btn-solid btn-primary">Contact Us</button>
-                    </div>
+        <!-- Logo -->
+        <div class="logo-holder flex xl:order-1 xl:justify-center">
+            <a href="/" class="block items-center">
+                <img src="/images/logo_moyer-realty-services.svg"
+                     srcset="/images/logo_moyer-realty-services_w.svg 1x, /images/logo_moyer-realty-services.svg 2x"
+                     alt="{{ site.Title }} logo">
+            </a>
+        </div>
+
+        <!-- Contact & Mobile Menu Button -->
+        <div class="flex justify-end md:order-2 space-x-3">
+            <button aria-label="Open Contact Form" data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal"
+                    class="btn btn-contact btn-arrow{{ if eq $showcase "dark" }} btn-outline btn-white{{ else }} btn-solid btn-primary{{ end }}">
+                Contact Us
+            </button>
+            <button id="mobile-menu-toggle" data-collapse-toggle="navbar-sticky" aria-controls="navbar-sticky"
+                    aria-expanded="false" class="navbar-toggler inline-flex items-center justify-center xl:hidden">
+                <span class="sr-only">Open main menu</span>
+                {{ readFile "static/icons/menu.svg" | safeHTML }}
+            </button>
+        </div>
+
+        <!-- Main Navigation Menu -->
+        <div id="navbar-sticky" class="hidden absolute top-full inset-x-0 xl:static xl:flex xl:w-auto">
+            <div class="container navbar-wrapper">
+                {{ partial "menu.html" (dict "menuID" "main" "page" . "showcase" $showcase) }}
+                <div class="navbar-btn-holder px-4 pb-4 xl:hidden">
+                    <button data-modal-target="contact-us-modal" data-modal-toggle="contact-us-modal"
+                            class="btn btn-contact btn-arrow btn-solid btn-primary">
+                        Contact Us
+                    </button>
                 </div>
             </div>
-        <!-- </div> -->
+        </div>
     </nav>
 </header>
+
+<!-- Mobile Menu Toggle Script -->
+<script>
+  document.getElementById("mobile-menu-toggle").addEventListener("click", function () {
+      let menu = document.getElementById("navbar-sticky");
+      menu.classList.toggle("hidden");
+  });
+</script>

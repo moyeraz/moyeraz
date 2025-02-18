@@ -1,81 +1,69 @@
 <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "{{ if eq .Params.structured_data.type "Organization" }}Organization{{ else if eq .Params.structured_data.type "RealEstateAgent" }}RealEstateAgent{{ end }}",
-        "@id": "{{ site.BaseURL | absURL }}#{{ if eq .Params.structured_data.type "Organization" }}organization{{ else }}realestateagent{{ end }}",
-        "name": "{{ site.Params.sitename }}",
-        "url": "{{ .Permalink }}",
+        "@type": "{{ .Params.structured_data.type | default "Organization" }}",
+        "@id": "{{ site.BaseURL }}#{{ .Params.structured_data.type | default "organization" }}",
+        "name": "{{ site.Params.sitename | default "Moyer Realty Services" }}",
+        "url": "{{ .Permalink | default site.BaseURL }}",
         "logo": {
             "@type": "ImageObject",
-            "url": "{{ absURL site.Params.logo.image }}",
-            "width": "{{ site.Params.logo.width }}",
-            "height": "{{ site.Params.logo.height }}"
+            "url": "{{ site.BaseURL }}{{ site.Params.logo.image | default "/images/default-placeholder.jpg" }}",
+            "width": "{{ site.Params.logo.width | default "200" }}",
+            "height": "{{ site.Params.logo.height | default "100" }}"
         },
         "image": {
             "@type": "ImageObject",
-            "url": "{{ absURL site.Params.image }}"
+            "url": "{{ site.BaseURL }}{{ site.Params.image | default "/images/default-placeholder.jpg" }}"
         },
-        "description": "{{ .Params.structured_data.description }}",
+        "description": "{{ .Params.structured_data.description | default site.Params.description | default "Trusted real estate services in Southern Arizona." }}",
+        
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": {{ site.Params.address.streetAddress | jsonify }},
-            "addressLocality": {{ site.Params.address.locality | jsonify }},
-            "addressRegion": {{ site.Params.address.region | jsonify }},
-            "postalCode": {{ site.Params.address.code | jsonify }},
-            "addressCountry": {
-                "@type": "Country",
-                "name": "US"
-            }
+            "streetAddress": "NA",
+            "addressLocality": "NA",
+            "addressRegion": "NA",
+            "postalCode": "85706",
+            "addressCountry": { "@type": "Country", "name": "US" }
         },       
-        "telephone": "{{ site.Params.tel }}",
-        "email": "{{ site.Params.email }}",
-        "foundingDate": "{{ site.Params.founder.date }}",
+
+        "telephone": "{{ site.Params.tel | default "(480) 861-4328" }}",
+        "email": "{{ site.Params.email | default "info@moyerrealty.com" }}",
+        "foundingDate": "2009-11",
+        
         "founder": {
             "@type": "Person",
-            "name": "{{ site.Params.founder.name }}"
+            "name": "{{ site.Params.founder.name | default "James Moyer" }}"
         },
-        "sameAs": [
-            {{ with site.Params.linkedin }}"{{ . }}",{{ end }}
-            {{ with site.Params.youtube }}"{{ . }}"{{ end }}
-        ],
+
+        "sameAs": [{{ delimit (slice site.Params.linkedin site.Params.youtube) ", " | jsonify }}],
+
         "openingHoursSpecification": [
-            {{- range $i, $e := site.Params.working_hours }}
             {
                 "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [
-                    {{- range $in, $el := $e.days }}"{{ $el }}"{{ if ne (add $in 1) ($e.days | len) }},{{ end }}{{- end }}
-                ],
-                "opens": "{{ $e.opens }}",
-                "closes": "{{ $e.closes }}"
-            }{{ if ne (add $i 1) (len site.Params.working_hours) }},{{ end }}
-            {{- end }}
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "08:30",
+                "closes": "18:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Saturday", "Sunday"],
+                "opens": "By appointment",
+                "closes": "By appointment"
+            }
         ],
-        "areaServed": [
-            {{- range $i, $e := site.Params.area_served }}"{{ $e }}"{{ if ne (add $i 1) (len site.Params.area_served) }},{{ end }}{{- end }}
-        ],
-        "priceRange": "{{ site.Params.price_range }}"{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
-        {{- if .Params.structured_data.offers }}
+
+        "areaServed": [{{ delimit site.Params.area_served ", " | jsonify }}],
+        "priceRange": "{{ site.Params.price_range | default "$$" }}"{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
+
+        {{- with .Params.structured_data.offers }}
         "makesOffer": [
-            {{- range $i, $e := .Params.structured_data.offers }}
-            {
-                "@type": "Offer",
-                "name": "{{ .name }}",
-                "description": "{{ .description }}"
-            }{{ if ne (add $i 1) (len .Params.structured_data.offers) }},{{ end }}
-            {{- end }}
-        ]{{ if .Params.structured_data.employees }},{{ end }}
+            {{ range . }} { "@type": "Offer", "name": "{{ .name }}", "description": "{{ .description }}" }, {{ end }}
+        ]
         {{- end }}
-        {{- if .Params.structured_data.employees }}
+
+        {{- with .Params.structured_data.employees }}
         "employee": [
-            {{- range $ind, $emp := .Params.structured_data.employees }}
-            {
-                "@type": "Person",
-                "name": "{{ $emp.name }}",
-                "jobTitle": "{{ $emp.job_title }}",
-                "telephone": "{{ $emp.tel }}",
-                "email": "{{ $emp.email }}"
-            }{{ if ne (add $ind 1) (len .Params.structured_data.employees) }},{{ end }}
-            {{- end }}
+            {{ range . }} { "@type": "Person", "name": "{{ .name }}" {{ with .job_title }}, "jobTitle": "{{ . }}"{{ end }} } {{ end }}
         ]
         {{- end }}
     }

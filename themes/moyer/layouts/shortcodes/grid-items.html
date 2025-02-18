@@ -1,11 +1,17 @@
 {{- $children := split .Inner "--break-me-here--" -}}
 <div class="pb-4">
+    {{ if index $children 0 }}
     <div>
         {{- index $children 0 | markdownify -}}
     </div>
+    {{ end }}
+
+    {{ if index $children 1 }}
     <div>
         {{- index $children 1 | safeHTML -}}
     </div>
+    {{ end }}
+
     {{ if index $children 2 }}
     <div>
         {{- index $children 2 | markdownify -}}

@@ -1,24 +1,30 @@
-<section id="showcase" class="relative pt-[var(--header-height)]{{ with .type }} min-h-[464px] xl:min-h-[510px]{{ else }} min-h-[525px] xl:min-h-[690px]{{ end }} flex items-center">
+<section id="showcase" class="relative pt-[var(--header-height)] min-h-[525px] xl:min-h-[690px] flex items-center">
     <div class="container flex items-center">
-        <div class="sc-text mx-auto{{ with .type }} max-w-[590px]{{ else}} max-w-[540px]{{ end}} text-center xl:mx-0 xl:text-left">
-            <h1 class="mb-4 text-[32px] leading-snug font-display font-bold text-white xl:mb-6 {{ with .type }} xl:text-4xl{{ else }} xl:text-5xl{{ end }} xl:leading-tight">{{ .title }}</h1>
-            <div class="subtitle text-[15px] leading-6 text-white xl:text-lg xl:leading-7">{{ .subtitle }}</div>
-            <div class="sc-action mt-5 flex gap-4 flex-wrap flex-col items-center{{ with .type }} xl:mt-5{{ else }} xl:mt-10{{ end }} xl:gap-8 xl:flex-row">
+        <div class="sc-text mx-auto max-w-[540px] text-center xl:mx-0 xl:text-left">
+            <h1 class="mb-4 text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white leading-tight">
+                {{ .title }}
+            </h1>
+            <div class="subtitle text-base sm:text-lg text-white">
+                {{ .subtitle }}
+            </div>
+            <div class="sc-action mt-5 flex gap-4 flex-wrap items-center xl:gap-8 xl:flex-row">
                 {{ range .buttons }}
-                    {{ if .link }}
-                        <a {{ .attr | safeHTMLAttr}} href="{{ .link | safeURL }}" class="{{ .classes }}">{{ .title }}</a>
+                    {{ with .link }}
+                        <a {{ .attr | safeHTMLAttr}} href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}">
+                            {{ $.title }}
+                        </a>
                     {{ else }}
-                        <button class="{{ .classes }}" {{ .attr | safeHTMLAttr}}>{{ .title }}</button>
+                        <button class="{{ $.classes }}" {{ $.attr | safeHTMLAttr}} aria-label="{{ $.title }}">
+                            {{ $.title }}
+                        </button>
                     {{ end }}
                 {{ end }}
             </div>
         </div>
     </div>
+    
+    <!-- Background Image -->
     <div class="sc-media absolute inset-0 -z-10 before:absolute before:inset-0 before:bg-secondary-600 before:bg-opacity-60">
-        {{ if .media_srcset }}
-            {{ partial "image-srcset.html" (dict "context" . "image" .media "alt" .title "loading" "eager" "srcset" .media_srcset "sizes" .media_sizes) }}
-        {{ else }}
-            {{ partial "image.html" (dict "context" . "image" .media "alt" .title "loading" "eager") }}
-        {{ end }}
+        {{ partial "image-srcset.html" (dict "context" . "image" .media "alt" .alt | default .title "loading" "eager" "srcset" (slice "640" "1280" "1920")) }}
     </div>
 </section>

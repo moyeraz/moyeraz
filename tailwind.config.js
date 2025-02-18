@@ -24,27 +24,26 @@ module.exports = {
                 },
                 'link': {
                     '600': 'rgb(var(--link-600) / <alpha-value>)',
-                    '600': 'rgb(var(--link-600) / <alpha-value>)',
                 }
             },
             boxShadow: {
                 'xl': '5px 5px 15px 0px rgba(51, 51, 51, 0.1)',
             },
             padding: {
-                'spacer': 'var(--spacer)'
+                'spacer': 'var(--spacer)',
             },
             margin: {
-                'spacer': 'var(--spacer)'
+                'spacer': 'var(--spacer)',
+            },
+            fontSize: {
+                '14': ['0.875rem', '1.25rem'],
+                '16': ['1rem', '1.5rem'],
+                '18': ['1.125rem', '1.625rem'],
+                '20': ['1.25rem', '1.75rem'],
+                '24': ['1.5rem', '2rem'],
+                '28': ['1.75rem', '2.25rem'],
+                '32': ['2rem', '2.75rem']
             }
-            // fontSize: {
-            //     '14': ['0.875rem', '1.25rem'],
-            //     '16': ['1rem', '1.5rem'],
-            //     '18': ['1.125rem', '1.625rem'],
-            //     '20': ['1.25rem', '1.75rem'],
-            //     '24': ['1.5rem', '2rem'],
-            //     '28': ['1.75rem', '2.25rem'],
-            //     '32': ['2rem', '2.75rem']
-            // }
         }
     },
 	plugins: [typography, require('flowbite/plugin')],
