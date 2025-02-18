@@ -10,14 +10,17 @@
             <div class="sc-action mt-5 flex gap-4 flex-wrap items-center xl:gap-8 xl:flex-row">
                 {{ range .buttons }}
                 {{- with .link }}
-                <a href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}" {{ if .attr }}{{ .attr | safeHTMLAttr }}{{ end }}>
-                    {{ $.title }}
-                </a>
-            {{ else }}
-                <button class="{{ $.classes }}" {{ if $.attr }}{{ $.attr | safeHTMLAttr }}{{ end }} aria-label="{{ $.title }}">
-                    {{ $.title }}
-                </button>
-            {{ end }}            
+                    <a href="{{ . | safeURL }}" class="{{ $.classes }}" aria-label="{{ $.title }}" 
+                       {{ if .attr }}{{ .attr | safeHTMLAttr }}{{ end }}>
+                        {{ $.title }}
+                    </a>
+                {{ else }}
+                    <button class="{{ $.classes }}" 
+                            {{ if $.attr }}{{ $.attr | safeHTMLAttr }}{{ end }} 
+                            aria-label="{{ $.title }}">
+                        {{ $.title }}
+                    </button>
+                {{ end }}            
                 {{ end }}
             </div>
         </div>
@@ -28,3 +31,4 @@
         {{ partial "image-srcset.html" (dict "context" . "image" .media "alt" (default .alt .title) "loading" "eager" "srcset" (slice "640" "1280" "1920")) }}
     </div>
 </section>
+
