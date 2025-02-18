@@ -1,28 +1,31 @@
 <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "{{ .Params.structured_data.type | default "Organization" }}",
-        "@id": "{{ site.BaseURL }}#{{ .Params.structured_data.type | default "organization" }}",
+        "@type": "{{ if eq .Params.structured_data.type "Organization" }}Organization{{ else if eq .Params.structured_data.type "RealEstateAgent" }}RealEstateAgent{{ end }}",
+        "@id": "{{ site.BaseURL | absURL }}#{{ if eq .Params.structured_data.type "Organization" }}organization{{ else }}realestateagent{{ end }}",
         "name": "{{ site.Params.sitename }}",
         "url": "{{ .Permalink }}",
         "logo": {
             "@type": "ImageObject",
-            "url": "{{ site.BaseURL }}{{ site.Params.logo.image }}",
+            "url": "{{ absURL site.Params.logo.image }}",
             "width": "{{ site.Params.logo.width }}",
             "height": "{{ site.Params.logo.height }}"
         },
         "image": {
             "@type": "ImageObject",
-            "url": "{{ site.BaseURL }}{{ site.Params.image }}"
+            "url": "{{ absURL site.Params.image }}"
         },
-        "description": "{{ .Params.structured_data.description | default site.Params.description }}",
+        "description": "{{ .Params.structured_data.description }}",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": {{ site.Params.address.streetAddress | jsonify }},
             "addressLocality": {{ site.Params.address.locality | jsonify }},
             "addressRegion": {{ site.Params.address.region | jsonify }},
             "postalCode": {{ site.Params.address.code | jsonify }},
-            "addressCountry": { "@type": "Country", "name": "US" }
+            "addressCountry": {
+                "@type": "Country",
+                "name": "US"
+            }
         },       
         "telephone": "{{ site.Params.tel }}",
         "email": "{{ site.Params.email }}",
@@ -31,29 +34,48 @@
             "@type": "Person",
             "name": "{{ site.Params.founder.name }}"
         },
-        "sameAs": [{{ delimit (slice site.Params.linkedin site.Params.youtube) ", " | jsonify }}],
+        "sameAs": [
+            {{ with site.Params.linkedin }}"{{ . }}",{{ end }}
+            {{ with site.Params.youtube }}"{{ . }}"{{ end }}
+        ],
         "openingHoursSpecification": [
             {{- range $i, $e := site.Params.working_hours }}
             {
                 "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [{{ delimit $e.days ", " | jsonify }}],
+                "dayOfWeek": [
+                    {{- range $in, $el := $e.days }}"{{ $el }}"{{ if ne (add $in 1) ($e.days | len) }},{{ end }}{{- end }}
+                ],
                 "opens": "{{ $e.opens }}",
                 "closes": "{{ $e.closes }}"
             }{{ if ne (add $i 1) (len site.Params.working_hours) }},{{ end }}
             {{- end }}
         ],
-        "areaServed": [{{ delimit site.Params.area_served ", " | jsonify }}],
+        "areaServed": [
+            {{- range $i, $e := site.Params.area_served }}"{{ $e }}"{{ if ne (add $i 1) (len site.Params.area_served) }},{{ end }}{{- end }}
+        ],
         "priceRange": "{{ site.Params.price_range }}"{{ if or .Params.structured_data.offers .Params.structured_data.employees }},{{ end }}
-        
-        {{- with .Params.structured_data.offers }}
+        {{- if .Params.structured_data.offers }}
         "makesOffer": [
-            {{ range . }} { "@type": "Offer", "name": "{{ .name }}", "description": "{{ .description }}" }, {{ end }}
-        ]
+            {{- range $i, $e := .Params.structured_data.offers }}
+            {
+                "@type": "Offer",
+                "name": "{{ .name }}",
+                "description": "{{ .description }}"
+            }{{ if ne (add $i 1) (len .Params.structured_data.offers) }},{{ end }}
+            {{- end }}
+        ]{{ if .Params.structured_data.employees }},{{ end }}
         {{- end }}
-
-        {{- with .Params.structured_data.employees }}
+        {{- if .Params.structured_data.employees }}
         "employee": [
-            {{ range . }} { "@type": "Person", "name": "{{ .name }}" {{ with .job_title }}, "jobTitle": "{{ . }}"{{ end }} } {{ end }}
+            {{- range $ind, $emp := .Params.structured_data.employees }}
+            {
+                "@type": "Person",
+                "name": "{{ $emp.name }}",
+                "jobTitle": "{{ $emp.job_title }}",
+                "telephone": "{{ $emp.tel }}",
+                "email": "{{ $emp.email }}"
+            }{{ if ne (add $ind 1) (len .Params.structured_data.employees) }},{{ end }}
+            {{- end }}
         ]
         {{- end }}
     }
