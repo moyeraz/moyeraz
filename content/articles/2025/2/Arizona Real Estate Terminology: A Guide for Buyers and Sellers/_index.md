@@ -5,6 +5,7 @@ author: "James Moyer"
 image: "moyer-sale-board.jpg"
 date: "2025-02-19"
 lastmod: "2025-02-19"
+slug: "arizona-real-estate-terminology"
 categories:
   - Common Real Estate Questions & FAQs
   - Real Estate Terminology
