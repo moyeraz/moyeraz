@@ -1,38 +1,52 @@
 {{- $image := "" }}
+
 {{- if .resource }}
     {{- $image = .context.Resources.Get .image }}
-{{- else }}
-    {{- $image = resources.Get (.image | safeURL) | default (resources.Get "/images/default-placeholder.jpg") }}
+{{- else if .image }}
+    {{- $image = resources.Get (.image | safeURL) }}
 {{- end }}
 
-{{- $ext := path.Ext .image }}
+{{- if not $image }}
+    {{- $image = resources.Get "/images/default-placeholder.jpg" }}
+{{- end }}
+
+{{- $ext := path.Ext .image | default "" }}
 
 {{ if eq $ext ".svg" }}
     <!-- SVG Handling -->
     <picture class="{{ .classes }}">
         <img class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}" 
             src="{{ $image.RelPermalink }}" 
-            width="{{ .width }}" 
-            height="{{ .height }}" 
+            width="{{ .width | default 100 }}" 
+            height="{{ .height | default 100 }}" 
             {{ if ne .loading "eager" }}loading="lazy"{{ end }} 
             alt="{{ .alt | default "Site image" }}">
     </picture>
 {{ else }}
-    <!-- Image Handling with WebP & AVIF -->
-    {{- $image_avif := $image.Resize "1200x auto avif" }}
-    {{- $image_webp := $image.Resize "1200x auto webp" }}
+    <!-- Ensure $image is valid before attempting resize -->
+    {{- $image_avif := "" }}
+    {{- $image_webp := "" }}
+
+    {{- if $image }}
+        {{- $image_avif = $image.Resize "1200x auto avif" }}
+        {{- $image_webp = $image.Resize "1200x auto webp" }}
+    {{- end }}
 
     <picture class="{{ .classes }}">
         <!-- Modern Formats (AVIF & WebP) -->
-        <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
-        <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
-        
+        {{- if $image_avif }}
+            <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
+        {{- end }}
+        {{- if $image_webp }}
+            <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
+        {{- end }}
+
         <!-- Fallback Image -->
         <img
             class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}"
             src="{{ $image.RelPermalink }}"
-            width="{{ .width | default $image.Width }}"
-            height="{{ .height | default $image.Height }}"
+            width="{{ .width | default 100 }}"
+            height="{{ .height | default 100 }}"
             {{ if ne .loading "eager" }}loading="lazy"{{ end }}
             alt="{{ .alt | default "Site image" }}"
         >
