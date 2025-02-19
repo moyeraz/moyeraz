@@ -148,6 +148,19 @@ params:
         - "Tucson, Arizona"
         - "Vail, Arizona"
     price_range: "$100,000 - $30,000,000"
+    modals:
+        contact-us:
+            id: "contact-us-modal"
+            title: "Get in Touch with Our Team"
+            description: "Have questions about buying or selling? Reach out to us."
+        seller:
+            id: "seller-modal"
+            title: "Get a Free Home Valuation"
+            description: "Find out how much your home is worth today."
+        buyer:
+            id: "buyer-modal"
+            title: "Start Your Home Search"
+            description: "Let us help you find the perfect home."
     categories:
         - Home Buying Guide
           - First-Time Buyers
