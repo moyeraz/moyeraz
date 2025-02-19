@@ -71,7 +71,7 @@ outputs:
         - html
 
 permalinks:
-  articles: "/articles/:slug/"
+  articles: /articles/:slug/
 
 taxonomies:
     category: categories
