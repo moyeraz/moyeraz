@@ -148,136 +148,38 @@ params:
         - "Tucson, Arizona"
         - "Vail, Arizona"
     price_range: "$100,000 - $30,000,000"
-
-    modals:
-        contact-us:
-            id: "contact-us-modal"
-            title: "Get in Touch with Our Team"
-            image: "/images/get-in-touch.jpg"
-            form_action: "https://submit-form.com/NcRDxU1ac"
-            button_text: "Get in Touch"
-            fields:
-                - type: hidden
-                  name: _redirect
-                  value: "thank-you/"
-                  url: true
-                - type: hidden
-                  name: _append
-                  value: false
-                - label: "Name"
-                  type: text
-                  id: name
-                  placeholder: "Your Full Name"
-                  full_width: false
-                - label: "Phone Number"
-                  type: tel
-                  id: phone_number
-                  placeholder: "Your Phone Number"
-                  full_width: false
-                - label: "Email Address"
-                  type: email
-                  id: email_address
-                  placeholder: "Your Email Address"
-                  full_width: true
-                - label: "Message"
-                  type: textarea
-                  id: message
-                  placeholder: "Tell us how we can assist you..."
-                  rows: 6
-                  full_width: true
-
-        seller:
-            id: "seller-modal"
-            title: "Get a Free Home Valuation"
-            image: "/images/home-valuation.jpg"
-            form_action: "https://submit-form.com/Kv7aTCXly"
-            button_text: "Request Valuation"
-            fields:
-                - type: hidden
-                  name: _redirect
-                  value: "thank-you/"
-                  url: true
-                - type: hidden
-                  name: _append
-                  value: false
-                - label: "Name"
-                  type: text
-                  id: name
-                  placeholder: "Your Full Name"
-                  full_width: false
-                - label: "Phone Number"
-                  type: tel
-                  id: phone_number
-                  placeholder: "Your Phone Number"
-                  full_width: false
-                - label: "Email Address"
-                  type: email
-                  id: email_address
-                  placeholder: "Your Email Address"
-                  full_width: true
-                - label: "Property Address"
-                  type: text
-                  id: property_address
-                  placeholder: "Your Property Address"
-                  full_width: true
-                - label: "Message"
-                  type: textarea
-                  id: message
-                  placeholder: "Tell us how we can assist you..."
-                  rows: 6
-                  full_width: true
-
-        buyer:
-            id: "buyer-modal"
-            title: "Start Your Home Search"
-            image: "/images/home-search.jpg"
-            form_action: "https://submit-form.com/0w7RCCsao"
-            button_text: "Find My Perfect Home"
-            fields:
-                - type: hidden
-                  name: _redirect
-                  value: "thank-you/"
-                  url: true
-                - type: hidden
-                  name: _append
-                  value: false
-                - label: "Name"
-                  type: text
-                  id: name
-                  placeholder: "Your Full Name"
-                  full_width: false
-                - label: "Phone Number"
-                  type: tel
-                  id: phone_number
-                  placeholder: "Your Phone Number"
-                  full_width: false
-                - label: "Email Address"
-                  type: email
-                  id: email_address
-                  placeholder: "Your Email Address"
-                  full_width: true
-                - label: "Preferred Location"
-                  type: select
-                  id: preferred-location
-                  placeholder: "City or Neighborhood"
-                  full_width: true
-                  options:
-                      - "Benson"
-                      - "Green Valley"
-                      - "Marana"
-                      - "Oro Valley"
-                      - "Red Rock"
-                      - "Rio Rico"
-                      - "Saddlebrooke"
-                      - "Sahuarita"
-                      - "Tubac"
-                      - "Tucson"
-                      - "Vail"
-                - label: "Message"
-                  type: textarea
-                  id: message
-                  placeholder: "Tell us how we can assist you..."
-                  rows: 6
-                  full_width: true
-                - type: honeypot
-                  id: terms
+    categories:
+        - Home Buying Guide
+          - First-Time Buyers
+          - Mortgage & Financing
+          - Finding the Right Home
+          - Making an Offer
+          - Closing Process
+        
+        - Home Selling Guide
+          - Pricing & Valuation
+          - Preparing Your Home
+          - Marketing Your Home
+          - Negotiating Offers
+          - Closing Process
+        
+        - Real Estate Market Insights
+          - Local Market Reports
+          - Housing Market Forecasts
+          - Investment Strategies
+        
+        - Homeownership & Maintenance
+          - Home Maintenance Tips
+          - Renovations & Improvements
+          - Energy Efficiency & Sustainability
+          - HOA & Community Living
+        
+        - Moving & Relocation
+          - Moving Tips
+          - Best Neighborhoods
+          - Relocation Services
+        
+        - Common Real Estate Questions & FAQs
+          - Legal & Contract Questions
+          - Real Estate Terminology
+          - Working with an Agent
