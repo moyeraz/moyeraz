@@ -2,6 +2,7 @@
 title: "Arizona Real Estate Terminology: A Guide for Buyers and Sellers"
 description: "Understand key real estate terms used in Arizona to make informed decisions when buying or selling a home."
 author: "James Moyer"
+image: "moyer-sale-board.jpg"
 date: "2025-02-19"
 lastmod: "2025-02-19"
 categories:
