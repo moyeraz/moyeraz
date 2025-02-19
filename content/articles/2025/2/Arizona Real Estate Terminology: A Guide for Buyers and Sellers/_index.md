@@ -4,7 +4,7 @@ description: "Understand key real estate terms used in Arizona to make informed 
 author: "James Moyer"
 date: "2025-02-19"
 lastmod: "2025-02-19"
-image: "arizona-real-estate-terms.jpg"
+image: ""
 categories:
   - Common Real Estate Questions & FAQs
   - Real Estate Terminology
