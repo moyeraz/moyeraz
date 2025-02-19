@@ -6,13 +6,12 @@
     {{- $image = resources.Get (.image | safeURL) }}
 {{- end }}
 
-{{- if not $image }}
-    {{- $image = resources.Get "/images/default-placeholder.jpg" }}
+{{- $ext := "" }}
+{{- if $image }}
+    {{- $ext = path.Ext $image }}
 {{- end }}
 
-{{- $ext := path.Ext .image | default "" }}
-
-{{ if eq $ext ".svg" }}
+{{ if and $image (eq $ext ".svg") }}
     <!-- SVG Handling -->
     <picture class="{{ .classes }}">
         <img class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}" 
@@ -22,7 +21,7 @@
             {{ if ne .loading "eager" }}loading="lazy"{{ end }} 
             alt="{{ .alt | default "Site image" }}">
     </picture>
-{{ else }}
+{{ else if $image }}
     <!-- Ensure $image is valid before attempting resize -->
     {{- $image_avif := "" }}
     {{- $image_webp := "" }}
@@ -33,7 +32,6 @@
     {{- end }}
 
     <picture class="{{ .classes }}">
-        <!-- Modern Formats (AVIF & WebP) -->
         {{- if $image_avif }}
             <source srcset="{{ $image_avif.RelPermalink }}" type="image/avif">
         {{- end }}
@@ -41,7 +39,6 @@
             <source srcset="{{ $image_webp.RelPermalink }}" type="image/webp">
         {{- end }}
 
-        <!-- Fallback Image -->
         <img
             class="w-full h-full object-{{ .object | default "cover" }} {{ .rounded }}"
             src="{{ $image.RelPermalink }}"
@@ -51,4 +48,6 @@
             alt="{{ .alt | default "Site image" }}"
         >
     </picture>
+{{ else }}
+    <!-- No image available: Do nothing instead of breaking build -->
 {{ end }}
