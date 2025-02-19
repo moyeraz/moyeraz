@@ -17,7 +17,7 @@
                             <div>
                                 <h3 class="text-heading-4 mb-5"><a class="hover:underline" href="{{ .Permalink }}">{{ .Title }}</a></h3>
                                 <div class="leading-6">
-                                    {{slicestr .Summary 0 300 | plainify }}...
+                                    {{ slicestr .Summary 0 300 | plainify }}...
                                 </div>
                                 <a href="{{ .Permalink }}" class="btn btn-solid btn-primary btn-arrow mt-8">Read More</a>
                             </div>
@@ -26,14 +26,12 @@
                     {{ end }}
                 </div>
                 <div class="swiper-pagination"></div>
-                <!-- <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div> -->
             </div>
         </div>
     </section>
 
     <section class="py-spacer">
-        <h2 class="mb-8 text-heading-1 text-center lg:mb-14">Latest Articles</h2>
+        <h2 class="mb-8 text-heading-1 text-center lg:mb-14">Latest Articles in {{ .Title }}</h2>
         <div class="container">
             <div class="text-center lg:hidden">
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="btn btn-solid btn-primary mb-8 min-w-80" type="button">
@@ -47,32 +45,27 @@
                         <li>
                             <a href="/articles/" class="block px-4 py-2 hover:bg-primary-400">All</a>
                         </li>
-                        {{ $categories := slice }}
                         {{ range .Site.Taxonomies.categories }}
-                            {{ $categories = $categories | append .Page }}
-                        {{ end }}
-                        {{ range $categories }}
-                            {{- $link := printf "/articles/%s%s" (.Title | urlize) "/" }}
                             <li>
-                                <a href="{{ .Permalink }}" class="block px-4 py-2{{ if eq $.RelPermalink $link }} text-white bg-primary-600{{ end }} hover:bg-primary-400">{{ .Title }}</a>
+                                <a href="/categories/{{ .Page.Title | urlize }}/" class="block px-4 py-2 hover:bg-primary-400">{{ .Page.Title }}</a>
                             </li>
                         {{ end }}
                     </ul>
                 </div>
             </div>
+
             <div class="categories mb-8 hidden gap-4 justify-center lg:mb-16 lg:flex">
                 <a href="/articles/" class="px-8 py-2 rounded-lg border inline-block border-text-600 hover:bg-primary-400 transition duration-300">All</a>
-                {{ $categories := slice }}
                 {{ range .Site.Taxonomies.categories }}
-                    {{ $categories = $categories | append .Page }}
-                {{ end }}
-                {{ range $categories }}
-                    {{- $link := printf "/articles/%s%s" (.Title | urlize) "/" }}
-                    <a href="{{ .Permalink }}" class="{{ if eq $.RelPermalink $link }}border-primary-600 bg-primary-600 text-white {{ else }}border-text-600 {{ end }}px-8 py-2 rounded-lg border inline-block hover:bg-primary-400 transition duration-300">{{ .Title }}</a>
+                    <a href="/categories/{{ .Page.Title | urlize }}/" 
+                       class="px-8 py-2 rounded-lg border inline-block {{ if eq $.RelPermalink (printf "/categories/%s/" (.Page.Title | urlize)) }}border-primary-600 bg-primary-600 text-white{{ else }}border-text-600{{ end }} hover:bg-primary-400 transition duration-300">
+                        {{ .Page.Title }}
+                    </a>
                 {{ end }}
             </div>
+
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 2xl:grid-cols-4">
-                {{ $pager := .Paginate (.Pages.ByDate.Reverse) }}
+                {{ $pager := .Paginate (where .Pages "Section" "articles") }}
                 {{ range $pager.Pages }}
                     {{ partial "blog-card" . }}
                 {{ end }}
@@ -82,15 +75,13 @@
     </section>
 {{ end }}
 
-
 {{ define "structured" }}
 <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Blog",
-        "@id": {{ printf "%s%s" .Permalink "#blog" | jsonify }},
+        "@type": "CollectionPage",
         "name": {{ .Title | jsonify }},
-        "description": {{ with .Params.structured_data.description }}{{ . | jsonify }}{{ else }}"Articles and insights on {{ .Title }}"{{ end }},
+        "description": {{ with .Params.structured_data.description }}{{ . | jsonify }}{{ else }}"Explore articles under {{ .Title }}"{{ end }},
         "url": {{ .Permalink | jsonify }},
         "publisher": {
             "@type": "Organization",
@@ -101,37 +92,36 @@
                 "url": {{ absURL site.Params.logo.image | jsonify }}
             }
         },
-        {{- if .Data.Pages }}
-        "blogPost": [
-            {{- range $i, $e := .Data.Pages }}{{ if $i }},{{ end }}
-            {
-                "@type": "BlogPosting",
-                "headline": {{ $e.Title | jsonify }},
-                "description": {{ $e.Summary | plainify | jsonify }},
-                "url": {{ $e.Permalink | jsonify }},
-                "datePublished": "{{ $e.Date }}",
-                "dateModified": "{{ $e.Lastmod }}",
-                "author": {
-                    "@type": "Person",
-                    "name": {{ $e.Params.author | jsonify }},
-                    "url": {{ absURL "/about-us/" | jsonify }}
-                },
-                {{- with $e.Resources.Get $e.Params.image }}
-                "image": {
-                    "@type": "ImageObject",
-                    "url": {{ .Permalink | jsonify }},
-                    "width": "{{ .Width }}",
-                    "height": "{{ .Height }}"
-                },
-                {{- end }}
-                "mainEntityOfPage": {
-                    "@type": "WebPage",
-                    "@id": {{ $e.Permalink | jsonify }}
+        "hasPart": [
+            {{- range $i, $e := .Pages }}
+                {{ if $i }},{{ end }}
+                {
+                    "@type": "BlogPosting",
+                    "headline": {{ $e.Title | jsonify }},
+                    "description": {{ $e.Summary | plainify | jsonify }},
+                    "url": {{ $e.Permalink | jsonify }},
+                    "datePublished": "{{ $e.Date.Format "2006-01-02T15:04:05Z07:00" }}",
+                    "dateModified": "{{ $e.Lastmod.Format "2006-01-02T15:04:05Z07:00" }}",
+                    "author": {
+                        "@type": "Person",
+                        "name": {{ $e.Params.author | jsonify }},
+                        "url": {{ absURL "/about-us/" | jsonify }}
+                    },
+                    {{- with $e.Resources.GetMatch $e.Params.image }}
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": {{ .Permalink | jsonify }},
+                        "width": "{{ .Width }}",
+                        "height": "{{ .Height }}"
+                    },
+                    {{- end }}
+                    "mainEntityOfPage": {
+                        "@type": "WebPage",
+                        "@id": {{ $e.Permalink | jsonify }}
+                    }
                 }
-            }
             {{- end }}
         ]
-        {{- end }}
     }
 </script>
 {{ end }}

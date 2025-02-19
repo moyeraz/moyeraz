@@ -1,22 +1,43 @@
 {{ define "main" }}
-<div class="page-name-holder">
-    <span>{{ .Title }}</span>
-</div>
-<div id="categories-page">
-    <div class="row justify-content-center">
-        {{ range .Data.Terms.ByCount }}
-        <div class="col-md-4">
-            <div class="category-card">
-                <div class="category-card-details">
-                    <a class="category-card-title" href="{{ .Page.Permalink }}">{{ .Page.Title }}
-                        ({{ $pageCount := len .Pages }}
-                        {{ $pageCount }} post{{ if ne $pageCount 1 }}s{{ end }} )
-                    </a>
-                </div>
-            </div>
-        </div>
-        {{ end }}
-    </div>
-</div>
+<section class="py-spacer">
+    <div class="container">
+        <h1 class="text-heading-1 text-center mb-8">Browse Categories</h1>
+        <p class="text-center mb-8">Explore topics related to buying, selling, and homeownership.</p>
 
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 2xl:grid-cols-4">
+            {{ range .Data.Terms.ByCount }}
+            <div class="p-6 border rounded-lg shadow-lg">
+                <h2 class="text-heading-4 mb-4">
+                    <a href="/categories/{{ .Page.Title | urlize }}/" class="hover:underline">
+                        {{ .Page.Title }} ({{ len .Pages }} post{{ if ne (len .Pages) 1 }}s{{ end }})
+                    </a>
+                </h2>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+{{ end }}
+
+{{ define "structured" }}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Categories",
+    "description": "Explore various topics related to real estate, including home buying, selling, and homeownership.",
+    "url": "{{ .Permalink }}",
+    "hasPart": [
+        {{- range $i, $e := .Data.Terms.ByCount }}
+        {{ if $i }},{{ end }}
+        {
+            "@type": "CollectionPage",
+            "name": "{{ .Page.Title }}",
+            "url": "/categories/{{ .Page.Title | urlize }}/",
+            "numberOfItems": {{ len .Pages }}
+        }
+        {{- end }}
+    ]
+}
+</script>
 {{ end }}
