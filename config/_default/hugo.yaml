@@ -162,37 +162,37 @@ params:
             title: "Start Your Home Search"
             description: "Let us help you find the perfect home."
     categories:
-        - Home Buying Guide
-          - First-Time Buyers
-          - Mortgage & Financing
-          - Finding the Right Home
-          - Making an Offer
-          - Closing Process
-        
-        - Home Selling Guide
-          - Pricing & Valuation
-          - Preparing Your Home
-          - Marketing Your Home
-          - Negotiating Offers
-          - Closing Process
-        
-        - Real Estate Market Insights
-          - Local Market Reports
-          - Housing Market Forecasts
-          - Investment Strategies
-        
-        - Homeownership & Maintenance
-          - Home Maintenance Tips
-          - Renovations & Improvements
-          - Energy Efficiency & Sustainability
-          - HOA & Community Living
-        
-        - Moving & Relocation
-          - Moving Tips
-          - Best Neighborhoods
-          - Relocation Services
-        
-        - Common Real Estate Questions & FAQs
-          - Legal & Contract Questions
-          - Real Estate Terminology
-          - Working with an Agent
+    Home Buying Guide:
+        - First-Time Buyers
+        - Mortgage & Financing
+        - Finding the Right Home
+        - Making an Offer
+        - Closing Process
+
+    Home Selling Guide:
+        - Pricing & Valuation
+        - Preparing Your Home
+        - Marketing Your Home
+        - Negotiating Offers
+        - Closing Process
+
+    Real Estate Market Insights:
+        - Local Market Reports
+        - Housing Market Forecasts
+        - Investment Strategies
+
+    Homeownership & Maintenance:
+        - Home Maintenance Tips
+        - Renovations & Improvements
+        - Energy Efficiency & Sustainability
+        - HOA & Community Living
+
+    Moving & Relocation:
+        - Moving Tips
+        - Best Neighborhoods
+        - Relocation Services
+
+    Common Real Estate Questions & FAQs:
+        - Legal & Contract Questions
+        - Real Estate Terminology
+        - Working with an Agent
