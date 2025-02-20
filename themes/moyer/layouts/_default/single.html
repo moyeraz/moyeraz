@@ -20,6 +20,12 @@
                 {{ end }}
             {{ end }}
 
+            {{ if .Params.toc }}
+    <h2>Debug: Raw ToC Output</h2>
+    <pre>{{ .TableOfContents }}</pre>
+{{ end }}
+
+
             <!-- Article Content -->
             {{ .Content }}
         </div>
