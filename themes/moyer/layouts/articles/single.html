@@ -23,22 +23,22 @@
                     {{ end }}                
                 </div>
             </div>
-            
-            <h2>Debug: Raw ToC Output</h2>
-            <pre>{{ printf "%#v" .TableOfContents }}</pre>
-            
+
             <!-- ✅ Table of Contents (Only for Articles) -->
 
-{{ if .Params.toc }}
-    {{ if .TableOfContents }}
-        <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-            <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
-            <div class="prose max-w-none">
-                {{ .TableOfContents | safeHTML }}
-            </div>
-        </aside>
-    {{ end }}
-{{ end }}
+            {{ if .Params.toc }}
+            {{ if .TableOfContents }}
+                <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+                    <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
+                    <div class="p-4">
+                        <nav id="TableOfContents" class="list-disc pl-5">
+                            {{ .TableOfContents | safeHTML }}
+                        </nav>
+                    </div>
+                </aside>
+            {{ end }}
+        {{ end }}
+        
 
 
 
