@@ -27,19 +27,17 @@
             <!-- ✅ Table of Contents (Only for Articles) -->
 
             {{ if .Params.toc }}
-            {{ if .TableOfContents }}
-                <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-                    <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
-                    <div class="p-4">
-                        <nav id="TableOfContents" class="list-disc pl-5">
-                            {{ .TableOfContents | safeHTML }}
-                        </nav>
-                    </div>
-                </aside>
-            {{ end }}
-        {{ end }}
-        
-
+    {{ if .TableOfContents }}
+        <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+            <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
+            <div class="prose max-w-none">
+                {{ .TableOfContents | safeHTML }}
+            </div>
+        </aside>
+    {{ else }}
+        <p><em>⚠️ No Table of Contents available. Check heading levels.</em></p>
+    {{ end }}
+{{ end }}
 
 
             <!-- ✅ Article Content -->
