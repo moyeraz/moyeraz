@@ -26,26 +26,39 @@
 
             <!-- ✅ Table of Contents (Only for Articles) -->
 
-            {{ if .Params.toc }}
-    {{ if .TableOfContents }}
-        <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-            <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
-            <div class="prose max-w-none">
-                {{ .TableOfContents | safeHTML }}
-            </div>
-        </aside>
-    {{ else }}
-        <p><em>⚠️ No Table of Contents available. Check heading levels.</em></p>
-    {{ end }}
-{{ end }}
-
-<aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6 border-2 border-red-500">
-    <h2 class="text-lg font-semibold mb-2 text-red-600">Table of Contents</h2>
-    <div class="p-4 text-black bg-white list-disc list-inside">
-        {{ .TableOfContents | safeHTML }}
-    </div>
-</aside>
-
+            <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6 border border-gray-300">
+                <button id="toggle-toc-btn" class="text-lg font-semibold mb-2 text-blue-600 hover:underline flex items-center">
+                    Table of Contents
+                    <svg id="toc-icon" class="w-5 h-5 ml-2 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 8l5 5 5-5H5z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            
+                <div id="toc-content" class="p-4 text-black bg-white list-disc list-inside mt-2 transition-all duration-300 ease-in-out opacity-0 h-0 overflow-hidden">
+                    <nav id="TableOfContents" class="list-disc list-inside text-black">
+                        {{ .TableOfContents | safeHTML }}
+                    </nav>
+                </div>
+            </aside>
+            
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tocBtn = document.getElementById("toggle-toc-btn");
+                const tocContent = document.getElementById("toc-content");
+                const tocIcon = document.getElementById("toc-icon");
+            
+                tocBtn.addEventListener("click", function() {
+                    if (tocContent.classList.contains("opacity-0")) {
+                        tocContent.classList.remove("opacity-0", "h-0", "overflow-hidden");
+                        tocContent.classList.add("opacity-100", "h-auto");
+                    } else {
+                        tocContent.classList.remove("opacity-100", "h-auto");
+                        tocContent.classList.add("opacity-0", "h-0", "overflow-hidden");
+                    }
+                    tocIcon.classList.toggle("rotate-180");
+                });
+            });
+            </script>
 
 
             <!-- ✅ Article Content -->
