@@ -6,25 +6,7 @@
                 {{ .Title }}
             </h1>
 
-            <!-- Table of Contents (Shows only if `toc: true`) -->
-            {{ if .Params.toc }}
-                {{ if .TableOfContents }}
-                    <aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-                        <h2 class="text-lg font-semibold mb-2">Table of Contents</h2>
-                        <div class="prose max-w-none">
-                            {{ .TableOfContents }}
-                        </div>
-                    </aside>
-                {{ else }}
-                    <p><em>⚠️ No Table of Contents available. Check heading levels.</em></p>
-                {{ end }}
-            {{ end }}
-
-            {{ if .Params.toc }}
-    <h2>Debug: Raw ToC Output</h2>
-    <pre>{{ .TableOfContents }}</pre>
-{{ end }}
-
+            <!-- ✅ Removed ToC Section Here -->
 
             <!-- Article Content -->
             {{ .Content }}
