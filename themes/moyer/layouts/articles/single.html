@@ -39,6 +39,14 @@
     {{ end }}
 {{ end }}
 
+<aside class="bg-gray-100 p-4 rounded-lg shadow-md mb-6 border-2 border-red-500">
+    <h2 class="text-lg font-semibold mb-2 text-red-600">Table of Contents</h2>
+    <div class="p-4 text-black bg-white list-disc list-inside">
+        {{ .TableOfContents | safeHTML }}
+    </div>
+</aside>
+
+
 
             <!-- ✅ Article Content -->
             <div class="md-content">
