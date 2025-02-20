@@ -76,6 +76,13 @@ permalinks:
 taxonomies:
     category: categories
 
+markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+
 module:
     hugoVersion:
         extended: true
